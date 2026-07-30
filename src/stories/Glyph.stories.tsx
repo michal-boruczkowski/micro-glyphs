@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Glyph } from './Glyph';
+import { Glyph } from '../components/Glyph';
 
 const meta: Meta<typeof Glyph> = {
   title: 'Components/Glyph',

@@ -1,4 +1,5 @@
 import { PathBuilder } from "./PathBuilder";
+import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
 
 export enum MonoPatternBlend {
@@ -123,7 +124,94 @@ export class MonoPattern {
         return result;
     }
 
+    public toPolygons(): Point[][] {
+        const graph = new EdgeGraph(this.width);
+
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.getPixel(x, y) === 1) {
+                    if (this.getPixel(x, y - 1) === 0) graph.addEdge(x, y, x + 1, y);
+                    if (this.getPixel(x + 1, y) === 0) graph.addEdge(x + 1, y, x + 1, y + 1);
+                    if (this.getPixel(x, y + 1) === 0) graph.addEdge(x + 1, y + 1, x, y + 1);
+                    if (this.getPixel(x - 1, y) === 0) graph.addEdge(x, y + 1, x, y);
+                }
+            }
+        }
+
+        const loops: Point[][] = [];
+
+        while (graph.activeKeys.length > 0) {
+            const startIdx = graph.activeKeys.pop()!;
+
+            if (!graph.edges.has(startIdx)) {
+                continue;
+            }
+
+            const loop: Point[] = [];
+            let currentIdx = startIdx;
+
+            while (graph.edges.has(currentIdx)) {
+                const outEdges = graph.edges.get(currentIdx)!;
+                const nextIdx = outEdges.pop()!;
+
+                if (outEdges.length === 0) {
+                    graph.edges.delete(currentIdx);
+                }
+
+                loop.push(graph.points.get(currentIdx)!);
+                currentIdx = nextIdx;
+
+                if (currentIdx === startIdx) {
+                    break;
+                }
+            }
+
+            if (loop.length > 0) {
+                loops.push(this.optimizePolygon(loop));
+            }
+        }
+
+        return loops;
+    }
+
+
+    private optimizePolygon(loop: Point[]): Point[] {
+        if (loop.length < 3) return loop;
+        const optimized: Point[] = [];
+
+        for (let i = 0; i < loop.length; i++) {
+            const prev = loop[(i - 1 + loop.length) % loop.length];
+            const curr = loop[i];
+            const next = loop[(i + 1) % loop.length];
+
+
+            if (!Point.isCollinear(prev, curr, next)) {
+                optimized.push(curr);
+            }
+        }
+        return optimized;
+    }
+
     public toPath(gridSize: number = 24) {
+        const pixelSize = (gridSize / Math.max(this.width, this.height))
+        const path = new PathBuilder()
+
+        for (const poly of this.toPolygons()) {
+            if (poly.length === 0) { continue; }
+
+            path.moveTo(poly[0].x * pixelSize, poly[0].y * pixelSize);
+
+            for (let i = 1; i < poly.length; i++) {
+                path.lineTo(poly[i].x * pixelSize, poly[i].y * pixelSize);
+            }
+
+            path.close();
+        }
+
+        return path.d;
+    }
+
+    public toPathTest(gridSize: number = 24) {
         const path = new PathBuilder()
 
         const pixelSize = (gridSize / Math.max(this.width, this.height))
@@ -140,4 +228,36 @@ export class MonoPattern {
     }
 
 
+}
+
+class EdgeGraph {
+    private readonly vertexStride: number;
+
+    edges = new Map<number, number[]>();
+    points = new Map<number, Point>();
+    activeKeys: number[] = [];
+
+    constructor(width: number) {
+        this.vertexStride = width + 1;
+    }
+
+    private getIndex(x: number, y: number): number {
+        return y * this.vertexStride + x;
+    }
+
+    public addEdge(sx: number, sy: number, ex: number, ey: number): void {
+        const startIdx = this.getIndex(sx, sy);
+        const endIdx = this.getIndex(ex, ey);
+
+        if (!this.points.has(startIdx)) this.points.set(startIdx, { x: sx, y: sy });
+        if (!this.points.has(endIdx)) this.points.set(endIdx, { x: ex, y: ey });
+
+        let outEdges = this.edges.get(startIdx);
+        if (!outEdges) {
+            outEdges = [];
+            this.edges.set(startIdx, outEdges);
+            this.activeKeys.push(startIdx);
+        }
+        outEdges.push(endIdx);
+    }
 }

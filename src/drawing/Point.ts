@@ -7,5 +7,9 @@ export class Point {
         this.y = y;
     }
 
+    static isCollinear(a: Point, b: Point, c: Point): boolean {
+        return (b.y - a.y) * (c.x - b.x) === (b.x - a.x) * (c.y - b.y);
+    }
+
 
 }

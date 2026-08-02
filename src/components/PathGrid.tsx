@@ -5,7 +5,7 @@ import { SVGRoot, SVGRootProps } from './SVGRoot';
 export type PathGridProps = SVGRootProps & { pattern: MonoPattern }
 
 export function PathGrid(props: PathGridProps) {
-  const { width = VIEWBOX_SIZE, height = width, pattern, viewBoxSize = VIEWBOX_SIZE, ...rest } = props;
+  const { width = VIEWBOX_SIZE, height = width, pattern, viewBoxSize = Math.max(pattern.width, pattern.height), ...rest } = props;
 
   return (
     <SVGRoot

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PathGrid } from '../components/PathGrid';
-import { SWORD_2, SWORD_ICON } from '../drawing/monoPatterns';
+import * as monoPatterns from '../drawing/monoPatterns';
 
 const meta: Meta<typeof PathGrid> = {
   title: 'Components/PathGrid',
@@ -22,9 +22,9 @@ export const Default: Story = {
   },
   render: (args) => (
     <div className='flex flex-wrap gap-4'>
-      <PathGrid {...args} pattern={SWORD_ICON} />
-      <PathGrid {...args} pattern={SWORD_2} />
-
+      {Object.values(monoPatterns).map((pattern, i) => (
+        <PathGrid key={i} {...args} pattern={pattern} />
+      ))}
 
     </div>
   )

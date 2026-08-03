@@ -1,14 +1,23 @@
-import { ComponentProps } from 'react';
-import { VIEWBOX_SIZE } from './consts';
+import { ComponentProps, useMemo } from 'react';
+import { Rectangle } from '../drawing/Rectangle';
 
-export type SVGRootProps = ComponentProps<'svg'> & { viewBoxSize?: number };
+export type SVGRootProps = ComponentProps<'svg'> & { viewBoxRect?: Rectangle };
 
 export function SVGRoot(props: SVGRootProps) {
-  const { children, viewBoxSize = VIEWBOX_SIZE, ...rest } = props;
+  const { children, viewBoxRect, ...rest } = props;
+
+  const viewBox = useMemo(() => {
+    if (viewBoxRect) {
+      return `${viewBoxRect.x} ${viewBoxRect.y} ${viewBoxRect.width} ${viewBoxRect.height}`
+    }
+
+    return
+  }, [viewBoxRect])
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+      viewBox={viewBox}
       {...rest}
     >
       {children}

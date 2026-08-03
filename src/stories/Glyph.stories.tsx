@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SVGRasterPath } from '../components/SVGRasterPath';
+import * as monoPatterns_3x3 from '../drawing/svgRasters_3x3';
 import * as monoPatterns_5x5 from '../drawing/svgRasters_5x5';
 import * as monoPatterns_9x9 from '../drawing/svgRasters_9x9';
 import { generateBinaryCombinations } from '../utils/generateBinaryCombinations';
 import { SVGRaster } from '../drawing/SVGRaster';
+
+import { StorybookScenario } from './StorybookScenario';
 
 const meta: Meta<typeof SVGRasterPath> = {
   title: 'Components/SVGRasterPath',
@@ -24,14 +27,22 @@ export const _3x3: Story = {
     color: "black"
   },
   render: (args) => {
+    const svgRasters = generateBinaryCombinations(9).map(combination => new SVGRaster(3, 3, combination))
+
+    return (<StorybookScenario svgRasters={svgRasters} />
+    )
+  }
+}
+
+export const _3x3_sets: Story = {
+  args: {
+    width: 24,
+    color: "black"
+  },
+  render: (args) => {
 
 
-    return (<div className='flex flex-wrap gap-4'>
-      {generateBinaryCombinations(9).map((combination, i) => (
-        <SVGRasterPath key={i} {...args} svgRaster={new SVGRaster(3, 3, combination)} onClick={() => console.log(new SVGRaster(3, 3, combination).toMiniature())} />
-      ))}
-
-    </div>
+    return (<StorybookScenario svgRasters={[]} />
     )
   }
 }

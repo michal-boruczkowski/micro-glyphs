@@ -45,6 +45,10 @@ export class Rectangle {
         return this
     }
 
+    toAddPadding(padding: number) {
+        return new Rectangle(this.x - padding, this.y - padding, this.width + padding * 2, this.height + padding * 2);
+    }
+
 
 
 }

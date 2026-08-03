@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SVGRasterPath } from '../components/SVGRasterPath';
-import * as monoPatterns_3x3 from '../drawing/svgRasters_3x3';
+import { NICE_SET } from '../drawing/svgRasters_3x3';
 import * as monoPatterns_5x5 from '../drawing/svgRasters_5x5';
 import * as monoPatterns_9x9 from '../drawing/svgRasters_9x9';
 import { generateBinaryCombinations } from '../utils/generateBinaryCombinations';
@@ -36,14 +36,15 @@ export const _3x3: Story = {
   }
 }
 
-const allPatterns = Object.values(monoPatterns_3x3)
 
 const generator = getCartesianProduct({
-  a: allPatterns,
-  b: allPatterns,
-  c: allPatterns,
-  d: allPatterns
+  a: NICE_SET,
+  b: NICE_SET,
+  c: NICE_SET,
+  d: NICE_SET
 });
+
+
 
 export const _3x3_sets: Story = {
   args: {
@@ -61,13 +62,15 @@ export const _3x3_sets: Story = {
 
 
 
-    const svgRasters = []
+    let svgRasters = []
 
-    for (const combination of generator) {
-      if (svgRasters.length >= count) {
-        break
-      }
+    const mul = 4
+    const pageLimit = 4 * 5 * mul ** 2
 
+
+    const combinations = count > pageLimit ? generator.slice(count - pageLimit, count) : generator.slice(0, count)
+
+    for (const combination of combinations) {
       const { a, b, c, d } = combination
 
       const background = new SVGRaster(9, 9)
@@ -81,23 +84,22 @@ export const _3x3_sets: Story = {
 
     }
 
-
-    const howManyColumns = Math.ceil(Math.sqrt(svgRasters.length))
+    const howManyColumns = Math.ceil(Math.sqrt(svgRasters.length / (4 * 5)) * 4)
 
     useEffect(() => {
       const timer = setInterval(() => {
         setCount(prev => {
-          if (prev >= (allPatterns.length ** 4)) {
+          if (prev >= (NICE_SET.length ** 4)) {
             return 1
           }
           return prev + 1
         })
-      }, 100)
+      }, 50)
 
       return () => {
         clearInterval(timer)
       }
-    }, [allPatterns.length])
+    }, [NICE_SET.length])
 
 
     return (<StorybookScenario svgRasters={svgRasters} howManyColumns={howManyColumns} />

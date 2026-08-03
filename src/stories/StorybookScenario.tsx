@@ -22,12 +22,12 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
     const padding = toScenarioPadding(scenarioWidth)
 
-    const initialCanvas = viewBoxRect.toAddPadding(-padding)
+    const canvas = viewBoxRect.toAddPadding(-padding)
 
     const howManyRows = Math.ceil(svgRasters.length / howManyColumns)
 
-    const cellWidth = initialCanvas.width / howManyColumns
-    const cellHeight = initialCanvas.height / howManyRows
+    const cellWidth = canvas.width / howManyColumns
+    const cellHeight = canvas.height / howManyRows
 
     const cellSize = Math.min(cellWidth, cellHeight)
 
@@ -36,7 +36,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
         height={viewBoxRect.height}
         viewBoxRect={viewBoxRect}>
         <SVGRectangle rectangle={viewBoxRect} fill="oklch(25.7% 0.09 281.288)" stroke="red" />
-        <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} rectangle={initialCanvas}>
+        <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} rectangle={canvas}>
             {svgRasters.map((svgRaster, i) => {
 
 

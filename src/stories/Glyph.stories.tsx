@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { PathGrid } from '../components/PathGrid';
-import * as monoPatterns from '../drawing/monoPatterns';
+import { SVGRasterPath } from '../components/SVGRasterPath';
+import * as monoPatterns_5x5 from '../drawing/svgRasters_5x5';
+import * as monoPatterns_9x9 from '../drawing/svgRasters_9x9';
+import { generateBinaryCombinations } from '../utils/generateBinaryCombinations';
+import { SVGRaster } from '../drawing/SVGRaster';
 
-const meta: Meta<typeof PathGrid> = {
-  title: 'Components/PathGrid',
-  component: PathGrid,
+const meta: Meta<typeof SVGRasterPath> = {
+  title: 'Components/SVGRasterPath',
+  component: SVGRasterPath,
   tags: ['autodocs'],
   argTypes: {
     width: { control: { type: 'number', min: 12, max: 64 } },
@@ -13,17 +16,50 @@ const meta: Meta<typeof PathGrid> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof PathGrid>;
+type Story = StoryObj<typeof SVGRasterPath>;
 
-export const Default: Story = {
+export const _3x3: Story = {
+  args: {
+    width: 24,
+    color: "black"
+  },
+  render: (args) => {
+
+
+    return (<div className='flex flex-wrap gap-4'>
+      {generateBinaryCombinations(9).map((combination, i) => (
+        <SVGRasterPath key={i} {...args} svgRaster={new SVGRaster(3, 3, combination)} onClick={() => console.log(new SVGRaster(3, 3, combination).toMiniature())} />
+      ))}
+
+    </div>
+    )
+  }
+}
+
+export const _5x5: Story = {
   args: {
     width: 24,
     color: "black"
   },
   render: (args) => (
     <div className='flex flex-wrap gap-4'>
-      {Object.values(monoPatterns).map((pattern, i) => (
-        <PathGrid key={i} {...args} pattern={pattern} />
+      {Object.values(monoPatterns_5x5).map((pattern, i) => (
+        <SVGRasterPath key={i} {...args} svgRaster={pattern} />
+      ))}
+
+    </div>
+  )
+};
+
+export const _9x9: Story = {
+  args: {
+    width: 24,
+    color: "black"
+  },
+  render: (args) => (
+    <div className='flex flex-wrap gap-4'>
+      {Object.values(monoPatterns_9x9).map((pattern, i) => (
+        <SVGRasterPath key={i} {...args} svgRaster={pattern} />
       ))}
 
     </div>

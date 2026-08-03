@@ -2,27 +2,18 @@ import { PathBuilder } from "./PathBuilder";
 import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
 
-export enum MonoPatternBlend {
-    OR,
-    AND,
-    XOR
-}
 
-export enum MonoPatternPixel {
-    OFF = '⬜',
-    ON = '⬛'
-}
 
-export class MonoPattern {
+export class SVGRaster {
     public width: number;
     public height: number;
     public data: Uint8Array;
 
-    static fromMiniature(miniature: string): MonoPattern {
+    static fromMiniature(miniature: string): SVGRaster {
         const lines = miniature.trim().split(/\r?\n/);
 
         if (lines.length === 0 || lines[0] === '') {
-            return new MonoPattern(0, 0, new Uint8Array(0))
+            return new SVGRaster(0, 0, new Uint8Array(0))
         }
 
         const parsedLines = lines.map(line => Array.from(line.trim()));
@@ -37,7 +28,7 @@ export class MonoPattern {
             for (let x = 0; x < width; x++) {
                 const char = chars[x];
 
-                if (char === MonoPatternPixel.ON || char === '1' || char === '#' || char === 'X') {
+                if (char === SVGRasterPixel.ON || char === '1' || char === '#' || char === 'X') {
                     data[y * width + x] = 1;
                 } else {
                     data[y * width + x] = 0;
@@ -45,7 +36,7 @@ export class MonoPattern {
             }
         }
 
-        return new MonoPattern(width, height, data);
+        return new SVGRaster(width, height, data);
     }
 
     constructor(width: number, height: number, data?: Uint8Array) {
@@ -60,10 +51,10 @@ export class MonoPattern {
     }
 
 
-    public concatHorizontal(other: MonoPattern): MonoPattern {
+    public concatHorizontal(other: SVGRaster): SVGRaster {
         const newWidth = this.width + other.width;
         const newHeight = Math.max(this.height, other.height);
-        const result = new MonoPattern(newWidth, newHeight);
+        const result = new SVGRaster(newWidth, newHeight);
 
         for (let y = 0; y < newHeight; y++) {
             for (let x = 0; x < newWidth; x++) {
@@ -78,10 +69,10 @@ export class MonoPattern {
         return result;
     }
 
-    public concatVertical(other: MonoPattern): MonoPattern {
+    public concatVertical(other: SVGRaster): SVGRaster {
         const newWidth = Math.max(this.width, other.width);
         const newHeight = this.height + other.height;
-        const result = new MonoPattern(newWidth, newHeight);
+        const result = new SVGRaster(newWidth, newHeight);
 
         for (let y = 0; y < newHeight; y++) {
             for (let x = 0; x < newWidth; x++) {
@@ -96,8 +87,8 @@ export class MonoPattern {
         return result;
     }
 
-    public overlay(other: MonoPattern, offsetX: number = 0, offsetY: number = 0, blend: MonoPatternBlend = MonoPatternBlend.OR): MonoPattern {
-        const result = new MonoPattern(this.width, this.height, this.data);
+    public overlay(other: SVGRaster, offsetX: number = 0, offsetY: number = 0, blend: SVGRasterBlend = SVGRasterBlend.OR): SVGRaster {
+        const result = new SVGRaster(this.width, this.height, this.data);
 
         for (let y = 0; y < other.height; y++) {
             for (let x = 0; x < other.width; x++) {
@@ -112,11 +103,11 @@ export class MonoPattern {
                 const currentPixel = result.data[index];
                 const newPixel = other.getPixel(x, y);
 
-                if (blend === MonoPatternBlend.OR) {
+                if (blend === SVGRasterBlend.OR) {
                     result.data[index] = currentPixel | newPixel;
-                } else if (blend === MonoPatternBlend.AND) {
+                } else if (blend === SVGRasterBlend.AND) {
                     result.data[index] = currentPixel & newPixel;
-                } else if (blend === MonoPatternBlend.XOR) {
+                } else if (blend === SVGRasterBlend.XOR) {
                     result.data[index] = currentPixel ^ newPixel;
                 }
             }
@@ -125,7 +116,7 @@ export class MonoPattern {
     }
 
     public toPolygons(): Point[][] {
-        const graph = new EdgeGraph(this.width);
+        const graph = new SVGRasterPixelGraph(this.width);
 
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -227,10 +218,35 @@ export class MonoPattern {
         return path.d;
     }
 
+    public toMiniature(): string {
+        let result = "";
+
+        for (let y = 0; y < this.height; y++) {
+            result += "\n";
+
+            for (let x = 0; x < this.width; x++) {
+                result += this.getPixel(x, y) ? SVGRasterPixel.ON : SVGRasterPixel.OFF;
+            }
+        }
+
+        return result;
+    }
+
 
 }
 
-class EdgeGraph {
+export enum SVGRasterBlend {
+    OR,
+    AND,
+    XOR
+}
+
+export enum SVGRasterPixel {
+    OFF = '⬜',
+    ON = '⬛'
+}
+
+class SVGRasterPixelGraph {
     private readonly vertexStride: number;
 
     edges = new Map<number, number[]>();

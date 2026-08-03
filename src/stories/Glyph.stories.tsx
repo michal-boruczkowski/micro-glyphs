@@ -7,6 +7,8 @@ import { generateBinaryCombinations } from '../utils/generateBinaryCombinations'
 import { SVGRaster } from '../drawing/SVGRaster';
 
 import { StorybookScenario } from './StorybookScenario';
+import { getCartesianProduct } from '../utils/getCartesianProduct';
+import { useEffect, useState } from 'react';
 
 const meta: Meta<typeof SVGRasterPath> = {
   title: 'Components/SVGRasterPath',
@@ -34,6 +36,15 @@ export const _3x3: Story = {
   }
 }
 
+const allPatterns = Object.values(monoPatterns_3x3)
+
+const generator = getCartesianProduct({
+  a: allPatterns,
+  b: allPatterns,
+  c: allPatterns,
+  d: allPatterns
+});
+
 export const _3x3_sets: Story = {
   args: {
     width: 24,
@@ -42,7 +53,54 @@ export const _3x3_sets: Story = {
   render: (args) => {
 
 
-    return (<StorybookScenario svgRasters={[]} />
+
+    const [count, setCount] = useState(1)
+
+
+
+
+
+
+    const svgRasters = []
+
+    for (const combination of generator) {
+      if (svgRasters.length >= count) {
+        break
+      }
+
+      const { a, b, c, d } = combination
+
+      const background = new SVGRaster(9, 9)
+        .overlay(a, 1, 1)
+        .overlay(b, 5, 1)
+        .overlay(c, 1, 5)
+        .overlay(d, 5, 5)
+
+
+      svgRasters.push(background)
+
+    }
+
+
+    const howManyColumns = Math.ceil(Math.sqrt(svgRasters.length))
+
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCount(prev => {
+          if (prev >= (allPatterns.length ** 4)) {
+            return 1
+          }
+          return prev + 1
+        })
+      }, 100)
+
+      return () => {
+        clearInterval(timer)
+      }
+    }, [allPatterns.length])
+
+
+    return (<StorybookScenario svgRasters={svgRasters} howManyColumns={howManyColumns} />
     )
   }
 }

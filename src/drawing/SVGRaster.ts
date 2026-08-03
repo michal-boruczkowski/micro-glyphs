@@ -42,7 +42,7 @@ export class SVGRaster {
     constructor(width: number, height: number, data?: Uint8Array) {
         this.width = width;
         this.height = height;
-        this.data = data ?? new Uint8Array(width * height)
+        this.data = data?.slice() ?? new Uint8Array(width * height)
     }
 
     public getPixel(x: number, y: number): number {

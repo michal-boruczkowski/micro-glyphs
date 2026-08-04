@@ -1,46 +1,63 @@
-import { useState } from "react"
-import { PHI, SCENARIO_HEIGHT, SCENARIO_WIDTH, toScenarioHeight, toScenarioPadding } from "../components/consts"
+import { useMemo, useState } from "react"
+import { PHI, toScenarioHeight, toScenarioPadding } from "../components/consts"
 import { Rectangle } from "../drawing/Rectangle"
 import { SVGRoot } from "../components/SVGRoot"
 import { SVGRectangle } from "../components/SVGRectangle"
 import { SVGGrid } from "../components/SVGGrid"
 import { SVGRaster } from "../drawing/SVGRaster"
+import { CellSizeFunction, equalCellSizeFunction } from "../utils/cellSizeFunction"
+
 
 type StorybookScenarioProps = {
     svgRasters: SVGRaster[]
     howManyColumns?: number
+    cellSizeFunction?: (canvas: Rectangle, howManyRows: number, howManyColumns: number) => CellSizeFunction
 }
 
+const scenarioWidth = 700
+
+const viewBoxRect = new Rectangle(0, 0, scenarioWidth, toScenarioHeight(scenarioWidth))
+
 export function StorybookScenario(props: StorybookScenarioProps) {
-    const { svgRasters, howManyColumns = 16 } = props
+    const { svgRasters, howManyColumns = 16, cellSizeFunction } = props
 
     const [selected, setSelected] = useState<Set<number>>(new Set())
 
-    const scenarioWidth = 700
 
-    const viewBoxRect = new Rectangle(0, 0, scenarioWidth, toScenarioHeight(scenarioWidth))
+    const canvas = useMemo(() => {
+        const padding = toScenarioPadding(scenarioWidth)
 
-    const padding = toScenarioPadding(scenarioWidth)
+        return viewBoxRect.toAddPadding(-padding)
 
-    const canvas = viewBoxRect.toAddPadding(-padding)
+    }, [])
 
     const howManyRows = Math.ceil(svgRasters.length / howManyColumns)
 
-    const cellWidth = canvas.width / howManyColumns
-    const cellHeight = canvas.height / howManyRows
+    const sizeFunction = useMemo(() => {
+        return cellSizeFunction ? cellSizeFunction(canvas, howManyRows, howManyColumns) : equalCellSizeFunction(canvas, howManyRows, howManyColumns)
+    }, [canvas, howManyRows, howManyColumns])
 
-    const cellSize = Math.min(cellWidth, cellHeight)
 
     return (<SVGRoot
         width={viewBoxRect.width}
         height={viewBoxRect.height}
         viewBoxRect={viewBoxRect}>
         <SVGRectangle rectangle={viewBoxRect} fill="oklch(25.7% 0.09 281.288)" stroke="red" />
-        <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} rectangle={canvas}>
+        <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} rectangle={canvas} cellSizeFunction={sizeFunction}>
             {svgRasters.map((svgRaster, i) => {
 
+                const rowIndex = Math.floor(i / howManyColumns)
+                const colIndex = i - rowIndex * howManyColumns
 
-                const paddedCellSize = cellSize * (1 - 1 / (PHI * 2))
+                const cellRectangle = sizeFunction(rowIndex, colIndex)
+
+                const cellWidth = cellRectangle.width
+                const cellHeight = cellRectangle.height
+
+                const cellSize = Math.min(cellWidth, cellHeight)
+
+                const paddedCellSize = cellSize * 0.8
+                // (1 - 1 / (PHI * 2))
 
 
                 const cellViewBoxSize = Math.ceil(paddedCellSize)

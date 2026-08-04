@@ -88,11 +88,13 @@ export const _3x3_sets: Story = {
 
     useEffect(() => {
       const timer = setInterval(() => {
-        setCount(prev => {
-          if (prev >= (NICE_SET.length ** 4)) {
-            return 1
-          }
-          return prev + 1
+        requestAnimationFrame(() => {
+          setCount(prev => {
+            if (prev >= (NICE_SET.length ** 4)) {
+              return 1
+            }
+            return prev + 1
+          })
         })
       }, 50)
 

@@ -56,8 +56,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
                 const cellSize = Math.min(cellWidth, cellHeight)
 
-                const paddedCellSize = cellSize * 0.8
-                // (1 - 1 / (PHI * 2))
+                const paddedCellSize = cellSize * 1 / PHI
 
 
                 const cellViewBoxSize = Math.ceil(paddedCellSize)
@@ -80,7 +79,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                     }
                     console.log(Array.from(selected))
                     setSelected(new Set(selected))
-                }}>
+                }} >
                     <SVGRectangle rectangle={new Rectangle(0, 0, cellViewBoxSize, cellViewBoxSize)} fill="transparent" />
                     <path key={i} d={svgRaster.toPath(cellViewBoxSize)} fill={fill} /></g>
 

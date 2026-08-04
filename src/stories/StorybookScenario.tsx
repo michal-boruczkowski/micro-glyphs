@@ -39,6 +39,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
 
     const gradientId = useId();
+    const selectedGradientId = useId();
     const filterId = useId();
 
     return (<SVGRoot
@@ -48,12 +49,16 @@ export function StorybookScenario(props: StorybookScenarioProps) {
         <defs>
             {/* Definicja gradientu */}
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-                {/* <stop offset="0%" stopColor="#00FFFF" />
-                <stop offset="100%" stopColor="#B200FF" /> */}
+                <stop offset="0%" stopColor="#00FFFF" />
+                <stop offset="100%" stopColor="#B200FF" />
+            </linearGradient>
 
-                <stop offset="0%" stopColor="#A67C00" />   {/* Ciemniejszy brzeg */}
-                <stop offset="50%" stopColor="#F9DF9F" />  {/* Jasny, matowy błysk w środku */}
-                <stop offset="100%" stopColor="#D4AF37" /> {/* Klasyczny złoty odcień */}``
+            <linearGradient id={selectedGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+
+
+                <stop offset="0%" stopColor="#A67C00" />
+                <stop offset="50%" stopColor="#F9DF9F" />
+                <stop offset="100%" stopColor="#D4AF37" />
             </linearGradient>
 
             <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
@@ -86,7 +91,6 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                 const x = (cellWidth - cellViewBoxSize) / 2
                 const y = (cellHeight - cellViewBoxSize) / 2
 
-                const fill = selected.has(i) ? "#FF0000DD" : "#FDFDFF"
 
                 const transform = `translate(${x}, ${y})`
 
@@ -107,7 +111,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                     <path
                         d={d}
                         fill="none"
-                        stroke={`url(#${gradientId})`}
+                        stroke={`url(#${selected.has(i) ? selectedGradientId : gradientId})`}
                         strokeWidth={rounding / PHI}
                         filter={`url(#${filterId})`}
                     />
@@ -115,8 +119,8 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                     {/* WARSTWA 2: Właściwy, ostry kształt z białą figurą w środku */}
                     <path
                         d={d}
-                        fill={fill}
-                        stroke={`url(#${gradientId})`}
+                        fill={"#FDFDFF"}
+                        stroke={`url(#${selected.has(i) ? selectedGradientId : gradientId})`}
                         strokeWidth={rounding / PHI / PHI}
                     />
 

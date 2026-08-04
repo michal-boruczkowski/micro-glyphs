@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infinity) {
+export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infinity, delay: number = 50) {
 
     const [count, setCount] = useState(1)
 
@@ -16,12 +16,12 @@ export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infin
                     return prev + 1
                 })
             })
-        }, 50)
+        }, delay)
 
         return () => {
             clearInterval(timer)
         }
-    }, [collection.length])
+    }, [collection.length, delay])
 
     return [combinations, count, setCount] as const
 }

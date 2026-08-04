@@ -9,7 +9,7 @@ import { SVGRaster } from '../drawing/SVGRaster';
 import { StorybookScenario } from './StorybookScenario';
 import { getCartesianProduct } from '../utils/getCartesianProduct';
 import { useCounterStrategy } from '../utils/useCounterStrategy';
-import { toScenarioLimit } from '../components/consts';
+import { getScenarioColumns, toScenarioLimit } from '../components/consts';
 
 const meta: Meta<typeof SVGRasterPath> = {
   title: 'Components/SVGRasterPath',
@@ -60,7 +60,7 @@ export const _3x3_NICE: Story = {
     color: "black"
   },
   render: (args) => {
-    const [combinations] = useCounterStrategy(niceGenerator, toScenarioLimit(1))
+    const [combinations] = useCounterStrategy(niceGenerator, toScenarioLimit(2))
 
     let svgRasters = []
 
@@ -79,9 +79,7 @@ export const _3x3_NICE: Story = {
       svgRasters.push(background)
     }
 
-    const howManyColumns = svgRasters.length < 16 ? Math.ceil(Math.sqrt(svgRasters.length)) : Math.ceil(Math.sqrt(svgRasters.length / (4 * 5)) * 4)
-
-    return (<StorybookScenario svgRasters={svgRasters} howManyColumns={howManyColumns} />
+    return (<StorybookScenario svgRasters={svgRasters} howManyColumns={getScenarioColumns(svgRasters.length)} />
     )
   }
 }
@@ -111,12 +109,7 @@ export const _3x3_NICE_AND_SIDES: Story = {
       svgRasters.push(background)
     }
 
-    const howManyColumns = Math.ceil(Math.sqrt(svgRasters.length / (4 * 5)) * 4)
-
-
-
-
-    return (<StorybookScenario svgRasters={svgRasters} howManyColumns={howManyColumns} />
+    return (<StorybookScenario svgRasters={svgRasters} howManyColumns={getScenarioColumns(svgRasters.length)} />
     )
   }
 }

@@ -16,7 +16,7 @@ export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infin
                     return prev + 1
                 })
             })
-        }, 300)
+        }, 50)
 
         return () => {
             clearInterval(timer)

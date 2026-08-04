@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useId, useMemo, useState } from "react"
 import { PHI, toScenarioHeight, toScenarioPadding } from "../components/consts"
 import { Rectangle } from "../drawing/Rectangle"
 import { SVGRoot } from "../components/SVGRoot"
@@ -27,7 +27,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
     const canvas = useMemo(() => {
         const padding = toScenarioPadding(scenarioWidth)
 
-        return viewBoxRect.toAddPadding(-padding)
+        return viewBoxRect.getPadded(-padding)
 
     }, [])
 
@@ -38,10 +38,32 @@ export function StorybookScenario(props: StorybookScenarioProps) {
     }, [canvas, howManyRows, howManyColumns])
 
 
+    const gradientId = useId();
+    const filterId = useId();
+
     return (<SVGRoot
         width={viewBoxRect.width}
         height={viewBoxRect.height}
         viewBoxRect={viewBoxRect}>
+        <defs>
+            {/* Definicja gradientu */}
+            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                {/* <stop offset="0%" stopColor="#00FFFF" />
+                <stop offset="100%" stopColor="#B200FF" /> */}
+
+                <stop offset="0%" stopColor="#A67C00" />   {/* Ciemniejszy brzeg */}
+                <stop offset="50%" stopColor="#F9DF9F" />  {/* Jasny, matowy błysk w środku */}
+                <stop offset="100%" stopColor="#D4AF37" /> {/* Klasyczny złoty odcień */}``
+            </linearGradient>
+
+            <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+            </filter>
+        </defs>
         <SVGRectangle rectangle={viewBoxRect} fill="#1B1E32" stroke="red" />
         <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} rectangle={canvas} cellSizeFunction={sizeFunction}>
             {svgRasters.map((svgRaster, i) => {
@@ -58,7 +80,6 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
                 const paddedCellSize = cellSize * 1 / PHI
 
-
                 const cellViewBoxSize = Math.ceil(paddedCellSize)
 
 
@@ -69,7 +90,9 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
                 const transform = `translate(${x}, ${y})`
 
+                const rounding = Math.sqrt(cellViewBoxSize) / PHI
 
+                const d = svgRaster.toPath(cellViewBoxSize, rounding)
 
                 return (<g transform={transform} cursor="pointer" onClick={() => {
                     if (selected.has(i)) {
@@ -81,10 +104,23 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                     setSelected(new Set(selected))
                 }} >
                     <SVGRectangle rectangle={new Rectangle(0, 0, cellViewBoxSize, cellViewBoxSize)} fill="transparent" />
-                    <path key={i} d={svgRaster.toPath(cellViewBoxSize)} fill={fill} stroke="white" strokeWidth={0} /></g>
+                    <path
+                        d={d}
+                        fill="none"
+                        stroke={`url(#${gradientId})`}
+                        strokeWidth={rounding / PHI}
+                        filter={`url(#${filterId})`}
+                    />
 
+                    {/* WARSTWA 2: Właściwy, ostry kształt z białą figurą w środku */}
+                    <path
+                        d={d}
+                        fill={fill}
+                        stroke={`url(#${gradientId})`}
+                        strokeWidth={rounding / PHI / PHI}
+                    />
 
-                )
+                </g>)
             })}
 
         </SVGGrid>

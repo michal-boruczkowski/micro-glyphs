@@ -183,20 +183,17 @@ export class SVGRaster {
         return optimized;
     }
 
-    public toPath(gridSize: number = 24) {
+    public toPath(gridSize: number = 24, rounding = 0) {
         const pixelSize = (gridSize / Math.max(this.width, this.height))
         const path = new PathBuilder()
 
         for (const poly of this.toPolygons()) {
-            if (poly.length === 0) { continue; }
 
-            path.moveTo(poly[0].x * pixelSize, poly[0].y * pixelSize);
-
-            for (let i = 1; i < poly.length; i++) {
-                path.lineTo(poly[i].x * pixelSize, poly[i].y * pixelSize);
+            if (rounding === 0) {
+                path.addPath(poly.map(p => new Point(p.x * pixelSize, p.y * pixelSize)));
+            } else {
+                path.addRoundedPath(poly.map(p => new Point(p.x * pixelSize, p.y * pixelSize)), rounding);
             }
-
-            path.close();
         }
 
         return path.d;
@@ -265,8 +262,8 @@ class SVGRasterPixelGraph {
         const startIdx = this.getIndex(sx, sy);
         const endIdx = this.getIndex(ex, ey);
 
-        if (!this.points.has(startIdx)) this.points.set(startIdx, { x: sx, y: sy });
-        if (!this.points.has(endIdx)) this.points.set(endIdx, { x: ex, y: ey });
+        if (!this.points.has(startIdx)) this.points.set(startIdx, new Point(sx, sy));
+        if (!this.points.has(endIdx)) this.points.set(endIdx, new Point(ex, ey));
 
         let outEdges = this.edges.get(startIdx);
         if (!outEdges) {

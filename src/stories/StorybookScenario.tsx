@@ -42,7 +42,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
         width={viewBoxRect.width}
         height={viewBoxRect.height}
         viewBoxRect={viewBoxRect}>
-        <SVGRectangle rectangle={viewBoxRect} fill="oklch(25.7% 0.09 281.288)" stroke="red" />
+        <SVGRectangle rectangle={viewBoxRect} fill="#1B1E32" stroke="red" />
         <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} rectangle={canvas} cellSizeFunction={sizeFunction}>
             {svgRasters.map((svgRaster, i) => {
 
@@ -65,7 +65,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                 const x = (cellWidth - cellViewBoxSize) / 2
                 const y = (cellHeight - cellViewBoxSize) / 2
 
-                const fill = selected.has(i) ? "#FF0000DD" : "#FFFFFFDD"
+                const fill = selected.has(i) ? "#FF0000DD" : "#FDFDFF"
 
                 const transform = `translate(${x}, ${y})`
 
@@ -81,7 +81,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                     setSelected(new Set(selected))
                 }} >
                     <SVGRectangle rectangle={new Rectangle(0, 0, cellViewBoxSize, cellViewBoxSize)} fill="transparent" />
-                    <path key={i} d={svgRaster.toPath(cellViewBoxSize)} fill={fill} /></g>
+                    <path key={i} d={svgRaster.toPath(cellViewBoxSize)} fill={fill} stroke="white" strokeWidth={0} /></g>
 
 
                 )

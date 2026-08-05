@@ -180,7 +180,7 @@ export const _3x3_LETTERS_SETS: Story = {
     color: "black"
   },
   render: (args) => {
-    const [combinations] = useCounterStrategy(lettersGenerator, toScenarioLimit(2))
+    const [combinations] = useCounterStrategy(lettersGenerator, toScenarioLimit(4))
 
     let svgRasters = []
 

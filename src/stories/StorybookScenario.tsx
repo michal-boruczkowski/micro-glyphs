@@ -83,6 +83,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
                 const cellSize = Math.min(cellWidth, cellHeight)
 
+                //TODO: More columns = smaller padding. d3 scale?
                 const paddedCellSize = cellSize * 1 / PHI
 
                 const cellViewBoxSize = Math.ceil(paddedCellSize)
@@ -107,7 +108,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
                     console.log(Array.from(selected))
                     setSelected(new Set(selected))
                 }} >
-                    <SVGRectangle rectangle={new Rectangle(0, 0, cellViewBoxSize, cellViewBoxSize)} fill="transparent" />
+                    <SVGRectangle rectangle={new Rectangle(0, 0, cellWidth, cellViewBoxSize)} fill="transparent" />
                     <path
                         d={d}
                         fill="none"

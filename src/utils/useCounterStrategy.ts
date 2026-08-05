@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infinity, delay: number = 50) {
+export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infinity, delay: number = 100) {
 
     const [count, setCount] = useState(1)
 

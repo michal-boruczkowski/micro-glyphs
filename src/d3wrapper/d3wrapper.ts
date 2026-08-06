@@ -1,9 +1,8 @@
-import { Selection, BaseType, EnterElement } from 'd3-selection';
+import { Selection, BaseType } from 'd3-selection';
 
 export interface D3Component<
     GElement extends BaseType = BaseType,
     Datum = any,
-    PElement extends BaseType = BaseType,
     PDatum = any
 > {
     <PGE extends BaseType, PPGE extends BaseType, PPD>(
@@ -12,25 +11,25 @@ export interface D3Component<
     ): void;
 
     data(fn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => Datum[]): this;
-    enter(fn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any): this;
-    update(fn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any): this;
-    exit(fn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any): this;
-    merged(fn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any): this;
+
+    enter(fn: <PGE extends BaseType>(selection: Selection<GElement, Datum, PGE, PDatum>) => any): this;
+    update(fn: <PGE extends BaseType>(selection: Selection<GElement, Datum, PGE, PDatum>) => any): this;
+    exit(fn: <PGE extends BaseType>(selection: Selection<GElement, Datum, PGE, PDatum>) => any): this;
+    merged(fn: <PGE extends BaseType>(selection: Selection<GElement, Datum, PGE, PDatum>) => any): this;
 }
 
 export function createComponent<
     GElement extends BaseType = BaseType,
     Datum = any,
-    PElement extends BaseType = BaseType,
     PDatum = any
->(tag: string, className?: string): D3Component<GElement, Datum, PElement, PDatum> {
+>(tag: string, className?: string): D3Component<GElement, Datum, PDatum> {
     const selectorString = className ? `${tag}.${className}` : tag;
 
     let _dataFn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => Datum[] = (d) => [d as unknown as Datum];
-    let _enterFn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any = (enter) => enter;
-    let _updateFn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any = (update) => update;
-    let _exitFn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any = (exit) => exit.remove();
-    let _mergedFn: (selection: Selection<GElement, Datum, PElement, PDatum>) => any = (merged) => merged;
+    let _enterFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (enter) => enter;
+    let _updateFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (update) => update;
+    let _exitFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (exit) => exit.remove();
+    let _mergedFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (merged) => merged;
 
     const render = function <PGE extends BaseType, PPGE extends BaseType, PPD>(
         selection: Selection<PGE, PDatum, PPGE, PPD>
@@ -38,26 +37,26 @@ export function createComponent<
         const joined = selection.selectAll<GElement, unknown>(selectorString).data(_dataFn);
 
         const merged = joined.join(
-            (enter: Selection<EnterElement, Datum, PGE, PDatum>) => {
+            (enter) => {
                 const e = enter.append<GElement>(tag);
                 if (className) e.classed(className, true);
-                e.call(_enterFn as any);
+                _enterFn(e);
                 return e;
             },
-            (update: Selection<GElement, Datum, PGE, PDatum>) => {
-                update.call(_updateFn as any);
+            (update) => {
+                _updateFn(update);
                 return update;
             },
-            (exit: Selection<GElement, Datum, PGE, PDatum>) => {
-                exit.call(_exitFn as any);
+            (exit) => {
+                _exitFn(exit);
                 return exit;
             }
         );
 
-        _mergedFn(merged as any);
+        _mergedFn(merged);
     };
 
-    const component = render as unknown as D3Component<GElement, Datum, PElement, PDatum>;
+    const component = render as unknown as D3Component<GElement, Datum, PDatum>;
 
     component.data = function (fn) { _dataFn = fn; return this; };
     component.enter = function (fn) { _enterFn = fn; return this; };
@@ -69,10 +68,10 @@ export function createComponent<
 }
 
 export const group = <Datum = any, PDatum = any>(className?: string) =>
-    createComponent<SVGGElement, Datum, SVGGElement, PDatum>('g', className);
+    createComponent<SVGGElement, Datum, PDatum>('g', className);
 
 export const circle = <Datum = any, PDatum = any>(className?: string) =>
-    createComponent<SVGCircleElement, Datum, SVGCircleElement, PDatum>('circle', className);
+    createComponent<SVGCircleElement, Datum, PDatum>('circle', className);
 
 export const rect = <Datum = any, PDatum = any>(className?: string) =>
-    createComponent<SVGRectElement, Datum, SVGRectElement, PDatum>('rect', className);
+    createComponent<SVGRectElement, Datum, PDatum>('rect', className);

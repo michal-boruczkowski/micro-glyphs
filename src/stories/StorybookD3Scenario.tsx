@@ -17,7 +17,7 @@ type StorybookD3ScenarioProps = {
 const myCircles = circle<string, SVGRaster[]>('my-circle')
     .data((parentData) => parentData.map((_, i) => String(i)))
     .enter((enter) => enter
-        .attr('cx', (d: string, i: number) => 20 * i)
+        .attr('cx', (d, i) => 20 * i)
         .attr('cy', 10)
         .attr('r', 0)
         .attr('fill', '#3b82f6')
@@ -30,7 +30,7 @@ const myCircles = circle<string, SVGRaster[]>('my-circle')
     .merged((merged) => merged
         .transition().duration(750)
         .attr('r', 100)
-        .attr('cy', (d: string, i: number) => 20 * i)
+        .attr('cy', (d, i) => 20 * i)
     );
 
 const mainGroup = group('raster-group')

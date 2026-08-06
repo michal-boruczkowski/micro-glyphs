@@ -10,11 +10,17 @@ import { StorybookScenario } from './StorybookScenario';
 import { getCartesianProduct } from '../utils/getCartesianProduct';
 import { useCounterStrategy } from '../utils/useCounterStrategy';
 import { getScenarioColumns, toScenarioLimit } from '../components/consts';
+import { StorybookD3Scenario } from './StorybookD3Scenario';
 
 const meta: Meta<typeof SVGRasterPath> = {
   title: 'Components/SVGRasterPath',
   component: SVGRasterPath,
   tags: ['autodocs'],
+  parameters: {
+    controls: {
+      include: ['width', 'fill'],
+    },
+  },
   argTypes: {
     width: { control: { type: 'number', min: 12, max: 64 } },
     fill: { control: 'color' },
@@ -23,6 +29,15 @@ const meta: Meta<typeof SVGRasterPath> = {
 
 export default meta;
 type Story = StoryObj<typeof SVGRasterPath>;
+
+export const d3: Story = {
+  render: (args) => {
+    const svgRasters = generateBinaryCombinations(9).map(combination => new SVGRaster(3, 3, combination))
+
+    return (<StorybookD3Scenario svgRasters={svgRasters} />
+    )
+  }
+}
 
 export const _3x3: Story = {
   args: {

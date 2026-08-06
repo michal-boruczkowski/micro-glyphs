@@ -4,7 +4,7 @@ import { Rectangle } from "../drawing/Rectangle"
 import { SVGRoot } from "../components/SVGRoot"
 import { SVGRectangle } from "../components/SVGRectangle"
 import { SVGRaster } from "../drawing/SVGRaster"
-import { select, scaleBand } from "d3"
+import { select } from "d3"
 import { circle, group } from "../d3wrapper/d3wrapper"
 
 
@@ -14,7 +14,7 @@ type StorybookD3ScenarioProps = {
     width?: number
 }
 
-const myCircles = circle('my-circle')
+const myCircles = circle<string, SVGRaster[]>('my-circle')
     .data((parentData) => parentData.map((_, i) => String(i)))
     .enter((enter) => enter
         .attr('cx', (d: string, i: number) => 20 * i)
@@ -67,37 +67,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
 
         d3Group.call(mainGroup)
 
-        const xScale = scaleBand()
-            .domain(svgRasters.map((_, i) => String(i)))
-            .range([0, width])
-            .padding(0.5);
 
-        const yScale = scaleBand()
-            .domain(svgRasters.map((_, i) => String(i)))
-            .range([0, height])
-            .padding(0.5);
-
-        // const circles = d3Group.selectAll<SVGCircleElement, number>('circle')
-        //     .data(svgRasters.map((_, i) => String(i)))
-
-        // circles.join(
-        //     enter => enter
-        //         .append('circle')
-        //         .attr('cx', d => xScale(d)! + xScale.bandwidth() / 2)
-        //         .attr('cy', d => 10)
-        //         .attr('r', 0)
-        //         .attr('fill', '#3b82f6')
-        //     ,
-        //     update => update,
-        //     exit => exit
-        //         .call(exit => exit.transition().duration(750)
-        //             .attr('r', 0)
-        //             .remove()
-        //         )
-        // ).call(update => update.transition().duration(750)
-        //     .attr('r', d => 100)
-        //     .attr('cy', d => yScale(d)! + yScale.bandwidth() / 2)
-        // )
 
     }, [svgRasters]);
 

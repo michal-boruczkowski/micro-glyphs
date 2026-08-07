@@ -26,14 +26,15 @@ export function createComponent<GElement extends BaseType = BaseType, Datum = an
 ): D3Component<GElement, Datum, PDatum> {
   const selectorString = className ? `${tag}.${className}` : tag;
 
+  type CS = Selection<GElement, Datum, any, PDatum>;
+
   let _dataFn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => Datum[] = (
     d,
   ) => [d as unknown as Datum];
-  let _enterFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (enter) => enter;
-  let _updateFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (update) => update;
-  let _exitFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (exit) =>
-    exit.remove();
-  let _mergedFn: (selection: Selection<GElement, Datum, any, PDatum>) => any = (merged) => merged;
+  let _enterFn: (selection: CS) => any = (enter) => enter;
+  let _updateFn: (selection: CS) => any = (update) => update;
+  let _exitFn: (selection: CS) => any = (exit) => exit.remove();
+  let _mergedFn: (selection: CS) => any = (merged) => merged;
 
   const render = function <PGE extends BaseType, PPGE extends BaseType, PPD>(
     selection: Selection<PGE, PDatum, PPGE, PPD>,

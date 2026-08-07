@@ -1,7 +1,5 @@
 import { SVGRaster } from "./SVGRaster";
 
-
-
 export const CHECKERBOARD_5x5 = SVGRaster.fromMiniature(`
   ⬛⬜⬛⬜⬛
   ⬜⬛⬜⬛⬜

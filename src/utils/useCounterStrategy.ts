@@ -1,27 +1,31 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-export function useCounterStrategy<T>(collection: T[], pageLimit: number = Infinity, delay: number = 100) {
+export function useCounterStrategy<T>(
+  collection: T[],
+  pageLimit: number = Infinity,
+  delay: number = 100,
+) {
+  const [count, setCount] = useState(1);
 
-    const [count, setCount] = useState(1)
+  const combinations =
+    count > pageLimit ? collection.slice(count - pageLimit, count) : collection.slice(0, count);
 
-    const combinations = count > pageLimit ? collection.slice(count - pageLimit, count) : collection.slice(0, count)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      requestAnimationFrame(() => {
+        setCount((prev) => {
+          if (prev >= collection.length) {
+            return 1;
+          }
+          return prev + 1;
+        });
+      });
+    }, delay);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            requestAnimationFrame(() => {
-                setCount(prev => {
-                    if (prev >= collection.length) {
-                        return 1
-                    }
-                    return prev + 1
-                })
-            })
-        }, delay)
+    return () => {
+      clearInterval(timer);
+    };
+  }, [collection.length, delay]);
 
-        return () => {
-            clearInterval(timer)
-        }
-    }, [collection.length, delay])
-
-    return [combinations, count, setCount] as const
+  return [combinations, count, setCount] as const;
 }

@@ -6,6 +6,7 @@ import { SVGRectangle } from "../components/SVGRectangle"
 import { SVGRaster } from "../drawing/SVGRaster"
 import { select } from "d3"
 import { circle, group } from "../d3wrapper/d3wrapper"
+import { TAILWIND_COLORS } from "../utils/colors"
 
 
 type StorybookD3ScenarioProps = {
@@ -20,7 +21,7 @@ const myCircles = circle<string, SVGRaster[]>('my-circle')
         .attr('cx', (d, i) => 20 * i)
         .attr('cy', 10)
         .attr('r', 0)
-        .attr('fill', '#3b82f6')
+        .attr('fill', TAILWIND_COLORS.blue[500])
     )
     .exit((exit) => exit
         .transition().duration(750)

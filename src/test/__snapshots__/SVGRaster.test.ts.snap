@@ -1,0 +1,186 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SVGRaster > concatHorizontal & concatVertical > concatenates rasters horizontally and vertically 1`] = `
+{
+  "concatHorizontal (2x1 + 2x1)": "
+⬛⬜⬜⬛",
+  "concatVertical (2x1 + 2x1)": "
+⬛⬛
+⬜⬜",
+}
+`;
+
+exports[`SVGRaster > fromMiniature & toMiniature > parses various string representations into miniature rasters 1`] = `
+{
+  "X/space representation": "
+⬛
+⬛",
+  "binary (1/0) representation": "
+⬛⬜
+⬜⬛",
+  "emoji (⬛/⬜) representation": "
+⬛⬜⬛
+⬜⬛⬜
+⬛⬜⬛",
+  "empty miniature string": "",
+  "hash/dot (#/.) representation": "
+⬛⬜
+⬜⬛",
+}
+`;
+
+exports[`SVGRaster > getPixel > fetches pixel values inside and outside bounds 1`] = `
+{
+  "(-1, 0) out of bounds": 0,
+  "(0, 0) inside ON": 1,
+  "(1, 0) inside OFF": 0,
+  "(5, 5) out of bounds": 0,
+}
+`;
+
+exports[`SVGRaster > overlay > overlays rasters with blend modes and offsets 1`] = `
+{
+  "AND blend mode": "
+⬜⬛⬜
+⬜⬛⬜
+⬜⬜⬜",
+  "OR blend mode": "
+⬛⬛⬛
+⬛⬛⬛
+⬜⬜⬜",
+  "OR blend mode with (1,1) offset": "
+⬛⬛⬜
+⬛⬛⬛
+⬜⬜⬛",
+  "XOR blend mode": "
+⬛⬜⬛
+⬛⬜⬛
+⬜⬜⬜",
+}
+`;
+
+exports[`SVGRaster > rotate > rotates asymmetric rasters 1`] = `
+{
+  "BIRD_3x3 0deg identity": "
+⬛⬜⬛
+⬛⬜⬜
+⬛⬛⬛",
+  "L_3x3 -90deg": "
+⬜⬜⬛
+⬜⬜⬛
+⬛⬛⬛",
+  "L_3x3 180deg": "
+⬛⬛⬛
+⬜⬜⬛
+⬜⬜⬛",
+  "L_3x3 270deg": "
+⬜⬜⬛
+⬜⬜⬛
+⬛⬛⬛",
+  "L_3x3 90deg": "
+⬛⬛⬛
+⬛⬜⬜
+⬛⬜⬜",
+  "L_3x3 original": "
+⬛⬜⬜
+⬛⬜⬜
+⬛⬛⬛",
+}
+`;
+
+exports[`SVGRaster > toPath & toPathTest > generates SVG path strings 1`] = `
+{
+  "BIRD_3x3 grid rectangle path (toPathTest)": "M 0 0 L 8 0 L 8 8 L 0 8 Z M 16 0 L 24 0 L 24 8 L 16 8 Z M 0 8 L 8 8 L 8 16 L 0 16 Z M 0 16 L 8 16 L 8 24 L 0 24 Z M 8 16 L 16 16 L 16 24 L 8 24 Z M 16 16 L 24 16 L 24 24 L 16 24 Z",
+  "BIRD_3x3 path no rounding": "M 24 24 L 0 24 L 0 0 L 8 0 L 8 16 L 24 16 Z M 16 8 L 16 0 L 24 0 L 24 8 Z",
+  "BIRD_3x3 path with rounding (r=2)": "M 12 24 L 2 24 Q 0 24 1.2246467991473532e-16 22 L 1.2246467991473532e-16 2 Q 0 0 2 0 L 6 2.4492935982947064e-16 Q 8 0 8 2 L 8 14 Q 8 16 10 16 L 22 16 Q 24 16 24 18 L 24 22 Q 24 24 22 24 Z M 16 4 L 16 2 Q 16 0 18 0 L 22 2.4492935982947064e-16 Q 24 0 24 2 L 24 6 Q 24 8 22 8 L 18 8 Q 16 8 16 6 Z",
+}
+`;
+
+exports[`SVGRaster > toPolygons > extracts polygons for solid and hollow rasters 1`] = `
+{
+  "BIRD_3x3 polygons": [
+    [
+      Point {
+        "x": 3,
+        "y": 3,
+      },
+      Point {
+        "x": 0,
+        "y": 3,
+      },
+      Point {
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "x": 1,
+        "y": 2,
+      },
+      Point {
+        "x": 3,
+        "y": 2,
+      },
+    ],
+    [
+      Point {
+        "x": 2,
+        "y": 1,
+      },
+      Point {
+        "x": 2,
+        "y": 0,
+      },
+      Point {
+        "x": 3,
+        "y": 0,
+      },
+      Point {
+        "x": 3,
+        "y": 1,
+      },
+    ],
+  ],
+  "SQUARE_3x3 hollow polygons": [
+    [
+      Point {
+        "x": 3,
+        "y": 3,
+      },
+      Point {
+        "x": 0,
+        "y": 3,
+      },
+      Point {
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "x": 3,
+        "y": 0,
+      },
+    ],
+    [
+      Point {
+        "x": 1,
+        "y": 2,
+      },
+      Point {
+        "x": 2,
+        "y": 2,
+      },
+      Point {
+        "x": 2,
+        "y": 1,
+      },
+      Point {
+        "x": 1,
+        "y": 1,
+      },
+    ],
+  ],
+}
+`;

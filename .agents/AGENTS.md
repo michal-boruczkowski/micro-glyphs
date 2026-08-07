@@ -36,8 +36,13 @@ src/
 
 ## Tests
 
-- Use `@testing-library/react` and `@testing-library/jest-dom`
+- Use `@testing-library/react` and `@testing-library/jest-dom` for React components
 - Run tests: `npm test` (Vitest, one-shot) or `npm run test:watch`
+- **Snapshot testing conventions**:
+  - Prefer snapshot testing with Vitest (`toMatchSnapshot()`) to minimize test boilerplate and maximize readability.
+  - Pack test cases/scenarios directly as key-value pairs inside an inline object literal in `expect({...}).toMatchSnapshot()`.
+  - Use clear, descriptive keys for each scenario (e.g., `"L_3x3 90deg"`, `"OR blend mode"`).
+  - Convert domain objects to concise string or JSON-serializable representations for snapshot assertions (e.g. `.toMiniature()` for rasters, `.toPath()` for SVG paths, `.toPolygons()` for vector shapes).
 
 ## Storybook
 

@@ -117,6 +117,54 @@ export class SVGRaster {
     return result;
   }
 
+  /**
+   * Rotates the raster by a multiple of 90 degrees in a single pass.
+   * @param degrees Angle in degrees (must be a multiple of 90, e.g. 90, 180, 270, -90). Defaults to 90.
+   * @returns A new rotated SVGRaster instance.
+   */
+  public rotate(degrees: number = 90): SVGRaster {
+    const normalized = ((degrees % 360) + 360) % 360;
+
+    if (normalized === 0) {
+      return new SVGRaster(this.width, this.height, this.data);
+    }
+
+    if (normalized !== 90 && normalized !== 180 && normalized !== 270) {
+      throw new Error(`Rotation angle must be a multiple of 90 degrees, got ${degrees}`);
+    }
+
+    const is90or270 = normalized === 90 || normalized === 270;
+    const newWidth = is90or270 ? this.height : this.width;
+    const newHeight = is90or270 ? this.width : this.height;
+    const result = new SVGRaster(newWidth, newHeight);
+
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        const val = this.getPixel(x, y);
+        if (!val) continue;
+
+        let newX: number;
+        let newY: number;
+
+        if (normalized === 90) {
+          newX = this.height - 1 - y;
+          newY = x;
+        } else if (normalized === 180) {
+          newX = this.width - 1 - x;
+          newY = this.height - 1 - y;
+        } else {
+          // normalized === 270
+          newX = y;
+          newY = this.width - 1 - x;
+        }
+
+        result.data[newY * newWidth + newX] = val;
+      }
+    }
+
+    return result;
+  }
+
   public toPolygons(): Point[][] {
     const graph = new SVGRasterPixelGraph(this.width);
 

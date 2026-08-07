@@ -21,6 +21,7 @@
     "build": "tsc && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:update": "vitest run --update",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "oxlint",

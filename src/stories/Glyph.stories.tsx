@@ -45,13 +45,7 @@ export const d3: Story = {
       (combination) => new SVGRaster(3, 3, combination),
     );
 
-    return (
-      <StorybookD3Scenario
-        svgRasters={svgRasters}
-        howManyColumns={getScenarioColumns(svgRasters.length)}
-        pageLimit={getScenarioLimit(2)}
-      />
-    );
+    return <StorybookD3Scenario svgRasters={svgRasters} pageLimit={getScenarioLimit(2)} />;
   },
 };
 

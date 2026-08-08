@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { toScenarioHeight, toScenarioPadding } from "../components/consts";
+import { getScenarioColumns, toScenarioHeight, toScenarioPadding } from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
@@ -7,16 +7,16 @@ import { SVGRaster } from "../drawing/SVGRaster";
 import { select } from "d3";
 import { circle, group } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
+import { getGrid, GridCell } from "../utils/getGrid";
 
 type StorybookD3ScenarioProps = {
   svgRasters: SVGRaster[];
-  howManyColumns?: number;
   width?: number;
   pageLimit?: number;
 };
 
 export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
-  const { svgRasters, howManyColumns = 16, width = 700, pageLimit } = props;
+  const { svgRasters, width = 700, pageLimit } = props;
 
   const count = svgRasters.length;
 
@@ -33,6 +33,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     return viewBoxRect.getPadded(-padding);
   }, []);
 
+  const howManyColumns = getScenarioColumns(data.length);
   const howManyRows = Math.ceil(data.length / howManyColumns);
 
   const d3Ref = useRef<SVGGElement | null>(null);
@@ -40,13 +41,21 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
   useEffect(() => {
     if (!d3Ref.current) return;
 
-    const { x, y, width, height } = canvas;
+    const { x, y } = canvas;
 
-    const d3Group = select(d3Ref.current)
-      .data(() => [data])
-      .attr("transform", `translate(${x}, ${y})`);
+    const grid = getGrid(canvas, howManyColumns, howManyRows);
 
-    d3Group.call(mainGroup);
+    const cells = [];
+
+    for (const cell of grid) {
+      const { x, y, width, height, rowIndex, colIndex } = cell;
+
+      cells.push(cell);
+    }
+
+    const d3Group = select(d3Ref.current).data([cells]).attr("transform", `translate(${x}, ${y})`);
+
+    d3Group.call(gridRow);
   }, [data]);
 
   const gradientId = useId();
@@ -82,11 +91,10 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
   );
 }
 
-const myCircles = circle<string, SVGRaster[]>("my-circle")
-  .data((parentData) => parentData.map((_, i) => String(i)))
+const myCircles = circle<GridCell, GridCell>("my-circle")
   .enter((enter) =>
     enter
-      .attr("cx", (d, i) => 20 * i)
+      .attr("cx", (d, i) => 10)
       .attr("cy", 10)
       .attr("r", 0)
       .attr("fill", TAILWIND_COLORS.blue[500]),
@@ -96,11 +104,19 @@ const myCircles = circle<string, SVGRaster[]>("my-circle")
     merged
       .transition()
       .duration(750)
-      .attr("r", 100)
-      .attr("cy", (d, i) => 20 * i),
+      .attr("r", (d) => d.width / 2)
+      .attr("cy", (d) => 40),
   );
 
-const mainGroup = group("raster-group")
-  .data((parentData) => [parentData])
-  .enter((enter) => enter.attr("class", "raster-group"))
+const gridCell = group("grid-cell")
+  .data((d) => d)
+  .enter((selection) => selection.attr("transform", (d) => `translate(${d.x},${d.y})`))
+  .update((selection) =>
+    selection
+      .transition()
+      .duration(750)
+      .attr("transform", (d) => `translate(${d.x},${d.y})`),
+  )
   .merged(myCircles);
+
+const gridRow = group("grid").merged(gridCell);

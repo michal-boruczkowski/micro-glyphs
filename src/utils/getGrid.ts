@@ -6,19 +6,17 @@ export type GridCell = {
   rowIndex: number;
   x: number;
   y: number;
+  width: number;
+  height: number;
 };
 
-export type GetGridProps = {
-  container: Rectangle;
-  howManyColumns?: number;
-  howManyRows?: number;
-  cellSizeFunction?: CellSizeFunction;
-};
-
-export function getGrid(props: GetGridProps): GridCell[][] {
-  const { container, howManyColumns, howManyRows, cellSizeFunction } = props;
-
-  const rows: GridCell[][] = [];
+export function getGrid(
+  container: Rectangle,
+  howManyColumns: number = 0,
+  howManyRows: number = 0,
+  cellSizeFunction?: CellSizeFunction,
+) {
+  const cells: GridCell[] = [];
 
   let totalHeight = 0;
 
@@ -26,17 +24,19 @@ export function getGrid(props: GetGridProps): GridCell[][] {
     cellSizeFunction || equalCellSizeFunction(container, howManyRows, howManyColumns);
 
   for (let rowIndex = 0; rowIndex < howManyRows; rowIndex++) {
-    const row: GridCell[] = [];
-
     let totalWidth = 0;
 
     for (let colIndex = 0; colIndex < howManyColumns; colIndex++) {
       const cellSize = sizeFunction(rowIndex, colIndex);
 
-      const x = totalWidth;
-      const y = totalHeight;
-
-      row.push({ colIndex, rowIndex, x, y });
+      cells.push({
+        rowIndex,
+        colIndex,
+        x: totalWidth,
+        y: totalHeight,
+        width: cellSize.width,
+        height: cellSize.height,
+      });
 
       totalWidth += cellSize.width;
 
@@ -44,11 +44,9 @@ export function getGrid(props: GetGridProps): GridCell[][] {
         totalHeight += cellSize.height;
       }
     }
-
-    rows.push(row);
   }
 
-  return rows;
+  return cells;
 }
 
 export function getCellIndex(rowIndex: number, colIndex: number, howManyColumns: number) {

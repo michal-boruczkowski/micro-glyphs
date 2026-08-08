@@ -16,26 +16,20 @@ export function SVGGrid(props: SVGGridProps) {
   const childrenArray = Children.toArray(children);
 
   const grid = useMemo(
-    () => getGrid({ container, howManyColumns, howManyRows, cellSizeFunction }),
+    () => getGrid(container, howManyColumns, howManyRows, cellSizeFunction),
     [container, howManyColumns, howManyRows, cellSizeFunction],
   );
 
   return (
     <g transform={`translate(${container.x},${container.y})`} {...rest}>
-      {grid.map((row, r) => {
+      {grid.map((cell) => {
+        const { x, y, rowIndex, colIndex } = cell;
+
+        const index = getCellIndex(rowIndex, colIndex, howManyColumns);
+
         return (
-          <g key={r}>
-            {row.map((cell, c) => {
-              const { x, y } = cell;
-
-              const index = getCellIndex(r, c, howManyColumns);
-
-              return (
-                <g key={c} transform={`translate(${x},${y})`}>
-                  {childrenArray[index]}
-                </g>
-              );
-            })}
+          <g key={index} transform={`translate(${x},${y})`}>
+            {childrenArray[index]}
           </g>
         );
       })}

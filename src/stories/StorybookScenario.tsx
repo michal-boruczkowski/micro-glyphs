@@ -71,7 +71,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
       <SVGGrid
         howManyColumns={howManyColumns}
         howManyRows={howManyRows}
-        rectangle={canvas}
+        container={canvas}
         cellSizeFunction={sizeFunction}
       >
         {svgRasters.map((svgRaster, i) => {

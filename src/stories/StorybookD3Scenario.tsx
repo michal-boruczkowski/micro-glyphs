@@ -12,11 +12,16 @@ type StorybookD3ScenarioProps = {
   svgRasters: SVGRaster[];
   howManyColumns?: number;
   width?: number;
-  limit?: number;
+  pageLimit?: number;
 };
 
 export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
-  const { svgRasters, howManyColumns = 16, width = 700 } = props;
+  const { svgRasters, howManyColumns = 16, width = 700, pageLimit } = props;
+
+  const count = svgRasters.length;
+
+  const data =
+    count > pageLimit ? svgRasters.slice(count - pageLimit, count) : svgRasters.slice(0, count);
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -28,7 +33,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     return viewBoxRect.getPadded(-padding);
   }, []);
 
-  const howManyRows = Math.ceil(svgRasters.length / howManyColumns);
+  const howManyRows = Math.ceil(data.length / howManyColumns);
 
   const d3Ref = useRef<SVGGElement | null>(null);
 
@@ -38,11 +43,11 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     const { x, y, width, height } = canvas;
 
     const d3Group = select(d3Ref.current)
-      .data(() => [svgRasters])
+      .data(() => [data])
       .attr("transform", `translate(${x}, ${y})`);
 
     d3Group.call(mainGroup);
-  }, [svgRasters]);
+  }, [data]);
 
   const gradientId = useId();
   const selectedGradientId = useId();

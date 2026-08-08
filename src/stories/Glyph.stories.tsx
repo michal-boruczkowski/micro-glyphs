@@ -49,7 +49,7 @@ export const d3: Story = {
       <StorybookD3Scenario
         svgRasters={svgRasters}
         howManyColumns={getScenarioColumns(svgRasters.length)}
-        limit={getScenarioLimit(2)}
+        pageLimit={getScenarioLimit(2)}
       />
     );
   },

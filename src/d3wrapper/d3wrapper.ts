@@ -105,3 +105,24 @@ export const onClick = <Datum>(
 ) => {
   d.onClick(event);
 };
+
+export const linearGradient = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGLinearGradientElement, Datum, PDatum>("linearGradient", className);
+
+export const stop = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGStopElement, Datum, PDatum>("stop", className);
+
+export const filter = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGFilterElement, Datum, PDatum>("filter", className);
+
+export const feGaussianBlur = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGFEGaussianBlurElement, Datum, PDatum>("feGaussianBlur", className);
+
+export const feMerge = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGFEMergeElement, Datum, PDatum>("feMerge", className);
+
+export const feMergeNode = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGFEMergeNodeElement, Datum, PDatum>("feMergeNode", className);
+
+export const defs = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGDefsElement, Datum, PDatum>("defs", className);

@@ -1,14 +1,16 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getScenarioColumns, PHI, toScenarioHeight, toScenarioPadding } from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
 import { select } from "d3";
-import { path, group, onClick } from "../d3wrapper/d3wrapper";
+import { path, group, onClick, defs } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
 import { getGrid } from "../utils/getGrid";
 import { useCounterStrategy } from "../utils/useCounterStrategy";
+import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
+import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 
 type StorybookD3ScenarioProps = {
   svgRasters: SVGRaster[];
@@ -59,16 +61,24 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
       const viewBox = Math.min(width, height);
       const rounding = Math.sqrt(viewBox) / PHI;
 
+      const rainbowGradient = getRainbowGradient(index, [
+        TAILWIND_COLORS.sky[100],
+        TAILWIND_COLORS.indigo[700],
+      ]);
+      const glowFilter = getGlowFilter(index);
+
       cells.push({
         x: x + (width - viewBox) / 2,
         y: y + (height - viewBox) / 2,
         width,
         height,
-        r: Math.min(width, height) / 2,
-        cx: width / 2,
-        cy: height / 2,
         duration,
         d: svgRaster.toPath(viewBox, rounding),
+        rainbowGradient,
+        glowFilter,
+        fill: TAILWIND_COLORS.slate[100],
+        stroke: `url(#${selected.has(index) ? "selectedGradientId" : rainbowGradient.id})`,
+        strokeWidth: rounding / PHI,
         onClick: () => {
           if (selected.has(index)) {
             selected.delete(index);
@@ -83,46 +93,20 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     const d3Group = select(d3Ref.current).data([cells]).attr("transform", `translate(${x}, ${y})`);
 
     d3Group.call(gridRow);
-  }, [data, duration]);
-
-  const gradientId = useId();
-  const selectedGradientId = useId();
-  const filterId = useId();
+  }, [data, duration, selected, svgRasters]);
 
   return (
     <SVGRoot width={viewBoxRect.width} height={viewBoxRect.height} viewBoxRect={viewBoxRect}>
-      <defs>
-        {/* Definicja gradientu */}
-        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00FFFF" />
-          <stop offset="100%" stopColor="#B200FF" />
-        </linearGradient>
-
-        <linearGradient id={selectedGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#A67C00" />
-          <stop offset="50%" stopColor="#F9DF9F" />
-          <stop offset="100%" stopColor="#D4AF37" />
-        </linearGradient>
-
-        <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
       <SVGRectangle rectangle={viewBoxRect} fill="#1B1E32" />
       <g ref={d3Ref} />
     </SVGRoot>
   );
 }
 
-const myCircles = path("my-circle")
+const glyph = path("glyph-path")
   .enter((enter) =>
     enter
       .attr("d", (d) => d.d)
-      .attr("fill", TAILWIND_COLORS.blue[500])
       .attr("opacity", 0)
       .on("click", onClick),
   )
@@ -139,8 +123,15 @@ const myCircles = path("my-circle")
       .transition()
       .duration((d) => d.duration)
       .attr("d", (d) => d.d)
-      .attr("opacity", 1),
+      .attr("opacity", 1)
+      .attr("fill", (d) => d.fill)
+      .attr("stroke", (d) => d.stroke)
+      .attr("stroke-width", (d) => d.strokeWidth),
   );
+
+const glyphGroup = group("glyph-group").merged((selection) =>
+  selection.call(defsContainer).call(glowGlyph).call(glyph),
+);
 
 const gridCell = group("grid-cell")
   .data((d) => d)
@@ -151,6 +142,36 @@ const gridCell = group("grid-cell")
       .duration((d) => d.duration)
       .attr("transform", (d) => `translate(${d.x},${d.y})`),
   )
-  .merged(myCircles);
+  .merged(glyphGroup);
 
 const gridRow = group("grid").merged(gridCell);
+
+const defsContainer = defs().merged((selection) =>
+  selection.call(rainbowGradientRenderer).call(glowFilterRenderer),
+);
+
+const glowGlyph = path("glyph-path-filter")
+  .data((d) => (d.glowFilter ? [d] : []))
+  .enter((enter) =>
+    enter
+      .attr("d", (d) => d.d)
+      .attr("opacity", 0)
+      .attr("filter", (d) => `url(#${d.glowFilter.id})`),
+  )
+  .exit((exit) =>
+    exit
+      .transition()
+      .duration((d) => d.duration)
+      .attr("opacity", 0)
+      .remove(),
+  )
+  .merged((merged) =>
+    merged
+      .transition()
+      .duration((d) => d.duration)
+      .attr("d", (d) => d.d)
+      .attr("opacity", 1)
+      .attr("fill", "none")
+      .attr("stroke", (d) => d.stroke)
+      .attr("stroke-width", (d) => d.strokeWidth),
+  );

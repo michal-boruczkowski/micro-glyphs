@@ -30,9 +30,9 @@ export function getScenarioColumns(howManyItems: number) {
     return 3;
   }
 
-  if (howManyItems <= 16) {
-    return Math.round(Math.sqrt(howManyItems));
-  }
+  // if (howManyItems <= 16) {
+  //   return Math.round(Math.sqrt(howManyItems));
+  // }
 
   const mul = Math.sqrt(howManyItems / (4 * 5)); //mul * 4 * mul * 5 = howManyItems
 

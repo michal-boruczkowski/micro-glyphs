@@ -95,3 +95,10 @@ export const circle = <Datum = any, PDatum = any>(className?: string) =>
 
 export const rect = <Datum = any, PDatum = any>(className?: string) =>
   createComponent<SVGRectElement, Datum, PDatum>("rect", className);
+
+export const onClick = <Datum>(
+  event: MouseEvent,
+  d: Datum & { onClick: (event: MouseEvent) => void },
+) => {
+  d.onClick(event);
+};

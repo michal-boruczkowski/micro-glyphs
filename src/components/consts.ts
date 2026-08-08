@@ -26,6 +26,10 @@ export function getScenarioColumns(howManyItems: number) {
     return 2;
   }
 
+  if (howManyItems <= 12) {
+    return 3;
+  }
+
   if (howManyItems <= 16) {
     return Math.ceil(Math.sqrt(howManyItems));
   }

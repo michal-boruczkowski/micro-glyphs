@@ -36,33 +36,6 @@ const meta: Meta<typeof SVGRasterPath> = {
   },
 };
 
-export default meta;
-type Story = StoryObj<typeof SVGRasterPath>;
-
-export const d3: Story = {
-  render: (args) => {
-    const svgRasters = generateBinaryCombinations(9).map(
-      (combination) => new SVGRaster(3, 3, combination),
-    );
-
-    return <StorybookD3Scenario svgRasters={svgRasters} pageLimit={getScenarioLimit(2)} />;
-  },
-};
-
-export const _3x3: Story = {
-  args: {
-    width: 24,
-    color: "black",
-  },
-  render: (args) => {
-    const svgRasters = generateBinaryCombinations(9).map(
-      (combination) => new SVGRaster(3, 3, combination),
-    );
-
-    return <StorybookScenario svgRasters={svgRasters} />;
-  },
-};
-
 const niceGenerator = getCartesianProduct({
   a: NICE_FULL,
   b: NICE_FULL,
@@ -84,20 +57,45 @@ const niceSidesGenerator = getCartesianProduct({
   d: BOTTOM_RIGHT_CORNER.concat(TOP_LEFT_CORNER),
 });
 
+const niceHeroes = ALL_HEROES.concat(TOP_LEFT_CORNER)
+  .concat(TOP_RIGHT_CORNER)
+  .concat(BOTTOM_LEFT_CORNER)
+  .concat(BOTTOM_RIGHT_CORNER);
+
+export default meta;
+type Story = StoryObj<typeof SVGRasterPath>;
+
+export const d3: Story = {
+  render: (args) => {
+    const svgRasters = niceHeroes.map((combination) =>
+      new SVGRaster(5, 5).overlay(combination, 1, 1),
+    );
+
+    return <StorybookD3Scenario svgRasters={svgRasters} pageLimit={getScenarioLimit(2)} />;
+  },
+};
+
+export const _3x3: Story = {
+  args: {
+    width: 24,
+    color: "black",
+  },
+  render: (args) => {
+    const svgRasters = generateBinaryCombinations(9).map(
+      (combination) => new SVGRaster(3, 3, combination),
+    );
+
+    return <StorybookScenario svgRasters={svgRasters} />;
+  },
+};
+
 export const _3x3_NICE: Story = {
   args: {
     width: 24,
     color: "black",
   },
   render: (args) => {
-    const [combinations] = useCounterStrategy(
-      ALL_HEROES.concat(TOP_LEFT_CORNER)
-        .concat(TOP_RIGHT_CORNER)
-        .concat(BOTTOM_LEFT_CORNER)
-        .concat(BOTTOM_RIGHT_CORNER),
-      1,
-      300,
-    );
+    const [combinations] = useCounterStrategy(niceHeroes, 1, 300);
 
     let svgRasters = [];
 

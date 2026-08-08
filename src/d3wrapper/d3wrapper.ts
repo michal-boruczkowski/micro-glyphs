@@ -90,6 +90,9 @@ export function createComponent<GElement extends BaseType = BaseType, Datum = an
 export const group = <Datum = any, PDatum = any>(className?: string) =>
   createComponent<SVGGElement, Datum, PDatum>("g", className);
 
+export const path = <Datum = any, PDatum = any>(className?: string) =>
+  createComponent<SVGPathElement, Datum, PDatum>("path", className);
+
 export const circle = <Datum = any, PDatum = any>(className?: string) =>
   createComponent<SVGCircleElement, Datum, PDatum>("circle", className);
 

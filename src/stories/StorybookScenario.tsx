@@ -29,7 +29,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
   const howManyRows = Math.ceil(svgRasters.length / howManyColumns);
 
   const grid = useMemo(
-    () => getGrid(canvas, howManyColumns, howManyRows, true),
+    () => getGrid(canvas, howManyColumns, howManyRows),
     [canvas, howManyColumns, howManyRows],
   );
 

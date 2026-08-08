@@ -31,10 +31,10 @@ export function getScenarioColumns(howManyItems: number) {
   }
 
   if (howManyItems <= 16) {
-    return Math.ceil(Math.sqrt(howManyItems));
+    return Math.round(Math.sqrt(howManyItems));
   }
 
   const mul = Math.sqrt(howManyItems / (4 * 5)); //mul * 4 * mul * 5 = howManyItems
 
-  return Math.ceil(mul * 4); //how many repetitions with 4 columns?
+  return Math.round(mul * 4); //how many repetitions with 4 columns?
 }

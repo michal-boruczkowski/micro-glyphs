@@ -1,11 +1,11 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { getScenarioColumns, toScenarioHeight, toScenarioPadding } from "../components/consts";
+import { getScenarioColumns, PHI, toScenarioHeight, toScenarioPadding } from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
 import { select } from "d3";
-import { circle, group, onClick } from "../d3wrapper/d3wrapper";
+import { path, group, onClick } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
 import { getGrid } from "../utils/getGrid";
 import { useCounterStrategy } from "../utils/useCounterStrategy";
@@ -50,21 +50,25 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     for (const cell of grid) {
       const { x, y, width, height, index } = cell;
 
-      const tuple = data[index];
+      const svgRaster = data[index];
 
-      if (!tuple) {
+      if (!svgRaster) {
         continue;
       }
 
+      const viewBox = Math.min(width, height);
+      const rounding = Math.sqrt(viewBox) / PHI;
+
       cells.push({
-        x,
-        y,
+        x: x + (width - viewBox) / 2,
+        y: y + (height - viewBox) / 2,
         width,
         height,
         r: Math.min(width, height) / 2,
         cx: width / 2,
         cy: height / 2,
         duration,
+        d: svgRaster.toPath(viewBox, rounding),
         onClick: () => {
           if (selected.has(index)) {
             selected.delete(index);
@@ -114,20 +118,19 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
   );
 }
 
-const myCircles = circle("my-circle")
+const myCircles = path("my-circle")
   .enter((enter) =>
     enter
-      .attr("cx", (d) => d.cx)
-      .attr("cy", (d) => d.cy)
-      .attr("r", 0)
+      .attr("d", (d) => d.d)
       .attr("fill", TAILWIND_COLORS.blue[500])
+      .attr("opacity", 0)
       .on("click", onClick),
   )
   .exit((exit) =>
     exit
       .transition()
       .duration((d) => d.duration)
-      .attr("r", 0)
+      .attr("opacity", 0)
       .remove(),
   )
   .merged((merged) =>
@@ -135,9 +138,8 @@ const myCircles = circle("my-circle")
       .on("click", onClick)
       .transition()
       .duration((d) => d.duration)
-      .attr("cx", (d) => d.cx)
-      .attr("cy", (d) => d.cy)
-      .attr("r", (d) => d.r),
+      .attr("d", (d) => d.d)
+      .attr("opacity", 1),
   );
 
 const gridCell = group("grid-cell")

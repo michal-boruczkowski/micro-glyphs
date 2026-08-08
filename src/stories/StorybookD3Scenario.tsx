@@ -8,6 +8,7 @@ import { select } from "d3";
 import { circle, group, onClick } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
 import { getGrid } from "../utils/getGrid";
+import { useCounterStrategy } from "../utils/useCounterStrategy";
 
 type StorybookD3ScenarioProps = {
   svgRasters: SVGRaster[];
@@ -18,10 +19,9 @@ type StorybookD3ScenarioProps = {
 export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
   const { svgRasters, width = 700, pageLimit } = props;
 
-  const [count, setCount] = useState(1);
+  const duration = 300;
 
-  const data =
-    count > pageLimit ? svgRasters.slice(count - pageLimit, count) : svgRasters.slice(0, count);
+  const [data] = useCounterStrategy(svgRasters, pageLimit, duration);
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -64,6 +64,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
         r: Math.min(width, height) / 2,
         cx: width / 2,
         cy: height / 2,
+        duration,
         onClick: () => {
           if (selected.has(index)) {
             selected.delete(index);
@@ -71,8 +72,6 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
             selected.add(index);
           }
           setSelected(new Set(selected));
-
-          setCount((prev) => prev + 1);
         },
       });
     }
@@ -80,7 +79,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     const d3Group = select(d3Ref.current).data([cells]).attr("transform", `translate(${x}, ${y})`);
 
     d3Group.call(gridRow);
-  }, [data]);
+  }, [data, duration]);
 
   const gradientId = useId();
   const selectedGradientId = useId();
@@ -124,12 +123,18 @@ const myCircles = circle("my-circle")
       .attr("fill", TAILWIND_COLORS.blue[500])
       .on("click", onClick),
   )
-  .exit((exit) => exit.transition().duration(750).attr("r", 0).remove())
+  .exit((exit) =>
+    exit
+      .transition()
+      .duration((d) => d.duration)
+      .attr("r", 0)
+      .remove(),
+  )
   .merged((merged) =>
     merged
       .on("click", onClick)
       .transition()
-      .duration(750)
+      .duration((d) => d.duration)
       .attr("cx", (d) => d.cx)
       .attr("cy", (d) => d.cy)
       .attr("r", (d) => d.r),
@@ -141,7 +146,7 @@ const gridCell = group("grid-cell")
   .update((selection) =>
     selection
       .transition()
-      .duration(750)
+      .duration((d) => d.duration)
       .attr("transform", (d) => `translate(${d.x},${d.y})`),
   )
   .merged(myCircles);

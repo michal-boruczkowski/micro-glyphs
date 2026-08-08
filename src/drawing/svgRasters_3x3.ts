@@ -107,3 +107,7 @@ export const TOP_LEFT_CORNER = [BIRD_90_3x3, L_90_3x3];
 export const TOP_RIGHT_CORNER = [BIRD_180_3x3, L_180_3x3];
 export const BOTTOM_LEFT_CORNER = [BIRD_3x3, L_3x3];
 export const BOTTOM_RIGHT_CORNER = [BIRD_270_3x3, L_270_3x3];
+
+export function compose4(a: SVGRaster, b: SVGRaster, c: SVGRaster, d: SVGRaster) {
+  return new SVGRaster(9, 9).overlay(a, 1, 1).overlay(b, 5, 1).overlay(c, 1, 5).overlay(d, 5, 5);
+}

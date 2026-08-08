@@ -12,30 +12,8 @@ type StorybookD3ScenarioProps = {
   svgRasters: SVGRaster[];
   howManyColumns?: number;
   width?: number;
+  limit?: number;
 };
-
-const myCircles = circle<string, SVGRaster[]>("my-circle")
-  .data((parentData) => parentData.map((_, i) => String(i)))
-  .enter((enter) =>
-    enter
-      .attr("cx", (d, i) => 20 * i)
-      .attr("cy", 10)
-      .attr("r", 0)
-      .attr("fill", TAILWIND_COLORS.blue[500]),
-  )
-  .exit((exit) => exit.transition().duration(750).attr("r", 0).remove())
-  .merged((merged) =>
-    merged
-      .transition()
-      .duration(750)
-      .attr("r", 100)
-      .attr("cy", (d, i) => 20 * i),
-  );
-
-const mainGroup = group("raster-group")
-  .data((parentData) => [parentData])
-  .enter((enter) => enter.attr("class", "raster-group"))
-  .merged(myCircles);
 
 export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
   const { svgRasters, howManyColumns = 16, width = 700 } = props;
@@ -98,3 +76,26 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
     </SVGRoot>
   );
 }
+
+const myCircles = circle<string, SVGRaster[]>("my-circle")
+  .data((parentData) => parentData.map((_, i) => String(i)))
+  .enter((enter) =>
+    enter
+      .attr("cx", (d, i) => 20 * i)
+      .attr("cy", 10)
+      .attr("r", 0)
+      .attr("fill", TAILWIND_COLORS.blue[500]),
+  )
+  .exit((exit) => exit.transition().duration(750).attr("r", 0).remove())
+  .merged((merged) =>
+    merged
+      .transition()
+      .duration(750)
+      .attr("r", 100)
+      .attr("cy", (d, i) => 20 * i),
+  );
+
+const mainGroup = group("raster-group")
+  .data((parentData) => [parentData])
+  .enter((enter) => enter.attr("class", "raster-group"))
+  .merged(myCircles);

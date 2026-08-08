@@ -8,6 +8,7 @@ import {
   TOP_LEFT_CORNER,
   TOP_RIGHT_CORNER,
   ALL_LETTERS,
+  compose4,
 } from "../drawing/svgRasters_3x3";
 import * as monoPatterns_5x5 from "../drawing/svgRasters_5x5";
 import * as monoPatterns_9x9 from "../drawing/svgRasters_9x9";
@@ -17,7 +18,7 @@ import { SVGRaster } from "../drawing/SVGRaster";
 import { StorybookScenario } from "./StorybookScenario";
 import { getCartesianProduct } from "../utils/getCartesianProduct";
 import { useCounterStrategy } from "../utils/useCounterStrategy";
-import { getScenarioColumns, toScenarioLimit } from "../components/consts";
+import { getScenarioColumns, getScenarioLimit } from "../components/consts";
 import { StorybookD3Scenario } from "./StorybookD3Scenario";
 
 const meta: Meta<typeof SVGRasterPath> = {
@@ -44,7 +45,13 @@ export const d3: Story = {
       (combination) => new SVGRaster(3, 3, combination),
     );
 
-    return <StorybookD3Scenario svgRasters={svgRasters} />;
+    return (
+      <StorybookD3Scenario
+        svgRasters={svgRasters}
+        howManyColumns={getScenarioColumns(svgRasters.length)}
+        limit={getScenarioLimit(2)}
+      />
+    );
   },
 };
 
@@ -121,20 +128,14 @@ export const _3x3_NICE_SETS: Story = {
     color: "black",
   },
   render: (args) => {
-    const [combinations] = useCounterStrategy(niceGenerator, toScenarioLimit(2));
+    const [combinations] = useCounterStrategy(niceGenerator, getScenarioLimit(2));
 
     let svgRasters = [];
 
     for (const combination of combinations) {
       const { a, b, c, d } = combination;
 
-      const background = new SVGRaster(9, 9)
-        .overlay(a, 1, 1)
-        .overlay(b, 5, 1)
-        .overlay(c, 1, 5)
-        .overlay(d, 5, 5);
-
-      svgRasters.push(background);
+      svgRasters.push(compose4(a, b, c, d));
     }
 
     return (
@@ -159,13 +160,7 @@ export const _3x3_NICE_SINGLE: Story = {
     for (const combination of combinations) {
       const { a, b, c, d } = combination;
 
-      const background = new SVGRaster(9, 9)
-        .overlay(a, 1, 1)
-        .overlay(b, 5, 1)
-        .overlay(c, 1, 5)
-        .overlay(d, 5, 5);
-
-      svgRasters.push(background);
+      svgRasters.push(compose4(a, b, c, d));
     }
 
     return (
@@ -190,13 +185,7 @@ export const _3x3_LETTERS_SINGLE: Story = {
     for (const combination of combinations) {
       const { a, b, c, d } = combination;
 
-      const background = new SVGRaster(9, 9)
-        .overlay(a, 1, 1)
-        .overlay(b, 5, 1)
-        .overlay(c, 1, 5)
-        .overlay(d, 5, 5);
-
-      svgRasters.push(background);
+      svgRasters.push(compose4(a, b, c, d));
     }
 
     return (
@@ -214,20 +203,14 @@ export const _3x3_LETTERS_SETS: Story = {
     color: "black",
   },
   render: (args) => {
-    const [combinations] = useCounterStrategy(lettersGenerator, toScenarioLimit(4));
+    const [combinations] = useCounterStrategy(lettersGenerator, getScenarioLimit(4));
 
     let svgRasters = [];
 
     for (const combination of combinations) {
       const { a, b, c, d } = combination;
 
-      const background = new SVGRaster(9, 9)
-        .overlay(a, 1, 1)
-        .overlay(b, 5, 1)
-        .overlay(c, 1, 5)
-        .overlay(d, 5, 5);
-
-      svgRasters.push(background);
+      svgRasters.push(compose4(a, b, c, d));
     }
 
     return (
@@ -245,20 +228,14 @@ export const _3x3_NICE_SIDES_SETS: Story = {
     color: "black",
   },
   render: (args) => {
-    const [combinations] = useCounterStrategy(niceSidesGenerator, toScenarioLimit(2));
+    const [combinations] = useCounterStrategy(niceSidesGenerator, getScenarioLimit(2));
 
     let svgRasters = [];
 
     for (const combination of combinations) {
       const { a, b, c, d } = combination;
 
-      const background = new SVGRaster(9, 9)
-        .overlay(a, 1, 1)
-        .overlay(b, 5, 1)
-        .overlay(c, 1, 5)
-        .overlay(d, 5, 5);
-
-      svgRasters.push(background);
+      svgRasters.push(compose4(a, b, c, d));
     }
 
     return (
@@ -283,13 +260,7 @@ export const _3x3_NICE_SIDES_SINGLE: Story = {
     for (const combination of combinations) {
       const { a, b, c, d } = combination;
 
-      const background = new SVGRaster(9, 9)
-        .overlay(a, 1, 1)
-        .overlay(b, 5, 1)
-        .overlay(c, 1, 5)
-        .overlay(d, 5, 5);
-
-      svgRasters.push(background);
+      svgRasters.push(compose4(a, b, c, d));
     }
 
     return (

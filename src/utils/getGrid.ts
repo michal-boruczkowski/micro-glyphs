@@ -1,5 +1,4 @@
 import { Rectangle } from "../drawing/Rectangle";
-import { CellSizeFunction, equalCellSizeFunction } from "./cellSizeFunction";
 
 export type GridCell = {
   colIndex: number;
@@ -10,38 +9,31 @@ export type GridCell = {
   height: number;
 };
 
-export function getGrid(
-  container: Rectangle,
-  howManyColumns: number = 0,
-  howManyRows: number = 0,
-  cellSizeFunction?: CellSizeFunction,
-) {
+export function getGrid(container: Rectangle, howManyColumns: number = 0, howManyRows: number = 0) {
   const cells: GridCell[] = [];
 
   let totalHeight = 0;
 
-  const sizeFunction =
-    cellSizeFunction || equalCellSizeFunction(container, howManyRows, howManyColumns);
+  const cellWidth = container.width / howManyColumns;
+  const cellHeight = container.height / howManyRows;
 
   for (let rowIndex = 0; rowIndex < howManyRows; rowIndex++) {
     let totalWidth = 0;
 
     for (let colIndex = 0; colIndex < howManyColumns; colIndex++) {
-      const cellSize = sizeFunction(rowIndex, colIndex);
-
       cells.push({
         rowIndex,
         colIndex,
         x: totalWidth,
         y: totalHeight,
-        width: cellSize.width,
-        height: cellSize.height,
+        width: cellWidth,
+        height: cellHeight,
       });
 
-      totalWidth += cellSize.width;
+      totalWidth += cellWidth;
 
       if (colIndex === howManyColumns - 1) {
-        totalHeight += cellSize.height;
+        totalHeight += cellHeight;
       }
     }
   }

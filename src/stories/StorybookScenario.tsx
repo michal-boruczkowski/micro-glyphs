@@ -68,12 +68,7 @@ export function StorybookScenario(props: StorybookScenarioProps) {
         </filter>
       </defs>
       <SVGRectangle rectangle={viewBoxRect} fill="#1B1E32" stroke="red" />
-      <SVGGrid
-        howManyColumns={howManyColumns}
-        howManyRows={howManyRows}
-        container={canvas}
-        cellSizeFunction={sizeFunction}
-      >
+      <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} container={canvas}>
         {svgRasters.map((svgRaster, i) => {
           const rowIndex = Math.floor(i / howManyColumns);
           const colIndex = i - rowIndex * howManyColumns;

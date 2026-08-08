@@ -3,18 +3,12 @@ import { PHI, toScenarioHeight, toScenarioPadding } from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
-import { SVGGrid } from "../components/SVGGrid";
 import { SVGRaster } from "../drawing/SVGRaster";
-import { CellSizeFunction, equalCellSizeFunction } from "../utils/cellSizeFunction";
+import { getGrid } from "../utils/getGrid";
 
 type StorybookScenarioProps = {
   svgRasters: SVGRaster[];
   howManyColumns?: number;
-  cellSizeFunction?: (
-    canvas: Rectangle,
-    howManyRows: number,
-    howManyColumns: number,
-  ) => CellSizeFunction;
 };
 
 const scenarioWidth = 700;
@@ -22,7 +16,7 @@ const scenarioWidth = 700;
 const viewBoxRect = new Rectangle(0, 0, scenarioWidth, toScenarioHeight(scenarioWidth));
 
 export function StorybookScenario(props: StorybookScenarioProps) {
-  const { svgRasters, howManyColumns = 16, cellSizeFunction } = props;
+  const { svgRasters, howManyColumns = 16 } = props;
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -34,11 +28,10 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
   const howManyRows = Math.ceil(svgRasters.length / howManyColumns);
 
-  const sizeFunction = useMemo(() => {
-    return cellSizeFunction
-      ? cellSizeFunction(canvas, howManyRows, howManyColumns)
-      : equalCellSizeFunction(canvas, howManyRows, howManyColumns);
-  }, [canvas, howManyRows, howManyColumns]);
+  const grid = useMemo(
+    () => getGrid(canvas, howManyColumns, howManyRows, true),
+    [canvas, howManyColumns, howManyRows],
+  );
 
   const gradientId = useId();
   const selectedGradientId = useId();
@@ -68,27 +61,27 @@ export function StorybookScenario(props: StorybookScenarioProps) {
         </filter>
       </defs>
       <SVGRectangle rectangle={viewBoxRect} fill="#1B1E32" stroke="red" />
-      <SVGGrid howManyColumns={howManyColumns} howManyRows={howManyRows} container={canvas}>
-        {svgRasters.map((svgRaster, i) => {
-          const rowIndex = Math.floor(i / howManyColumns);
-          const colIndex = i - rowIndex * howManyColumns;
+      <g transform={`translate(${canvas.x},${canvas.y})`}>
+        {grid.map((cell) => {
+          const { x, y, index, width, height } = cell;
 
-          const cellRectangle = sizeFunction(rowIndex, colIndex);
+          const svgRaster = svgRasters[index];
 
-          const cellWidth = cellRectangle.width;
-          const cellHeight = cellRectangle.height;
+          if (!svgRaster) {
+            return null;
+          }
 
-          const cellSize = Math.min(cellWidth, cellHeight);
+          const cellSize = Math.min(width, height);
 
           //TODO: More columns = smaller padding. d3 scale?
           const paddedCellSize = (cellSize * 1) / PHI;
 
           const cellViewBoxSize = Math.ceil(paddedCellSize);
 
-          const x = (cellWidth - cellViewBoxSize) / 2;
-          const y = (cellHeight - cellViewBoxSize) / 2;
+          const xCell = x + (width - cellViewBoxSize) / 2;
+          const yCell = y + (height - cellViewBoxSize) / 2;
 
-          const transform = `translate(${x}, ${y})`;
+          const transform = `translate(${xCell}, ${yCell})`;
 
           const rounding = Math.sqrt(cellViewBoxSize) / PHI;
 
@@ -96,26 +89,24 @@ export function StorybookScenario(props: StorybookScenarioProps) {
 
           return (
             <g
+              key={index}
               transform={transform}
               cursor="pointer"
               onClick={() => {
-                if (selected.has(i)) {
-                  selected.delete(i);
+                if (selected.has(index)) {
+                  selected.delete(index);
                 } else {
-                  selected.add(i);
+                  selected.add(index);
                 }
                 console.log(Array.from(selected));
                 setSelected(new Set(selected));
               }}
             >
-              <SVGRectangle
-                rectangle={new Rectangle(0, 0, cellWidth, cellViewBoxSize)}
-                fill="transparent"
-              />
+              <SVGRectangle rectangle={new Rectangle(0, 0, width, height)} fill="transparent" />
               <path
                 d={d}
                 fill="none"
-                stroke={`url(#${selected.has(i) ? selectedGradientId : gradientId})`}
+                stroke={`url(#${selected.has(index) ? selectedGradientId : gradientId})`}
                 strokeWidth={rounding / PHI}
                 filter={`url(#${filterId})`}
               />
@@ -124,13 +115,13 @@ export function StorybookScenario(props: StorybookScenarioProps) {
               <path
                 d={d}
                 fill={"#FDFDFF"}
-                stroke={`url(#${selected.has(i) ? selectedGradientId : gradientId})`}
+                stroke={`url(#${selected.has(index) ? selectedGradientId : gradientId})`}
                 strokeWidth={rounding / PHI / PHI}
               />
             </g>
           );
         })}
-      </SVGGrid>
+      </g>
     </SVGRoot>
   );
 }

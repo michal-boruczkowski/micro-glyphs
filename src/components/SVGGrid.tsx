@@ -1,6 +1,6 @@
 import { Children, ComponentProps, useMemo } from "react";
 import { Rectangle } from "../drawing/Rectangle";
-import { getCellIndex, getGrid } from "../utils/getGrid";
+import { getGrid } from "../utils/getGrid";
 
 export type SVGGridProps = ComponentProps<"g"> & {
   howManyColumns?: number;
@@ -21,9 +21,7 @@ export function SVGGrid(props: SVGGridProps) {
   return (
     <g transform={`translate(${container.x},${container.y})`} {...rest}>
       {grid.map((cell) => {
-        const { x, y, rowIndex, colIndex } = cell;
-
-        const index = getCellIndex(rowIndex, colIndex, howManyColumns);
+        const { x, y, index } = cell;
 
         return (
           <g key={index} transform={`translate(${x},${y})`}>

@@ -7,7 +7,7 @@ import { SVGRaster } from "../drawing/SVGRaster";
 import { select } from "d3";
 import { circle, group, onClick } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
-import { getCellIndex, getGrid } from "../utils/getGrid";
+import { getGrid } from "../utils/getGrid";
 
 type StorybookD3ScenarioProps = {
   svgRasters: SVGRaster[];
@@ -43,14 +43,14 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
 
     const { x, y } = canvas;
 
-    const grid = getGrid(canvas, howManyColumns, howManyRows);
+    const grid = getGrid(canvas, howManyColumns, howManyRows, true);
 
     const cells = [];
 
     for (const cell of grid) {
-      const { x, y, width, height, rowIndex, colIndex } = cell;
+      const { x, y, width, height, index } = cell;
 
-      const tuple = data[getCellIndex(rowIndex, colIndex, howManyColumns)];
+      const tuple = data[index];
 
       if (!tuple) {
         continue;
@@ -64,7 +64,16 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
         r: Math.min(width, height) / 2,
         cx: width / 2,
         cy: height / 2,
-        onClick: () => setCount((prev) => prev + 1),
+        onClick: () => {
+          if (selected.has(index)) {
+            selected.delete(index);
+          } else {
+            selected.add(index);
+          }
+          setSelected(new Set(selected));
+
+          setCount((prev) => prev + 1);
+        },
       });
     }
 

@@ -1,5 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { getScenarioColumns, PHI, toScenarioHeight, toScenarioPadding } from "../components/consts";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import {
+  getScenarioColumns,
+  getScenarioLimit,
+  PHI,
+  toScenarioHeight,
+  toScenarioPadding,
+} from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
@@ -12,18 +18,49 @@ import { useCounterStrategy } from "../utils/useCounterStrategy";
 import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 
-type StorybookD3ScenarioProps = {
+type SVGRasterScenarioProps = {
   svgRasters: SVGRaster[];
+
+  color?: CSSProperties["color"];
+  background?: CSSProperties["color"];
+  gradientColors?: CSSProperties["color"][];
+
   width?: number;
-  pageLimit?: number;
+
+  start?: number;
+  page?: number;
+
+  autoCenter?: boolean;
+  glowSize?: number;
+
+  duration?: number;
 };
 
-export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
-  const { svgRasters, width = 700, pageLimit } = props;
+const DEFAULT_GRADIENT = [
+  TAILWIND_COLORS.sky[100],
+  TAILWIND_COLORS.indigo[400],
+  TAILWIND_COLORS.orange[700],
+];
 
-  const duration = 300;
+// <stop offset="0%" stopColor="#A67C00" />
+//     <stop offset="50%" stopColor="#F9DF9F" />
+//     <stop offset="100%" stopColor="#D4AF37" />
 
-  const [data] = useCounterStrategy(svgRasters, pageLimit, duration);
+export function SVGRasterScenario(props: SVGRasterScenarioProps) {
+  const {
+    svgRasters,
+    color = TAILWIND_COLORS.slate[100],
+    background = TAILWIND_COLORS.gray[800],
+    width = 700,
+    start,
+    page = getScenarioLimit(2),
+    gradientColors = DEFAULT_GRADIENT,
+    autoCenter = false,
+    duration = 300,
+    glowSize = 4,
+  } = props;
+
+  const [data] = useCounterStrategy(svgRasters, start, page, duration);
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -45,7 +82,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
 
     const { x, y } = canvas;
 
-    const grid = getGrid(canvas, howManyColumns, howManyRows, true);
+    const grid = getGrid(canvas, howManyColumns, howManyRows, autoCenter);
 
     const cells = [];
 
@@ -61,11 +98,8 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
       const viewBox = Math.min(width, height);
       const rounding = Math.sqrt(viewBox) / PHI;
 
-      const rainbowGradient = getRainbowGradient(index, [
-        TAILWIND_COLORS.sky[100],
-        TAILWIND_COLORS.indigo[700],
-      ]);
-      const glowFilter = getGlowFilter(index);
+      const rainbowGradient = getRainbowGradient(index, gradientColors);
+      const glowFilter = glowSize > 0 && getGlowFilter(index, glowSize);
 
       cells.push({
         x: x + (width - viewBox) / 2,
@@ -76,9 +110,9 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
         d: svgRaster.toPath(viewBox, rounding),
         rainbowGradient,
         glowFilter,
-        fill: TAILWIND_COLORS.slate[100],
-        stroke: `url(#${selected.has(index) ? "selectedGradientId" : rainbowGradient.id})`,
-        strokeWidth: rounding / PHI,
+        fill: color,
+        stroke: selected.has(index) ? TAILWIND_COLORS.indigo[500] : rainbowGradient.url,
+        strokeWidth: rounding / PHI / PHI,
         onClick: () => {
           if (selected.has(index)) {
             selected.delete(index);
@@ -97,7 +131,7 @@ export function StorybookD3Scenario(props: StorybookD3ScenarioProps) {
 
   return (
     <SVGRoot width={viewBoxRect.width} height={viewBoxRect.height} viewBoxRect={viewBoxRect}>
-      <SVGRectangle rectangle={viewBoxRect} fill="#1B1E32" />
+      <SVGRectangle rectangle={viewBoxRect} fill={background} />
       <g ref={d3Ref} />
     </SVGRoot>
   );
@@ -108,6 +142,8 @@ const glyph = path("glyph-path")
     enter
       .attr("d", (d) => d.d)
       .attr("opacity", 0)
+      .attr("stroke", (d) => d.stroke)
+      .attr("stroke-width", (d) => d.strokeWidth)
       .on("click", onClick),
   )
   .exit((exit) =>

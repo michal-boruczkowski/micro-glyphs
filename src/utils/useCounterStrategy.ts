@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 
 export function useCounterStrategy<T>(
   collection: T[],
+  start: number = 1,
   pageLimit: number = Infinity,
   delay: number = 100,
 ) {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(start);
 
   const combinations =
     count > pageLimit ? collection.slice(count - pageLimit, count) : collection.slice(0, count);
@@ -15,7 +16,7 @@ export function useCounterStrategy<T>(
       requestAnimationFrame(() => {
         setCount((prev) => {
           if (prev >= collection.length) {
-            return 1;
+            return start;
           }
           return prev + 1;
         });
@@ -25,7 +26,7 @@ export function useCounterStrategy<T>(
     return () => {
       clearInterval(timer);
     };
-  }, [collection.length, delay]);
+  }, [collection.length, delay, start]);
 
   return [combinations, count, setCount] as const;
 }

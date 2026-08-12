@@ -29,11 +29,11 @@ const blurRenderer = feGaussianBlur()
     enter.attr("stdDeviation", (d) => d.stdDeviation).attr("result", (d) => d.result),
   );
 
-export function getGlowFilter(id: string | number) {
+export function getGlowFilter(id: string | number, size: number = 4) {
   return {
     id: `glow-filter-${id}`,
     blur: {
-      stdDeviation: "4",
+      stdDeviation: String(size),
       result: "blur",
     },
     merge: {

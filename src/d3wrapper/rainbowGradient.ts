@@ -16,15 +16,18 @@ export const rainbowGradientRenderer = linearGradient()
   )
   .merged(gradientStops);
 
-export function getRainbowGradient(id: string | number, colors: string[]) {
+export function getRainbowGradient(id: string | number, stopColors: string[]) {
+  const rainbowGradientId = `rainbow-gradient-${id}`;
+
   return {
-    id: `rainbow-gradient-${id}`,
-    stops: colors.map((color, index) => {
-      const offsetPercent = colors.length > 1 ? (index / (colors.length - 1)) * 100 : 0;
+    id: rainbowGradientId,
+    url: `url(#${rainbowGradientId})`,
+    stops: stopColors.map((stopColor, index) => {
+      const offsetPercent = stopColors.length > 1 ? (index / (stopColors.length - 1)) * 100 : 0;
 
       return {
         offset: `${Math.round(offsetPercent)}%`,
-        stopColor: color,
+        stopColor,
       };
     }),
   };

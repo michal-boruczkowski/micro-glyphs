@@ -2,7 +2,7 @@ import { linearGradient, stop } from "./d3wrapper";
 
 const gradientStops = stop()
   .data((d) => d.stops)
-  .enter((enter) => enter.attr("offset", (d) => d.offset).attr("stop-color", (d) => d.stopColor));
+  .merged((enter) => enter.attr("offset", (d) => d.offset).attr("stop-color", (d) => d.stopColor));
 
 export const rainbowGradientRenderer = linearGradient()
   .data((d) => (d.rainbowGradient ? [d.rainbowGradient] : []))

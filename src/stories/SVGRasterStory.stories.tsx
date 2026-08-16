@@ -19,13 +19,33 @@ import { getCartesianProduct } from "../utils/getCartesianProduct";
 import { SVGRasterScenario } from "./SVGRasterScenario";
 import { TAILWIND_COLORS, TAILWIND_PRESET_COLORS } from "../utils/colors";
 
+const COLOR_CONTROL = {
+  control: {
+    type: "color",
+    presetColors: TAILWIND_PRESET_COLORS,
+  },
+} as const;
+
 const meta: Meta<typeof SVGRasterScenario> = {
   title: "SVGRasterStory",
   component: SVGRasterScenario,
   tags: ["autodocs"],
   parameters: {
     controls: {
-      include: ["color", "background", "autoCenter", "duration", "glowSize", "animateOpacity"],
+      include: [
+        "color",
+        "background",
+        "autoCenter",
+        "duration",
+        "glowSize",
+        "roundingSize",
+        "animateOpacity",
+        "strokeSize",
+        "gradientColor1",
+        "gradientColor2",
+        "gradientColor3",
+        "stroke",
+      ],
     },
   },
   args: {
@@ -35,24 +55,21 @@ const meta: Meta<typeof SVGRasterScenario> = {
     animateOpacity: true,
     duration: 600,
     glowSize: 4,
+    strokeSize: 0,
   },
   argTypes: {
-    color: {
-      control: {
-        type: "color",
-        presetColors: TAILWIND_PRESET_COLORS,
-      },
-    },
-    background: {
-      control: {
-        type: "color",
-        presetColors: TAILWIND_PRESET_COLORS,
-      },
-    },
+    color: COLOR_CONTROL,
+    background: COLOR_CONTROL,
+    stroke: COLOR_CONTROL,
+    gradientColor1: COLOR_CONTROL,
+    gradientColor2: COLOR_CONTROL,
+    gradientColor3: COLOR_CONTROL,
     autoCenter: { control: "boolean" },
     animateOpacity: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
+    strokeSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
+    roundingSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
   },
 };
 
@@ -109,10 +126,9 @@ export const _3x3: Story = {
     return (
       <SVGRasterScenario
         start={svgRasters.length}
+        stop={svgRasters.length}
         page={svgRasters.length}
         svgRasters={svgRasters}
-        gradientColors={[]}
-
         {...args}
       />
     );
@@ -131,7 +147,7 @@ export const _3x3_NICE: Story = {
 
 export const _3x3_NICE_SETS: Story = {
   render: (args) => {
-    return <SVGRasterScenario svgRasters={niceFull} {...args} />;
+    return <SVGRasterScenario svgRasters={niceFull} {...args} stop={niceFull.length} />;
   },
 };
 
@@ -143,13 +159,13 @@ export const _3x3_LETTERS_SINGLE: Story = {
 
 export const _3x3_LETTERS_SETS: Story = {
   render: (args) => {
-    return <SVGRasterScenario svgRasters={letters} {...args} />;
+    return <SVGRasterScenario svgRasters={letters} {...args} stop={niceFull.length} />;
   },
 };
 
 export const _3x3_NICE_SIDES_SETS: Story = {
   render: (args) => {
-    return <SVGRasterScenario svgRasters={niceSides} {...args} />;
+    return <SVGRasterScenario svgRasters={niceSides} {...args} stop={niceFull.length} />;
   },
 };
 
@@ -163,7 +179,7 @@ export const _5x5: Story = {
   render: (args) => (
     <div className="flex flex-wrap gap-4">
       {Object.values(monoPatterns_5x5).map((pattern, i) => (
-        <SVGRasterPath key={i} {...args} svgRaster={pattern} {...args} />
+        <SVGRasterPath key={i} svgRaster={pattern} {...args} />
       ))}
     </div>
   ),
@@ -173,7 +189,7 @@ export const _9x9: Story = {
   render: (args) => (
     <div className="flex flex-wrap gap-4">
       {Object.values(monoPatterns_9x9).map((pattern, i) => (
-        <SVGRasterPath key={i} {...args} svgRaster={pattern} {...args} />
+        <SVGRasterPath key={i} svgRaster={pattern} {...args} />
       ))}
     </div>
   ),

@@ -23,16 +23,22 @@ type SVGRasterScenarioProps = {
 
   color?: CSSProperties["color"];
   background?: CSSProperties["color"];
-  gradientColors?: CSSProperties["color"][];
+  stroke?: CSSProperties["color"];
+  gradientColor1?: CSSProperties["color"];
+  gradientColor2?: CSSProperties["color"];
+  gradientColor3?: CSSProperties["color"];
 
   width?: number;
 
   start?: number;
+  stop?: number;
   page?: number;
 
   autoCenter?: boolean;
   animateOpacity?: boolean;
   glowSize?: number;
+  strokeSize?: number;
+  roundingSize?: number;
 
   duration?: number;
 };
@@ -54,15 +60,26 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     background = TAILWIND_COLORS.gray[800],
     width = 700,
     start,
+    stop,
     page = getScenarioLimit(2),
-    gradientColors = DEFAULT_GRADIENT,
+    gradientColor1,
+    gradientColor2,
+    gradientColor3,
     autoCenter = false,
     duration = 300,
     glowSize = 4,
+    strokeSize,
+    roundingSize,
     animateOpacity = true,
+    stroke,
   } = props;
 
-  const [data] = useCounterStrategy(svgRasters, start, page, duration);
+  const [data] = useCounterStrategy(svgRasters, {
+    start,
+    stop,
+    page,
+    duration: duration,
+  });
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -72,7 +89,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     const padding = toScenarioPadding(width);
 
     return viewBoxRect.getPadded(-padding);
-  }, []);
+  }, [width, viewBoxRect]);
 
   const howManyColumns = getScenarioColumns(data.length);
   const howManyRows = Math.ceil(data.length / howManyColumns);
@@ -98,9 +115,13 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
       }
 
       const viewBox = Math.min(width, height);
-      const rounding = Math.sqrt(viewBox) / PHI;
+      const niceRounding = Math.sqrt(viewBox) / PHI;
+      const rounding = roundingSize < 0 ? niceRounding : roundingSize;
 
-      const rainbowGradient = getRainbowGradient(index, gradientColors);
+      const gradientColors = [gradientColor1, gradientColor2, gradientColor3].filter(Boolean);
+      const rainbowGradient =
+        gradientColors.length > 0 ? getRainbowGradient(index, gradientColors) : undefined;
+
       const glowFilter = glowSize > 0 && getGlowFilter(index, glowSize);
 
       cells.push({
@@ -114,8 +135,8 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
         rainbowGradient,
         glowFilter,
         fill: color,
-        stroke: selected.has(index) ? TAILWIND_COLORS.indigo[500] : rainbowGradient.url,
-        strokeWidth: rounding / PHI / PHI,
+        stroke: rainbowGradient ? rainbowGradient.url : stroke,
+        strokeWidth: strokeSize < 0 ? niceRounding / PHI / PHI : strokeSize,
         animateOpacity,
         onClick: () => {
           if (selected.has(index)) {
@@ -131,7 +152,26 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     const d3Group = select(d3Ref.current).data([cells]).attr("transform", `translate(${x}, ${y})`);
 
     d3Group.call(gridRow);
-  }, [data, duration, selected, svgRasters, animateOpacity]);
+  }, [
+    data,
+    duration,
+    selected,
+    svgRasters,
+    animateOpacity,
+    strokeSize,
+    roundingSize,
+    glowSize,
+    color,
+    background,
+    canvas,
+    howManyColumns,
+    howManyRows,
+    autoCenter,
+    gradientColor1,
+    gradientColor2,
+    gradientColor3,
+    stroke,
+  ]);
 
   return (
     <SVGRoot width={viewBoxRect.width} height={viewBoxRect.height} viewBoxRect={viewBoxRect}>

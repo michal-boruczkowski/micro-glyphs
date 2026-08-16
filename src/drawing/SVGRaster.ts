@@ -43,6 +43,10 @@ export class SVGRaster {
     this.data = data?.slice() ?? new Uint8Array(width * height);
   }
 
+  public get hash(): string {
+    return `${this.width}x${this.height}:${this.data.join("")}`;
+  }
+
   public getPixel(x: number, y: number): number {
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) return 0;
     return this.data[y * this.width + x];

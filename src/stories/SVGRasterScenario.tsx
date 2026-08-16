@@ -31,6 +31,7 @@ type SVGRasterScenarioProps = {
   page?: number;
 
   autoCenter?: boolean;
+  animateOpacity?: boolean;
   glowSize?: number;
 
   duration?: number;
@@ -58,6 +59,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     autoCenter = false,
     duration = 300,
     glowSize = 4,
+    animateOpacity = true,
   } = props;
 
   const [data] = useCounterStrategy(svgRasters, start, page, duration);
@@ -102,6 +104,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
       const glowFilter = glowSize > 0 && getGlowFilter(index, glowSize);
 
       cells.push({
+        id: svgRaster.hash,
         x: x + (width - viewBox) / 2,
         y: y + (height - viewBox) / 2,
         width,
@@ -113,6 +116,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
         fill: color,
         stroke: selected.has(index) ? TAILWIND_COLORS.indigo[500] : rainbowGradient.url,
         strokeWidth: rounding / PHI / PHI,
+        animateOpacity,
         onClick: () => {
           if (selected.has(index)) {
             selected.delete(index);
@@ -127,7 +131,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     const d3Group = select(d3Ref.current).data([cells]).attr("transform", `translate(${x}, ${y})`);
 
     d3Group.call(gridRow);
-  }, [data, duration, selected, svgRasters]);
+  }, [data, duration, selected, svgRasters, animateOpacity]);
 
   return (
     <SVGRoot width={viewBoxRect.width} height={viewBoxRect.height} viewBoxRect={viewBoxRect}>
@@ -138,20 +142,17 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
 }
 
 const glyph = path("glyph-path")
+  .data(
+    (d) => [d],
+    (d) => d.id,
+  )
   .enter((enter) =>
     enter
       .attr("d", (d) => d.d)
-      .attr("opacity", 0)
+      .attr("opacity", (d) => (d.animateOpacity ? 0 : 1))
       .attr("stroke", (d) => d.stroke)
       .attr("stroke-width", (d) => d.strokeWidth)
       .on("click", onClick),
-  )
-  .exit((exit) =>
-    exit
-      .transition()
-      .duration((d) => d.duration)
-      .attr("opacity", 0)
-      .remove(),
   )
   .merged((merged) =>
     merged
@@ -187,19 +188,18 @@ const defsContainer = defs().merged((selection) =>
 );
 
 const glowGlyph = path("glyph-path-filter")
-  .data((d) => (d.glowFilter ? [d] : []))
+  .data(
+    (d) => (d.glowFilter ? [d] : []),
+    (d) => d.id,
+  )
   .enter((enter) =>
     enter
+      .attr("filter", (d) => `url(#${d.glowFilter.id})`)
       .attr("d", (d) => d.d)
-      .attr("opacity", 0)
-      .attr("filter", (d) => `url(#${d.glowFilter.id})`),
-  )
-  .exit((exit) =>
-    exit
-      .transition()
-      .duration((d) => d.duration)
-      .attr("opacity", 0)
-      .remove(),
+      .attr("opacity", (d) => (d.animateOpacity ? 0 : 1))
+      .attr("fill", "none")
+      .attr("stroke", (d) => d.stroke)
+      .attr("stroke-width", (d) => d.strokeWidth),
   )
   .merged((merged) =>
     merged

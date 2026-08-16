@@ -25,19 +25,22 @@ const meta: Meta<typeof SVGRasterScenario> = {
   tags: ["autodocs"],
   parameters: {
     controls: {
-      include: ["color", "background", "autoCenter", "duration", "glowSize"],
+      include: ["color", "background", "autoCenter", "duration", "glowSize", "animateOpacity"],
     },
   },
   args: {
     color: TAILWIND_COLORS.slate[100],
     background: TAILWIND_COLORS.gray[800],
     autoCenter: false,
+    animateOpacity: true,
     duration: 600,
+    glowSize: 4,
   },
   argTypes: {
     color: { control: "color" },
     background: { control: "color" },
     autoCenter: { control: "boolean" },
+    animateOpacity: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
   },

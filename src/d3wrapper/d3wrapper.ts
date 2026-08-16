@@ -6,7 +6,10 @@ export interface D3Component<GElement extends BaseType = BaseType, Datum = any, 
     ...args: any[]
   ): void;
 
-  data(fn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => Datum[]): this;
+  data(
+    fn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => Datum[],
+    keyFn?: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => string,
+  ): this;
 
   enter(
     fn: <PGE extends BaseType>(selection: Selection<GElement, Datum, PGE, PDatum>) => any,
@@ -31,6 +34,7 @@ export function createComponent<GElement extends BaseType = BaseType, Datum = an
   let _dataFn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => Datum[] = (
     d,
   ) => [d as unknown as Datum];
+  let _keyFn: (d: PDatum, i: number, groups: BaseType[] | ArrayLike<BaseType>) => string;
   let _enterFn: (selection: CS) => any = (enter) => enter;
   let _updateFn: (selection: CS) => any = (update) => update;
   let _exitFn: (selection: CS) => any = (exit) => exit.remove();
@@ -39,7 +43,7 @@ export function createComponent<GElement extends BaseType = BaseType, Datum = an
   const render = function <PGE extends BaseType, PPGE extends BaseType, PPD>(
     selection: Selection<PGE, PDatum, PPGE, PPD>,
   ) {
-    const joined = selection.selectAll<GElement, unknown>(selectorString).data(_dataFn);
+    const joined = selection.selectAll<GElement, unknown>(selectorString).data(_dataFn, _keyFn);
 
     const merged = joined.join(
       (enter) => {
@@ -63,8 +67,9 @@ export function createComponent<GElement extends BaseType = BaseType, Datum = an
 
   const component = render as unknown as D3Component<GElement, Datum, PDatum>;
 
-  component.data = function (fn) {
+  component.data = function (fn, keyFn) {
     _dataFn = fn;
+    _keyFn = keyFn;
     return this;
   };
   component.enter = function (fn) {

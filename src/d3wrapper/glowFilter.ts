@@ -2,22 +2,20 @@ import { filter, feGaussianBlur, feMerge, feMergeNode } from "./d3wrapper";
 
 export const glowFilterRenderer = filter()
   .data((d) => (d.glowFilter ? [d.glowFilter] : []))
-  .enter((enter) =>
-    enter
+  .merged((selection) =>
+    selection
       .attr("id", (d) => d.id)
       .attr("x", "-50%")
       .attr("y", "-50%")
       .attr("width", "200%")
-      .attr("height", "200%"),
-  )
-  .merged((merged) => {
-    blurRenderer(merged);
-    mergeRenderer(merged);
-  });
+      .attr("height", "200%")
+      .call(blurRenderer)
+      .call(mergeRenderer),
+  );
 
 const mergeNodeRenderer = feMergeNode()
   .data((d) => d.nodes)
-  .enter((enter) => enter.attr("in", (d) => d.in));
+  .merged((selection) => selection.attr("in", (d) => d.in));
 
 const mergeRenderer = feMerge()
   .data((d) => (d.merge ? [d.merge] : []))
@@ -25,8 +23,8 @@ const mergeRenderer = feMerge()
 
 const blurRenderer = feGaussianBlur()
   .data((d) => (d.blur ? [d.blur] : []))
-  .enter((enter) =>
-    enter.attr("stdDeviation", (d) => d.stdDeviation).attr("result", (d) => d.result),
+  .merged((selection) =>
+    selection.attr("stdDeviation", (d) => d.stdDeviation).attr("result", (d) => d.result),
   );
 
 export function getGlowFilter(id: string | number, size: number = 4) {

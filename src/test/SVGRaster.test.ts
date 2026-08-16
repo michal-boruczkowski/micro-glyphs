@@ -111,4 +111,25 @@ describe("SVGRaster", () => {
       }).toMatchSnapshot();
     });
   });
+
+  describe("hash", () => {
+    it("calculates unique hash based on dimensions and pixel data", () => {
+      expect({
+        "empty raster": SVGRaster.fromMiniature("").hash,
+        "L_3x3": L_3x3.hash,
+        "L_3x3 90deg": L_3x3.rotate(90).hash,
+        "BIRD_3x3": BIRD_3x3.hash,
+        "SQUARE_3x3": SQUARE_3x3.hash,
+      }).toMatchSnapshot();
+    });
+
+    it("produces identical hash for identical rasters and different for different", () => {
+      const raster1 = SVGRaster.fromMiniature("10\n01");
+      const raster2 = SVGRaster.fromMiniature("10\n01");
+      const raster3 = SVGRaster.fromMiniature("01\n10");
+      expect(raster1.hash).toBe(raster2.hash);
+      expect(raster1.hash).not.toBe(raster3.hash);
+    });
+  });
 });
+

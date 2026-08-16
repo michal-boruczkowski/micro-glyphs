@@ -1,6 +1,5 @@
 # micro-glyphs
 
-- add hash function to raster
 - add padding function to MonoPatern
 - zamień useCounterStrategy na coś co przyjmuje obiekt konfiguracyjny, dodaj stop index
 - zbuduj tailwindowy color picker w storybook

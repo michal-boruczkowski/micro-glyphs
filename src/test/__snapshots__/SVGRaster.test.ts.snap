@@ -38,6 +38,16 @@ exports[`SVGRaster > getPixel > fetches pixel values inside and outside bounds 1
 }
 `;
 
+exports[`SVGRaster > hash > calculates unique hash based on dimensions and pixel data 1`] = `
+{
+  "BIRD_3x3": "3x3:101100111",
+  "L_3x3": "3x3:100100111",
+  "L_3x3 90deg": "3x3:111100100",
+  "SQUARE_3x3": "3x3:111101111",
+  "empty raster": "0x0:",
+}
+`;
+
 exports[`SVGRaster > overlay > overlays rasters with blend modes and offsets 1`] = `
 {
   "AND blend mode": "

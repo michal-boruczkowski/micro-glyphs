@@ -17,7 +17,7 @@ import { SVGRaster } from "../drawing/SVGRaster";
 
 import { getCartesianProduct } from "../utils/getCartesianProduct";
 import { SVGRasterScenario } from "./SVGRasterScenario";
-import { TAILWIND_COLORS } from "../utils/colors";
+import { TAILWIND_COLORS, TAILWIND_PRESET_COLORS } from "../utils/colors";
 
 const meta: Meta<typeof SVGRasterScenario> = {
   title: "SVGRasterStory",
@@ -37,14 +37,26 @@ const meta: Meta<typeof SVGRasterScenario> = {
     glowSize: 4,
   },
   argTypes: {
-    color: { control: "color" },
-    background: { control: "color" },
+    color: {
+      control: {
+        type: "color",
+        presetColors: TAILWIND_PRESET_COLORS,
+      },
+    },
+    background: {
+      control: {
+        type: "color",
+        presetColors: TAILWIND_PRESET_COLORS,
+      },
+    },
     autoCenter: { control: "boolean" },
     animateOpacity: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
   },
 };
+
+console.log(TAILWIND_PRESET_COLORS);
 
 const niceFull = getCartesianProduct({
   a: NICE_FULL,
@@ -90,8 +102,8 @@ type Story = StoryObj<typeof SVGRasterScenario>;
 export const _3x3: Story = {
   args: { background: TAILWIND_COLORS.black },
   render: (args) => {
-    const svgRasters = generateBinaryCombinations(9).map(
-      (combination) => new SVGRaster(5, 5).overlay(new SVGRaster(3, 3, combination), 1, 1), //add padding here
+    const svgRasters = generateBinaryCombinations(9).map((combination) =>
+      new SVGRaster(3, 3, combination).getPadded(1),
     );
 
     return (

@@ -56,6 +56,27 @@ describe("SVGRaster", () => {
     });
   });
 
+  describe("addPadding", () => {
+    it("adds padding with default y=x and asymmetric x, y", () => {
+      const dot = SVGRaster.fromMiniature("⬛");
+      expect({
+        "dot original": dot.toMiniature(),
+        "dot addPadding(1)": dot.getPadded(1).toMiniature(),
+        "dot addPadding(2, 1)": dot.getPadded(2, 1).toMiniature(),
+        "dot addPadding(1, 0)": dot.getPadded(1, 0).toMiniature(),
+        "dot addPadding(0, 1)": dot.getPadded(0, 1).toMiniature(),
+        "L_3x3 addPadding(1)": L_3x3.getPadded(1).toMiniature(),
+      }).toMatchSnapshot();
+    });
+
+    it("correctly sets new dimensions", () => {
+      const raster = SVGRaster.fromMiniature("⬛⬛\n⬛⬛");
+      const padded = raster.getPadded(2, 3);
+      expect(padded.width).toBe(2 + 2 * 2);
+      expect(padded.height).toBe(2 + 2 * 3);
+    });
+  });
+
   describe("concatHorizontal & concatVertical", () => {
     it("concatenates rasters horizontally and vertically", () => {
       const left = SVGRaster.fromMiniature("⬛⬜");
@@ -116,10 +137,10 @@ describe("SVGRaster", () => {
     it("calculates unique hash based on dimensions and pixel data", () => {
       expect({
         "empty raster": SVGRaster.fromMiniature("").hash,
-        "L_3x3": L_3x3.hash,
+        L_3x3: L_3x3.hash,
         "L_3x3 90deg": L_3x3.rotate(90).hash,
-        "BIRD_3x3": BIRD_3x3.hash,
-        "SQUARE_3x3": SQUARE_3x3.hash,
+        BIRD_3x3: BIRD_3x3.hash,
+        SQUARE_3x3: SQUARE_3x3.hash,
       }).toMatchSnapshot();
     });
 
@@ -132,4 +153,3 @@ describe("SVGRaster", () => {
     });
   });
 });
-

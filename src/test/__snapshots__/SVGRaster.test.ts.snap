@@ -1,5 +1,32 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`SVGRaster > addPadding > adds padding with default y=x and asymmetric x, y 1`] = `
+{
+  "L_3x3 addPadding(1)": "
+⬜⬜⬜⬜⬜
+⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜
+⬜⬛⬛⬛⬜
+⬜⬜⬜⬜⬜",
+  "dot addPadding(0, 1)": "
+⬜
+⬛
+⬜",
+  "dot addPadding(1)": "
+⬜⬜⬜
+⬜⬛⬜
+⬜⬜⬜",
+  "dot addPadding(1, 0)": "
+⬜⬛⬜",
+  "dot addPadding(2, 1)": "
+⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜
+⬜⬜⬜⬜⬜",
+  "dot original": "
+⬛",
+}
+`;
+
 exports[`SVGRaster > concatHorizontal & concatVertical > concatenates rasters horizontally and vertically 1`] = `
 {
   "concatHorizontal (2x1 + 2x1)": "

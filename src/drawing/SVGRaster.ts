@@ -122,6 +122,31 @@ export class SVGRaster {
   }
 
   /**
+   * Adds padding around the raster.
+   * @param x Horizontal padding added to both left and right sides.
+   * @param y Vertical padding added to both top and bottom sides (defaults to x).
+   * @returns A new padded SVGRaster instance.
+   */
+  public getPadded(x: number, y: number = x): SVGRaster {
+    const newWidth = Math.max(0, this.width + 2 * x);
+    const newHeight = Math.max(0, this.height + 2 * y);
+    const result = new SVGRaster(newWidth, newHeight);
+
+    for (let py = 0; py < this.height; py++) {
+      for (let px = 0; px < this.width; px++) {
+        const targetX = px + x;
+        const targetY = py + y;
+
+        if (targetX >= 0 && targetX < newWidth && targetY >= 0 && targetY < newHeight) {
+          result.data[targetY * newWidth + targetX] = this.getPixel(px, py);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  /**
    * Rotates the raster by a multiple of 90 degrees in a single pass.
    * @param degrees Angle in degrees (must be a multiple of 90, e.g. 90, 180, 270, -90). Defaults to 90.
    * @returns A new rotated SVGRaster instance.

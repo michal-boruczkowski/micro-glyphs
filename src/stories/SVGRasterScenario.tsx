@@ -33,21 +33,16 @@ type SVGRasterScenarioProps = {
   start?: number;
   stop?: number;
   page?: number;
+  pageMul?: number;
 
   autoCenter?: boolean;
-  animateOpacity?: boolean;
   glowSize?: number;
   strokeSize?: number;
   roundingSize?: number;
 
   duration?: number;
+  loop?: boolean;
 };
-
-const DEFAULT_GRADIENT = [
-  TAILWIND_COLORS.sky[100],
-  TAILWIND_COLORS.indigo[400],
-  TAILWIND_COLORS.orange[700],
-];
 
 // <stop offset="0%" stopColor="#A67C00" />
 //     <stop offset="50%" stopColor="#F9DF9F" />
@@ -61,7 +56,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     width = 700,
     start,
     stop,
-    page = getScenarioLimit(2),
+    page,
     gradientColor1,
     gradientColor2,
     gradientColor3,
@@ -70,16 +65,21 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     glowSize = 4,
     strokeSize,
     roundingSize,
-    animateOpacity = true,
     stroke,
+    pageMul = 2,
+    loop,
   } = props;
 
   const [data] = useCounterStrategy(svgRasters, {
     start,
     stop,
     page,
+    pageMul,
     duration,
+    loop,
   });
+
+  const animateOpacity = !(data.length === page || data.length === getScenarioLimit(pageMul));
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 

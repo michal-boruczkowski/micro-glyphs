@@ -78,7 +78,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     start,
     stop,
     page,
-    duration: duration,
+    duration,
   });
 
   const [selected, setSelected] = useState<Set<number>>(new Set());

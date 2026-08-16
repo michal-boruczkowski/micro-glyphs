@@ -1,12 +1,8 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "unicorn",
-    "typescript",
-    "oxc",
-    "react"
-  ],
+  "plugins": ["unicorn", "typescript", "oxc", "react"],
   "rules": {
-    "react/exhaustive-deps": "warn"
+    "react/exhaustive-deps": "warn",
+    "object-shorthand": "error"
   }
 }

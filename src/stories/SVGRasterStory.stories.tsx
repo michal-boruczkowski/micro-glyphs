@@ -17,12 +17,20 @@ import { SVGRaster } from "../drawing/SVGRaster";
 
 import { getCartesianProduct } from "../utils/getCartesianProduct";
 import { SVGRasterScenario } from "./SVGRasterScenario";
-import { TAILWIND_COLORS, TAILWIND_PRESET_COLORS } from "../utils/colors";
+import { TAILWIND_COLORS, TAILWIND_PRESET_COLORS, TailwindGradients } from "../utils/colors";
 
 const COLOR_CONTROL = {
   control: {
     type: "color",
     presetColors: TAILWIND_PRESET_COLORS,
+  },
+} as const;
+
+const GRADIENT_CONTROLL = {
+  options: Object.keys(TailwindGradients),
+  mapping: TailwindGradients,
+  control: {
+    type: "select",
   },
 } as const;
 
@@ -41,9 +49,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
         "roundingSize",
         "animateOpacity",
         "strokeSize",
-        "gradientColor1",
-        "gradientColor2",
-        "gradientColor3",
+        "gradientColors",
         "stroke",
         "loop",
       ],
@@ -57,18 +63,14 @@ const meta: Meta<typeof SVGRasterScenario> = {
     glowSize: 4,
     strokeSize: -1,
     roundingSize: -1,
-    gradientColor1: TAILWIND_COLORS.orange[100],
-    gradientColor2: TAILWIND_COLORS.indigo[400],
-    gradientColor3: TAILWIND_COLORS.sky[100],
+    gradientColors: TailwindGradients.SUNSET_VIBES,
     loop: false,
   },
   argTypes: {
     color: COLOR_CONTROL,
     background: COLOR_CONTROL,
     stroke: COLOR_CONTROL,
-    gradientColor1: COLOR_CONTROL,
-    gradientColor2: COLOR_CONTROL,
-    gradientColor3: COLOR_CONTROL,
+    gradientColors: GRADIENT_CONTROLL,
     autoCenter: { control: "boolean" },
     loop: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
@@ -77,8 +79,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
     roundingSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
   },
 };
-
-console.log(TAILWIND_PRESET_COLORS);
 
 const niceFull = getCartesianProduct({
   a: NICE_FULL,
@@ -170,7 +170,9 @@ export const _3x3_LETTERS_SETS: Story = {
 
 export const _3x3_NICE_SIDES_SETS: Story = {
   render: (args) => {
-    return <SVGRasterScenario svgRasters={niceSides} {...args} stop={niceFull.length} />;
+    return (
+      <SVGRasterScenario svgRasters={niceSides} {...args} stop={niceFull.length} pageMul={3} />
+    );
   },
 };
 

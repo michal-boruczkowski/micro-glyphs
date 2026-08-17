@@ -10,7 +10,7 @@ import { Rectangle } from "../drawing/Rectangle";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
-import { select } from "d3";
+import { easeElasticOut, select } from "d3";
 import { path, group, onClick, defs } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
 import { getGrid } from "../utils/getGrid";
@@ -24,9 +24,7 @@ type SVGRasterScenarioProps = {
   color?: CSSProperties["color"];
   background?: CSSProperties["color"];
   stroke?: CSSProperties["color"];
-  gradientColor1?: CSSProperties["color"];
-  gradientColor2?: CSSProperties["color"];
-  gradientColor3?: CSSProperties["color"];
+  gradientColors?: CSSProperties["color"][];
 
   width?: number;
 
@@ -57,9 +55,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     start,
     stop,
     page,
-    gradientColor1,
-    gradientColor2,
-    gradientColor3,
+    gradientColors,
     autoCenter = false,
     duration = 300,
     glowSize = 4,
@@ -118,9 +114,8 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
       const niceRounding = Math.sqrt(viewBox) / PHI;
       const rounding = roundingSize < 0 ? niceRounding : roundingSize;
 
-      const gradientColors = [gradientColor1, gradientColor2, gradientColor3].filter(Boolean);
       const rainbowGradient =
-        gradientColors.length > 0 ? getRainbowGradient(index, gradientColors) : undefined;
+        gradientColors?.length > 0 ? getRainbowGradient(index, gradientColors) : undefined;
 
       const glowFilter = glowSize > 0 && getGlowFilter(index, glowSize);
 
@@ -167,9 +162,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     howManyColumns,
     howManyRows,
     autoCenter,
-    gradientColor1,
-    gradientColor2,
-    gradientColor3,
+    gradientColors,
     stroke,
   ]);
 
@@ -180,6 +173,8 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     </SVGRoot>
   );
 }
+
+const customEase = easeElasticOut.amplitude(1).period(1);
 
 const glyph = path("glyph-path")
   .data(
@@ -198,6 +193,7 @@ const glyph = path("glyph-path")
     merged
       .on("click", onClick)
       .transition()
+      .ease(customEase)
       .duration((d) => d.duration)
       .attr("d", (d) => d.d)
       .attr("opacity", 1)
@@ -216,6 +212,7 @@ const gridCell = group("grid-cell")
   .update((selection) =>
     selection
       .transition()
+      .ease(customEase)
       .duration((d) => d.duration)
       .attr("transform", (d) => `translate(${d.x},${d.y})`),
   )
@@ -244,6 +241,7 @@ const glowGlyph = path("glyph-path-filter")
   .merged((merged) =>
     merged
       .transition()
+      .ease(customEase)
       .duration((d) => d.duration)
       .attr("d", (d) => d.d)
       .attr("opacity", 1)

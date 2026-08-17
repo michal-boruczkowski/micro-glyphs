@@ -26,10 +26,10 @@ export function getGrid(
   const xOffset = autoCenter ? (container.width - cellSize * howManyColumns) / 2 : 0;
   const yOffset = autoCenter ? (container.height - cellSize * howManyRows) / 2 : 0;
 
-  let totalHeight = yOffset;
+  let totalHeight = container.y + yOffset;
 
   for (let rowIndex = 0; rowIndex < howManyRows; rowIndex++) {
-    let totalWidth = xOffset;
+    let totalWidth = container.x + xOffset;
 
     for (let colIndex = 0; colIndex < howManyColumns; colIndex++) {
       const width = autoCenter ? cellSize : cellWidth;

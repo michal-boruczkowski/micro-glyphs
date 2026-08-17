@@ -40,6 +40,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
         "loop",
         "pageMul",
         "stop",
+        "showBox",
       ],
     },
   },
@@ -54,6 +55,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     gradientColors: TailwindGradients.SUNSET_VIBES,
     loop: false,
     stop: false,
+    showBox: false,
   },
   argTypes: {
     color: COLOR_CONTROL,
@@ -68,6 +70,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     pageMul: { control: { type: "range", min: 1, max: 5, step: 1 } },
     loop: { control: "boolean" },
     stop: { control: "boolean" },
+    showBox: { control: "boolean" },
   },
 };
 

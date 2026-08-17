@@ -60,4 +60,8 @@ export class Rectangle {
       this.height + padding * 2,
     );
   }
+
+  clone() {
+    return new Rectangle(this.x, this.y, this.width, this.height);
+  }
 }

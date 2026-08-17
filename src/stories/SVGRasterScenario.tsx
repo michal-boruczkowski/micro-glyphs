@@ -109,7 +109,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
         glowFilter,
         fill: color,
         stroke: rainbowGradient ? rainbowGradient.url : stroke,
-        strokeWidth: strokeSize < 0 ? niceRounding / PHI / PHI : strokeSize,
+        strokeWidth: strokeSize < 0 ? niceRounding / PHI : strokeSize,
         animateOpacity,
         onClick: () => {
           if (selected.has(index)) {

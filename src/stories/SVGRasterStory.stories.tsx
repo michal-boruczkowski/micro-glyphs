@@ -38,6 +38,8 @@ const meta: Meta<typeof SVGRasterScenario> = {
         "gradientColors",
         "stroke",
         "loop",
+        "pageMul",
+        "stop",
       ],
     },
   },
@@ -51,6 +53,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     roundingSize: -1,
     gradientColors: TailwindGradients.SUNSET_VIBES,
     loop: false,
+    stop: false,
   },
   argTypes: {
     color: COLOR_CONTROL,
@@ -58,11 +61,13 @@ const meta: Meta<typeof SVGRasterScenario> = {
     stroke: COLOR_CONTROL,
     gradientColors: GRADIENT_CONTROL,
     autoCenter: { control: "boolean" },
-    loop: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
     strokeSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
     roundingSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
+    pageMul: { control: { type: "range", min: 1, max: 5, step: 1 } },
+    loop: { control: "boolean" },
+    stop: { control: "boolean" },
   },
 };
 
@@ -116,9 +121,8 @@ export const _3x3: Story = {
 
     return (
       <SVGRasterScenario
-        start={svgRasters.length}
-        stop={svgRasters.length}
-        page={svgRasters.length}
+        startIndex={svgRasters.length}
+        stopIndex={svgRasters.length}
         svgRasters={svgRasters}
         {...args}
       />
@@ -138,7 +142,7 @@ export const _3x3_NICE: Story = {
 
 export const _3x3_NICE_SETS: Story = {
   render: (args) => {
-    return <SVGRasterScenario svgRasters={niceFull} {...args} stop={niceFull.length} />;
+    return <SVGRasterScenario svgRasters={niceFull} {...args} />;
   },
 };
 
@@ -150,15 +154,13 @@ export const _3x3_LETTERS_SINGLE: Story = {
 
 export const _3x3_LETTERS_SETS: Story = {
   render: (args) => {
-    return <SVGRasterScenario svgRasters={letters} {...args} stop={niceFull.length} />;
+    return <SVGRasterScenario svgRasters={letters} {...args} />;
   },
 };
 
 export const _3x3_NICE_SIDES_SETS: Story = {
   render: (args) => {
-    return (
-      <SVGRasterScenario svgRasters={niceSides} {...args} stop={niceFull.length} pageMul={3} />
-    );
+    return <SVGRasterScenario svgRasters={niceSides} {...args} />;
   },
 };
 

@@ -14,11 +14,11 @@ import { easeElasticOut, select } from "d3";
 import { path, group, onClick, defs } from "../d3wrapper/d3wrapper";
 import { TAILWIND_COLORS } from "../utils/colors";
 import { getGrid } from "../utils/getGrid";
-import { useCounterStrategy } from "../utils/useCounterStrategy";
+import { CounterStrategyOptions, useCounterStrategy } from "../utils/useCounterStrategy";
 import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 
-type SVGRasterScenarioProps = {
+type SVGRasterScenarioProps = CounterStrategyOptions & {
   svgRasters: SVGRaster[];
 
   color?: CSSProperties["color"];
@@ -28,23 +28,11 @@ type SVGRasterScenarioProps = {
 
   width?: number;
 
-  start?: number;
-  stop?: number;
-  page?: number;
-  pageMul?: number;
-
   autoCenter?: boolean;
   glowSize?: number;
   strokeSize?: number;
   roundingSize?: number;
-
-  duration?: number;
-  loop?: boolean;
 };
-
-// <stop offset="0%" stopColor="#A67C00" />
-//     <stop offset="50%" stopColor="#F9DF9F" />
-//     <stop offset="100%" stopColor="#D4AF37" />
 
 export function SVGRasterScenario(props: SVGRasterScenarioProps) {
   const {
@@ -52,28 +40,18 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     color = TAILWIND_COLORS.slate[100],
     background = TAILWIND_COLORS.gray[800],
     width = 700,
-    start,
-    stop,
-    page,
     gradientColors,
     autoCenter = false,
-    duration = 300,
     glowSize = 4,
     strokeSize,
     roundingSize,
     stroke,
-    pageMul = 2,
-    loop,
+    ...counterOptions
   } = props;
 
-  const [data] = useCounterStrategy(svgRasters, {
-    start,
-    stop,
-    page,
-    pageMul,
-    duration,
-    loop,
-  });
+  const [data] = useCounterStrategy(svgRasters, counterOptions);
+
+  const { duration = 300, page = 1, pageMul = 2 } = counterOptions;
 
   const animateOpacity = !(data.length === page || data.length === getScenarioLimit(pageMul));
 

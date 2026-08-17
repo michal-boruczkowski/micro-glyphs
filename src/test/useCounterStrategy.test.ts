@@ -8,7 +8,7 @@ describe("useCounterStrategy", () => {
   it("calculates window combinations without loop", () => {
     const results: Record<string, string[]> = {};
     const { result } = renderHook(() =>
-      useCounterStrategy(collection, { page: 4, start: 1, duration: 1000 }),
+      useCounterStrategy(collection, { page: 4, startIndex: 1, duration: 1000 }),
     );
 
     results["count 1 (start)"] = result.current[0];
@@ -34,7 +34,7 @@ describe("useCounterStrategy", () => {
   it("calculates window combinations with loop wrapping around the end", () => {
     const results: Record<string, string[]> = {};
     const { result } = renderHook(() =>
-      useCounterStrategy(collection, { page: 4, start: 1, loop: true, duration: 1000 }),
+      useCounterStrategy(collection, { page: 4, startIndex: 1, loop: true, duration: 1000 }),
     );
 
     act(() => {

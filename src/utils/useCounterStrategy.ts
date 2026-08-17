@@ -2,24 +2,22 @@ import { useEffect, useState } from "react";
 import { getScenarioLimit } from "../components/consts";
 
 export type CounterStrategyOptions = {
-  start?: number;
-  stop?: number;
+  startIndex?: number;
+  stopIndex?: number;
   page?: number;
   pageMul?: number;
   duration?: number;
   loop?: boolean;
+  stop?: boolean;
 };
 
 export function useCounterStrategy<T>(collection: T[], options: CounterStrategyOptions = {}) {
-  const {
-    start = 1,
-    stop,
-    pageMul,
-    page = pageMul !== undefined ? getScenarioLimit(pageMul) : Infinity,
-    duration = 100,
-    loop = false,
-  } = options;
-  const [count, setCount] = useState(start);
+  const { startIndex = 1, pageMul, duration = 100, loop = false, stop = false } = options;
+  const [count, setCount] = useState(startIndex);
+
+  const page = pageMul !== undefined ? getScenarioLimit(pageMul) : (options.page ?? Infinity);
+
+  const stopIndex = stop ? collection.length : options.stopIndex;
 
   const combinations = (() => {
     if (count <= page || page >= collection.length) {
@@ -38,7 +36,7 @@ export function useCounterStrategy<T>(collection: T[], options: CounterStrategyO
     const timer = setInterval(() => {
       requestAnimationFrame(() => {
         setCount((prev) => {
-          if (stop !== undefined && prev >= stop) {
+          if (stopIndex !== undefined && prev >= stopIndex) {
             clearInterval(timer);
             return prev;
           }
@@ -49,7 +47,7 @@ export function useCounterStrategy<T>(collection: T[], options: CounterStrategyO
             return prev + 1;
           }
           if (prev >= collection.length) {
-            return start;
+            return startIndex;
           }
           return prev + 1;
         });
@@ -59,7 +57,7 @@ export function useCounterStrategy<T>(collection: T[], options: CounterStrategyO
     return () => {
       clearInterval(timer);
     };
-  }, [collection.length, duration, loop, page, start, stop]);
+  }, [collection.length, duration, loop, page, startIndex, stopIndex]);
 
   return [combinations, count, setCount] as const;
 }

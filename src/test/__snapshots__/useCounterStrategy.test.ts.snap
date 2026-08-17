@@ -1,0 +1,56 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`useCounterStrategy > calculates window combinations with loop wrapping around the end 1`] = `
+{
+  "count 10 (at end)": [
+    "G",
+    "H",
+    "I",
+    "J",
+  ],
+  "count 11 (1 element from start)": [
+    "H",
+    "I",
+    "J",
+    "A",
+  ],
+  "count 12 (2 elements from start)": [
+    "I",
+    "J",
+    "A",
+    "B",
+  ],
+  "count 13 (3 elements from start)": [
+    "J",
+    "A",
+    "B",
+    "C",
+  ],
+}
+`;
+
+exports[`useCounterStrategy > calculates window combinations without loop 1`] = `
+{
+  "count 1 (start)": [
+    "A",
+  ],
+  "count 10 (end of collection)": [
+    "G",
+    "H",
+    "I",
+    "J",
+  ],
+  "count 4 (full page)": [
+    "A",
+    "B",
+    "C",
+    "D",
+  ],
+  "count 7 (sliding)": [
+    "D",
+    "E",
+    "F",
+    "G",
+  ],
+}
+`;

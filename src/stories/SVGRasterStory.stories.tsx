@@ -17,22 +17,8 @@ import { SVGRaster } from "../drawing/SVGRaster";
 
 import { getCartesianProduct } from "../utils/getCartesianProduct";
 import { SVGRasterScenario } from "./SVGRasterScenario";
-import { TAILWIND_COLORS, TAILWIND_PRESET_COLORS, TailwindGradients } from "../utils/colors";
-
-const COLOR_CONTROL = {
-  control: {
-    type: "color",
-    presetColors: TAILWIND_PRESET_COLORS,
-  },
-} as const;
-
-const GRADIENT_CONTROLL = {
-  options: Object.keys(TailwindGradients),
-  mapping: TailwindGradients,
-  control: {
-    type: "select",
-  },
-} as const;
+import { TAILWIND_COLORS, TailwindGradients } from "../utils/colors";
+import { COLOR_CONTROL, GRADIENT_CONTROL } from "./colors";
 
 const meta: Meta<typeof SVGRasterScenario> = {
   title: "SVGRasterStory",
@@ -70,7 +56,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     color: COLOR_CONTROL,
     background: COLOR_CONTROL,
     stroke: COLOR_CONTROL,
-    gradientColors: GRADIENT_CONTROLL,
+    gradientColors: GRADIENT_CONTROL,
     autoCenter: { control: "boolean" },
     loop: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },

@@ -1,5 +1,6 @@
 import { PHI } from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
+import { Mulberry32 } from "./Mulberry32";
 
 export function getGoldenDivision(
   initialRect: Rectangle,
@@ -8,23 +9,12 @@ export function getGoldenDivision(
 ): Rectangle[] {
   if (howManyRectangles <= 0) return [];
 
+  const randomGenerator = new Mulberry32(1000);
+
   const rectangles: Rectangle[] = [initialRect.clone()];
 
-  let index = 0;
-
   while (rectangles.length < howManyRectangles) {
-    let largestIdx = 0;
-    let maxArea = -1;
-
-    for (let i = 0; i < rectangles.length; i++) {
-      const rect = rectangles[i];
-      const area = Math.abs(rect.width * rect.height);
-
-      if (area > maxArea) {
-        maxArea = area;
-        largestIdx = i;
-      }
-    }
+    const largestIdx = randomGenerator.getRandomInt(0, rectangles.length - 1);
 
     const largestRect = rectangles[largestIdx];
     const { x, y, width, height } = largestRect;
@@ -49,8 +39,6 @@ export function getGoldenDivision(
     }
 
     rectangles.splice(largestIdx, 1, rect1, rect2);
-
-    index++;
   }
 
   return rectangles;

@@ -18,6 +18,7 @@ import { CounterStrategyOptions, useCounterStrategy } from "../utils/useCounterS
 import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 import { getGoldenDivision } from "../utils/getGoldenDivision";
+import { DivisionType } from "./divisionType";
 
 type SVGRasterScenarioProps = CounterStrategyOptions & {
   svgRasters: SVGRaster[];
@@ -36,11 +37,6 @@ type SVGRasterScenarioProps = CounterStrategyOptions & {
   roundingSize?: number;
   divisionType?: DivisionType;
 };
-
-enum DivisionType {
-  GRID = "grid",
-  GOLDEN = "golden",
-}
 
 export function SVGRasterScenario(props: SVGRasterScenarioProps) {
   const {

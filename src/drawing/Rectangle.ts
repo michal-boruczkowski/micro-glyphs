@@ -43,22 +43,17 @@ export class Rectangle {
     return new Point(this.x + this.width / 2, this.y + this.height / 2);
   }
 
-  addPadding(padding: number) {
-    this.x -= padding;
-    this.y -= padding;
-    this.width += padding * 2;
-    this.height += padding * 2;
+  addPadding(px: number, py: number = px) {
+    this.x -= px;
+    this.y -= py;
+    this.width += px * 2;
+    this.height += py * 2;
 
     return this;
   }
 
-  getPadded(padding: number) {
-    return new Rectangle(
-      this.x - padding,
-      this.y - padding,
-      this.width + padding * 2,
-      this.height + padding * 2,
-    );
+  getPadded(px: number, py: number = px) {
+    return new Rectangle(this.x - px, this.y - py, this.width + px * 2, this.height + py * 2);
   }
 
   clone() {

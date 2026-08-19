@@ -122,7 +122,7 @@ export const ALL_HEROES = [
 
 export const NICE_FULL = [FULL_3x3, SQUARE_3x3, DOT_3x3, CROSS_3x3];
 
-export const ALL_LETTERS = [N_3x3, U_3x3, C_3x3, L_3x3, H_3x3, I_3x3];
+export const ALL_LETTERS = [N_3x3, U_3x3, C_3x3, L_3x3, H_3x3];
 
 export const TOP_LEFT_CORNER = [BIRD_90_3x3, L_90_3x3, PYRAMID_90_3x3];
 export const TOP_RIGHT_CORNER = [BIRD_180_3x3, L_180_3x3, PYRAMID_180_3x3];

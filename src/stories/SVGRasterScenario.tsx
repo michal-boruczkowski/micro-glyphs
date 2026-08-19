@@ -30,7 +30,6 @@ type SVGRasterScenarioProps = CounterStrategyOptions & {
 
   width?: number;
 
-  autoCenter?: boolean;
   showBox?: boolean;
   glowSize?: number;
   strokeSize?: number;
@@ -45,7 +44,6 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     background = TAILWIND_COLORS.gray[800],
     width = 700,
     gradientColors,
-    autoCenter = false,
     showBox = false,
     glowSize = 4,
     strokeSize,
@@ -66,9 +64,10 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
   const viewBoxRect = useMemo(() => new Rectangle(0, 0, width, toScenarioHeight(width)), [width]);
 
   const canvas = useMemo(() => {
-    const padding = toScenarioPadding(width);
+    const px = toScenarioPadding(width);
+    const py = toScenarioHeight(px);
 
-    return viewBoxRect.getPadded(-padding);
+    return viewBoxRect.getPadded(-px, -py);
   }, [width, viewBoxRect]);
 
   const howManyColumns = getScenarioColumns(data.length);
@@ -83,7 +82,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
 
     switch (divisionType) {
       case DivisionType.GRID:
-        grid = getGrid(canvas, howManyColumns, howManyRows, autoCenter);
+        grid = getGrid(canvas, howManyColumns, howManyRows);
         break;
       case DivisionType.GOLDEN:
         grid = getGoldenDivision(canvas, data.length).map((rectangle, i) => ({
@@ -162,7 +161,6 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     canvas,
     howManyColumns,
     howManyRows,
-    autoCenter,
     gradientColors,
     stroke,
     divisionType,

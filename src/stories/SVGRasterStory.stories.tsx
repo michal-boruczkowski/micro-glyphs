@@ -21,7 +21,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
       include: [
         "color",
         "background",
-        "autoCenter",
         "duration",
         "glowSize",
         "roundingSize",
@@ -41,7 +40,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
   args: {
     color: TAILWIND_COLORS.slate[100],
     background: TAILWIND_COLORS.gray[800],
-    autoCenter: false,
     duration: 600,
     glowSize: 4,
     strokeSize: -1,
@@ -59,7 +57,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
     stroke: COLOR_CONTROL,
     gradientColors: GRADIENT_CONTROL,
     divisionType: DIVISION_TYPE_CONTROL,
-    autoCenter: { control: "boolean" },
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
     strokeSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
@@ -74,24 +71,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
 
 export default meta;
 type Story = StoryObj<typeof SVGRasterScenario>;
-
-export const _3x3: Story = {
-  args: { background: TAILWIND_COLORS.black },
-  render: (args) => {
-    const svgRasters = generateBinaryCombinations(9).map((combination) =>
-      new SVGRaster(3, 3, combination).getPadded(1),
-    );
-
-    return (
-      <SVGRasterScenario
-        startIndex={svgRasters.length}
-        stopIndex={svgRasters.length}
-        svgRasters={svgRasters}
-        {...args}
-      />
-    );
-  },
-};
 
 export const StoryGenerator: Story = {
   render: (args) => {
@@ -123,7 +102,6 @@ export const GoldHeroes: Story = {
   args: {
     color: "oklch(96.8% 0.007 247.896)",
     background: "oklch(27.8% 0.033 256.848)",
-    autoCenter: false,
     duration: 150,
     glowSize: 4,
     strokeSize: -1,

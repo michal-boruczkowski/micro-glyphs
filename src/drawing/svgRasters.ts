@@ -39,7 +39,7 @@ export const letters = getCartesianProduct({
   return compose4(a, b, c, d);
 });
 
-export const niceSides = getCartesianProduct({
+export const allCorners = getCartesianProduct({
   a: TOP_LEFT_CORNER.concat(BOTTOM_RIGHT_CORNER),
   b: TOP_RIGHT_CORNER.concat(BOTTOM_LEFT_CORNER),
   c: BOTTOM_LEFT_CORNER.concat(TOP_RIGHT_CORNER),
@@ -48,6 +48,15 @@ export const niceSides = getCartesianProduct({
   const { a, b, c, d } = combination;
 
   return compose4(a, b, c, d);
+});
+
+export const niceCorners = getCartesianProduct({
+  a: TOP_LEFT_CORNER.concat(BOTTOM_RIGHT_CORNER).concat(NICE_FULL),
+  b: TOP_RIGHT_CORNER.concat(BOTTOM_LEFT_CORNER).concat(NICE_FULL),
+}).map((combination) => {
+  const { a, b } = combination;
+
+  return compose4(a, b, b.rotate(180), a.rotate(180));
 });
 
 export const niceHeroes = ALL_HEROES.concat(TOP_LEFT_CORNER)
@@ -64,7 +73,8 @@ const svgRasters = {
   binary9,
   niceFull,
   letters,
-  niceSides,
+  allCorners,
+  niceCorners,
   niceHeroes,
 };
 

@@ -3,14 +3,12 @@ import { SVGRasterPath } from "../components/SVGRasterPath";
 
 import * as monoPatterns_5x5 from "../drawing/svgRasters_5x5";
 import * as monoPatterns_9x9 from "../drawing/svgRasters_9x9";
-import { generateBinaryCombinations } from "../utils/generateBinaryCombinations";
-import { SVGRaster } from "../drawing/SVGRaster";
 
 import { SVGRasterScenario } from "./SVGRasterScenario";
 import { TAILWIND_COLORS, TailwindGradients } from "../utils/colors";
 import { COLOR_CONTROL, GRADIENT_CONTROL } from "./colors";
 import { DIVISION_TYPE_CONTROL, DivisionType } from "./divisionType";
-import { niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
+import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
 
 const meta: Meta<typeof SVGRasterScenario> = {
   title: "SVGRasterStory",
@@ -50,6 +48,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     showBox: false,
     divisionType: DivisionType.GRID,
     svgRasters: niceHeroes,
+    pageMul: 2,
   },
   argTypes: {
     color: COLOR_CONTROL,
@@ -61,7 +60,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
     strokeSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
     roundingSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
-    pageMul: { control: { type: "range", min: 1, max: 5, step: 1 } },
+    pageMul: { control: { type: "range", min: 1, max: 10, step: 1 } },
     loop: { control: "boolean" },
     stop: { control: "boolean" },
     showBox: { control: "boolean" },
@@ -112,6 +111,34 @@ export const GoldHeroes: Story = {
     showBox: false,
     divisionType: DivisionType.GRID,
     svgRasters: niceHeroes,
+  },
+
+  render: (args) => {
+    return <SVGRasterScenario {...args} />;
+  },
+};
+
+export const PerlinPattern: Story = {
+  args: {
+    color: "oklch(96.8% 0.007 247.896)",
+    background: "oklch(27.8% 0.033 256.848)",
+    duration: 0,
+    glowSize: 4,
+    strokeSize: 0,
+    roundingSize: 0,
+
+    gradientColors: [
+      "oklch(64.5% 0.246 16.439)",
+      "oklch(75% 0.183 55.934)",
+      "oklch(90.5% 0.182 98.111)",
+    ],
+
+    loop: false,
+    stop: true,
+    showBox: true,
+    divisionType: DivisionType.PERLIN,
+    svgRasters: allCorners,
+    pageMul: 8,
   },
 
   render: (args) => {

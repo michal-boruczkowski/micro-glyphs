@@ -1,6 +1,7 @@
 export enum DivisionType {
   GRID = "grid",
   GOLDEN = "golden",
+  PERLIN = "perlin",
 }
 
 export const DIVISION_TYPE_CONTROL = {

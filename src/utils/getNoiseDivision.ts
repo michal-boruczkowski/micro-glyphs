@@ -10,7 +10,6 @@ export function getNoiseDivision(
   rows: number,
   noiseFn: NoiseFunction,
   sizeFn: SizeFunction = (noiseValue) => Math.ceil(noiseValue * PHI * PHI),
-  noiseScale: number = 1,
 ): Rectangle[] {
   const squares: Rectangle[] = [];
 
@@ -34,7 +33,7 @@ export function getNoiseDivision(
     for (let x = 0; x < columns; x++) {
       if (occupied[x][y]) continue;
 
-      const noiseValue = noiseFn(x * noiseScale, y * noiseScale);
+      const noiseValue = noiseFn(x, y);
 
       let targetSize = sizeFn(noiseValue);
 

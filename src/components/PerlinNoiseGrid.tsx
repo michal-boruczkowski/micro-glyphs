@@ -7,22 +7,13 @@ import { Rectangle } from "../drawing/Rectangle";
 import { createPerlin2D } from "../utils/perlinNoise";
 import { TAILWIND_COLORS } from "../utils/colors";
 
-export enum CellShape {
-  RECT = "rect",
-  CIRCLE = "circle",
-  ROUNDED_RECT = "roundedRect",
-}
-
 export type PerlinNoiseGridProps = {
   width?: number;
   height?: number;
   scale?: number;
   seed?: number;
   cellSize?: number;
-  duration?: number;
-  background?: string;
   color?: (value: number) => string;
-  shape?: CellShape;
 };
 
 export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
@@ -32,10 +23,7 @@ export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
     scale = 0.1,
     seed = 1337,
     cellSize = 28,
-    duration = 300,
-    background = TAILWIND_COLORS.gray[900],
     color = interpolateViridis,
-    shape = CellShape.ROUNDED_RECT,
   } = props;
 
   const d3Ref = useRef<SVGGElement | null>(null);
@@ -57,18 +45,8 @@ export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
         const x = col * cellSize;
         const y = row * cellSize;
 
-        let size = cellSize - 2;
-        let rx = 2;
-        if (shape === CellShape.CIRCLE) {
-          size = (cellSize - 2) * (0.3 + noiseValue * 0.7);
-          rx = size / 2;
-        } else if (shape === CellShape.ROUNDED_RECT) {
-          size = cellSize - 2;
-          rx = (size / 2) * noiseValue;
-        } else {
-          size = cellSize - 2;
-          rx = 0;
-        }
+        const size = cellSize - 2;
+        const rx = 1;
 
         cells.push({
           id: `${col}-${row}`,
@@ -82,18 +60,17 @@ export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
           rx,
           fill: color(noiseValue),
           opacity: 0.3 + noiseValue * 0.7,
-          duration,
         });
       }
     }
 
     const d3Group = select(d3Ref.current).data([cells]);
     d3Group.call(gridRow);
-  }, [width, height, scale, seed, cellSize, duration, color, shape]);
+  }, [width, height, scale, seed, cellSize, color]);
 
   return (
     <SVGRoot width={viewBoxRect.width} height={viewBoxRect.height} viewBoxRect={viewBoxRect}>
-      <SVGRectangle rectangle={viewBoxRect} fill={background} />
+      <SVGRectangle rectangle={viewBoxRect} fill={TAILWIND_COLORS.gray[900]} />
       <g ref={d3Ref} />
     </SVGRoot>
   );
@@ -111,7 +88,6 @@ type CellData = {
   rx: number;
   fill: string;
   opacity: number;
-  duration: number;
 };
 
 const customEase = easeElasticOut.amplitude(1).period(1);
@@ -135,7 +111,6 @@ const cellShape = rect<CellData>("cell-shape")
     merged
       .transition()
       .ease(customEase)
-      .duration((d) => d.duration)
       .attr("width", (d) => d.size)
       .attr("height", (d) => d.size)
       .attr("x", (d) => (d.cellSize - d.size) / 2)
@@ -154,7 +129,6 @@ const gridCell = group<CellData, CellData[]>("grid-cell")
     selection
       .transition()
       .ease(customEase)
-      .duration((d) => d.duration)
       .attr("transform", (d) => `translate(${d.x},${d.y})`),
   )
   .merged(cellGroup);

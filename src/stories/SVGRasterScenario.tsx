@@ -96,7 +96,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
         }));
         break;
       case DivisionType.PERLIN:
-        grid = getNoiseDivision(canvas, howManyColumns, howManyRows, createPerlin2D(0.1)).map(
+        grid = getNoiseDivision(canvas, howManyColumns, howManyRows, createPerlin2D(0.07)).map(
           (rectangle, i) => ({
             x: rectangle.x,
             y: rectangle.y,

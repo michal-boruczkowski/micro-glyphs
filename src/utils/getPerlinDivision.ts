@@ -1,7 +1,6 @@
 import { PHI } from "../components/consts";
 import { Rectangle } from "../drawing/Rectangle";
-
-export type NoiseFunction = (x: number, y: number) => number;
+import { NoiseFunction } from "../drawing/NoiseRect";
 
 export type SizeFunction = (noiseValue: number) => number;
 

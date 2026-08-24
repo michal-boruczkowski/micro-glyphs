@@ -1,0 +1,29 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`clamp > clamps values within min and max bounds 1`] = `
+{
+  "exact max bound": 1,
+  "exact min bound": 0,
+  "value above custom max (20)": 20,
+  "value above max (1)": 1,
+  "value below custom min (10)": 10,
+  "value below min (0)": 0,
+  "value within [0, 1]": 0.5,
+  "value within custom range [10, 20]": 15,
+}
+`;
+
+exports[`clamp > handles NaN by returning min 1`] = `
+{
+  "NaN with custom min (5)": 5,
+  "NaN with default min": 0,
+}
+`;
+
+exports[`clamp > uses default bounds [0, 1] when min and max are omitted 1`] = `
+{
+  "default range above 1": 1,
+  "default range below 0": 0,
+  "default range normal": 0.7,
+}
+`;

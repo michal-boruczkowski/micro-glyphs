@@ -1,0 +1,154 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NoiseRect > generates Perlin noise grid with all values in [0, 1] 1`] = `
+{
+  "5x5 Perlin noise grid": [
+    [
+      0.5,
+      0.617376,
+      0.731744,
+      0.731744,
+      0.6173759999999999,
+    ],
+    [
+      0.38262399999999996,
+      0.49454347264,
+      0.6321370624,
+      0.68345248768,
+      0.6188068556799999,
+    ],
+    [
+      0.268256,
+      0.33005077503999997,
+      0.45666563072,
+      0.5760511078400001,
+      0.6191498752,
+    ],
+    [
+      0.26825600000000005,
+      0.24672906240000003,
+      0.3005408153599999,
+      0.43499844608000005,
+      0.57232628736,
+    ],
+    [
+      0.3826240000000001,
+      0.29109978112,
+      0.24489044991999998,
+      0.3221440000000001,
+      0.47817389056000004,
+    ],
+  ],
+}
+`;
+
+exports[`NoiseRect > initializes constant values clamped to [0, 1] 1`] = `
+{
+  "rect1 (0.5)": [
+    [
+      0.5,
+      0.5,
+      0.5,
+    ],
+    [
+      0.5,
+      0.5,
+      0.5,
+    ],
+  ],
+  "rect2 (-1.5 clamped to 0)": [
+    [
+      0,
+      0,
+    ],
+    [
+      0,
+      0,
+    ],
+  ],
+  "rect3 (2.0 clamped to 1)": [
+    [
+      1,
+      1,
+    ],
+    [
+      1,
+      1,
+    ],
+  ],
+}
+`;
+
+exports[`NoiseRect > initializes from 2D array clamping out of bound values 1`] = `
+{
+  "fromArray noise values": [
+    [
+      0,
+      0.2,
+    ],
+    [
+      0.8,
+      1,
+    ],
+  ],
+}
+`;
+
+exports[`NoiseRect > initializes from function clamping values to [0, 1] 1`] = `
+{
+  "function noise values": [
+    [
+      0,
+      0,
+      0,
+    ],
+    [
+      0,
+      0,
+      0.5,
+    ],
+    [
+      0,
+      0.5,
+      1,
+    ],
+  ],
+}
+`;
+
+exports[`NoiseRect > supports get, set, map and clone 1`] = `
+{
+  "cloned values": [
+    [
+      0.9,
+      0.2,
+    ],
+    [
+      0.2,
+      1,
+    ],
+  ],
+  "mapped values": [
+    [
+      0.45,
+      0.1,
+    ],
+    [
+      0.1,
+      0.5,
+    ],
+  ],
+  "original values": [
+    [
+      0.9,
+      0.2,
+    ],
+    [
+      0.2,
+      1,
+    ],
+  ],
+  "out of bounds get(-1, 0)": 0,
+  "out of bounds get(5, 5)": 0,
+}
+`;

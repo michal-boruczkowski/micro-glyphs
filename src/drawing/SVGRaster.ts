@@ -47,7 +47,7 @@ export class SVGRaster {
     return `${this.width}x${this.height}:${this.data.join("")}`;
   }
 
-  public getPixel(x: number, y: number): number {
+  public get(x: number, y: number): number {
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) return 0;
     return this.data[y * this.width + x];
   }
@@ -61,9 +61,9 @@ export class SVGRaster {
       for (let x = 0; x < newWidth; x++) {
         const index = y * newWidth + x;
         if (x < this.width) {
-          result.data[index] = this.getPixel(x, y);
+          result.data[index] = this.get(x, y);
         } else {
-          result.data[index] = other.getPixel(x - this.width, y);
+          result.data[index] = other.get(x - this.width, y);
         }
       }
     }
@@ -79,9 +79,9 @@ export class SVGRaster {
       for (let x = 0; x < newWidth; x++) {
         const index = y * newWidth + x;
         if (y < this.height) {
-          result.data[index] = this.getPixel(x, y);
+          result.data[index] = this.get(x, y);
         } else {
-          result.data[index] = other.getPixel(x, y - this.height);
+          result.data[index] = other.get(x, y - this.height);
         }
       }
     }
@@ -107,7 +107,7 @@ export class SVGRaster {
 
         const index = targetY * this.width + targetX;
         const currentPixel = result.data[index];
-        const newPixel = other.getPixel(x, y);
+        const newPixel = other.get(x, y);
 
         if (blend === SVGRasterBlend.OR) {
           result.data[index] = currentPixel | newPixel;
@@ -138,7 +138,7 @@ export class SVGRaster {
         const targetY = py + y;
 
         if (targetX >= 0 && targetX < newWidth && targetY >= 0 && targetY < newHeight) {
-          result.data[targetY * newWidth + targetX] = this.getPixel(px, py);
+          result.data[targetY * newWidth + targetX] = this.get(px, py);
         }
       }
     }
@@ -169,7 +169,7 @@ export class SVGRaster {
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        const val = this.getPixel(x, y);
+        const val = this.get(x, y);
         if (!val) continue;
 
         let newX: number;
@@ -199,11 +199,11 @@ export class SVGRaster {
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        if (this.getPixel(x, y) === 1) {
-          if (this.getPixel(x, y - 1) === 0) graph.addEdge(x, y, x + 1, y);
-          if (this.getPixel(x + 1, y) === 0) graph.addEdge(x + 1, y, x + 1, y + 1);
-          if (this.getPixel(x, y + 1) === 0) graph.addEdge(x + 1, y + 1, x, y + 1);
-          if (this.getPixel(x - 1, y) === 0) graph.addEdge(x, y + 1, x, y);
+        if (this.get(x, y) === 1) {
+          if (this.get(x, y - 1) === 0) graph.addEdge(x, y, x + 1, y);
+          if (this.get(x + 1, y) === 0) graph.addEdge(x + 1, y, x + 1, y + 1);
+          if (this.get(x, y + 1) === 0) graph.addEdge(x + 1, y + 1, x, y + 1);
+          if (this.get(x - 1, y) === 0) graph.addEdge(x, y + 1, x, y);
         }
       }
     }
@@ -285,7 +285,7 @@ export class SVGRaster {
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        if (this.getPixel(x, y)) {
+        if (this.get(x, y)) {
           path
             .addRectangle(new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize))
             .close();
@@ -303,7 +303,7 @@ export class SVGRaster {
       result += "\n";
 
       for (let x = 0; x < this.width; x++) {
-        result += this.getPixel(x, y) ? SVGRasterPixel.ON : SVGRasterPixel.OFF;
+        result += this.get(x, y) ? SVGRasterPixel.ON : SVGRasterPixel.OFF;
       }
     }
 

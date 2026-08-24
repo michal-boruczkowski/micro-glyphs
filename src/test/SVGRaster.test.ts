@@ -29,10 +29,10 @@ describe("SVGRaster", () => {
     it("fetches pixel values inside and outside bounds", () => {
       const raster = SVGRaster.fromMiniature("⬛⬜\n⬜⬛");
       expect({
-        "(0, 0) inside ON": raster.getPixel(0, 0),
-        "(1, 0) inside OFF": raster.getPixel(1, 0),
-        "(-1, 0) out of bounds": raster.getPixel(-1, 0),
-        "(5, 5) out of bounds": raster.getPixel(5, 5),
+        "(0, 0) inside ON": raster.get(0, 0),
+        "(1, 0) inside OFF": raster.get(1, 0),
+        "(-1, 0) out of bounds": raster.get(-1, 0),
+        "(5, 5) out of bounds": raster.get(5, 5),
       }).toMatchSnapshot();
     });
   });

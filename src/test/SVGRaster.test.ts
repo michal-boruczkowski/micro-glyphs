@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { NoiseRect } from "../drawing/NoiseRect";
 import { SVGRaster, SVGRasterBlend } from "../drawing/SVGRaster";
 import { BIRD_3x3, L_3x3, SQUARE_3x3 } from "../drawing/svgRasters_3x3";
 
@@ -152,4 +153,58 @@ describe("SVGRaster", () => {
       expect(raster1.hash).not.toBe(raster3.hash);
     });
   });
+
+  describe("compareWithNoise", () => {
+    it("calculates similarity score in range [0, 1]", () => {
+      const raster = SVGRaster.fromMiniature("10\n01");
+
+      const identicalNoise = NoiseRect.fromArray([
+        [1.0, 0.0],
+        [0.0, 1.0],
+      ]);
+
+      const inverseNoise = NoiseRect.fromArray([
+        [0.0, 1.0],
+        [1.0, 0.0],
+      ]);
+
+      const partialNoise = NoiseRect.fromArray([
+        [0.8, 0.2],
+        [0.1, 0.9],
+      ]);
+
+      const largerNoise = NoiseRect.fromArray([
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 0.0, 0.0],
+      ]);
+
+      const emptyRaster = SVGRaster.fromMiniature("");
+      const emptyNoise = new NoiseRect(0, 0);
+
+      expect({
+        "identical noise (score 1.0)": raster.compareWithNoise(identicalNoise),
+        "inverse noise (score 0.0)": raster.compareWithNoise(inverseNoise),
+        "partial match noise": raster.compareWithNoise(partialNoise),
+        "different dimensions comparison (exact false / scaled default)": raster.compareWithNoise(largerNoise, false),
+        "different dimensions comparison (exact true / unscaled)": raster.compareWithNoise(largerNoise, true),
+        "empty raster with empty noise": emptyRaster.compareWithNoise(emptyNoise),
+      }).toMatchSnapshot();
+    });
+
+    it("scales noise coordinates by default (exact = false) and skips scaling when exact = true", () => {
+      const raster4x4 = SVGRaster.fromMiniature("1100\n1100\n0011\n0011");
+      const noise2x2 = NoiseRect.fromArray([
+        [1.0, 0.0],
+        [0.0, 1.0],
+      ]);
+
+      expect({
+        "4x4 raster vs 2x2 noise (exact: false / scaled)": raster4x4.compareWithNoise(noise2x2, false),
+        "4x4 raster vs 2x2 noise (exact: true / unscaled)": raster4x4.compareWithNoise(noise2x2, true),
+      }).toMatchSnapshot();
+    });
+
+  });
 });
+

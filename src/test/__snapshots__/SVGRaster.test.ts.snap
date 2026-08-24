@@ -27,6 +27,24 @@ exports[`SVGRaster > addPadding > adds padding with default y=x and asymmetric x
 }
 `;
 
+exports[`SVGRaster > compareWithNoise > calculates similarity score in range [0, 1] 1`] = `
+{
+  "different dimensions comparison (exact false / scaled default)": 1,
+  "different dimensions comparison (exact true / unscaled)": 1,
+  "empty raster with empty noise": 1,
+  "identical noise (score 1.0)": 1,
+  "inverse noise (score 0.0)": 0,
+  "partial match noise": 0.85,
+}
+`;
+
+exports[`SVGRaster > compareWithNoise > scales noise coordinates by default (exact = false) and skips scaling when exact = true 1`] = `
+{
+  "4x4 raster vs 2x2 noise (exact: false / scaled)": 1,
+  "4x4 raster vs 2x2 noise (exact: true / unscaled)": 0.625,
+}
+`;
+
 exports[`SVGRaster > concatHorizontal & concatVertical > concatenates rasters horizontally and vertically 1`] = `
 {
   "concatHorizontal (2x1 + 2x1)": "

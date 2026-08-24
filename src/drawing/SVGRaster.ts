@@ -56,32 +56,11 @@ export class SVGRaster {
   /**
    * Compares this raster with a NoiseRect and returns a similarity score in the range [0, 1].
    * A score of 1 represents identical values across all pixels, while 0 represents complete mismatch.
+   * Scales the noise rectangle to match this raster's dimensions.
    * @param noise The NoiseRect instance to compare against.
-   * @param exact If true, performs exact 1:1 unscaled pixel matching; if false (default), scales the noise rectangle to match this raster's dimensions.
    * @returns Similarity score between 0 and 1.
    */
-  public compareWithNoise(noise: NoiseRect, exact: boolean = false): number {
-    if (exact) {
-      const maxW = Math.max(this.width, noise.width);
-      const maxH = Math.max(this.height, noise.height);
-      const totalPixels = maxW * maxH;
-
-      if (totalPixels === 0) {
-        return 1;
-      }
-
-      let matchSum = 0;
-      for (let y = 0; y < maxH; y++) {
-        for (let x = 0; x < maxW; x++) {
-          const rasterVal = this.get(x, y);
-          const noiseVal = noise.get(x, y);
-          matchSum += 1 - Math.abs(rasterVal - noiseVal);
-        }
-      }
-
-      return matchSum / totalPixels;
-    }
-
+  public compareWithNoise(noise: NoiseRect): number {
     if (this.width === 0 || this.height === 0) {
       return noise.width === 0 || noise.height === 0 ? 1 : 0;
     }
@@ -94,8 +73,8 @@ export class SVGRaster {
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        const nx = Math.min(noise.width - 1, Math.floor((x / this.width) * noise.width));
-        const ny = Math.min(noise.height - 1, Math.floor((y / this.height) * noise.height));
+        const nx = Math.min(noise.width - 1, Math.floor((x * noise.width) / this.width));
+        const ny = Math.min(noise.height - 1, Math.floor((y * noise.height) / this.height));
 
         const rasterVal = this.get(x, y);
         const noiseVal = noise.get(nx, ny);
@@ -105,7 +84,6 @@ export class SVGRaster {
 
     return matchSum / totalPixels;
   }
-
 
   public concatHorizontal(other: SVGRaster): SVGRaster {
     const newWidth = this.width + other.width;

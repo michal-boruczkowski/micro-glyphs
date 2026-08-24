@@ -186,13 +186,12 @@ describe("SVGRaster", () => {
         "identical noise (score 1.0)": raster.compareWithNoise(identicalNoise),
         "inverse noise (score 0.0)": raster.compareWithNoise(inverseNoise),
         "partial match noise": raster.compareWithNoise(partialNoise),
-        "different dimensions comparison (exact false / scaled default)": raster.compareWithNoise(largerNoise, false),
-        "different dimensions comparison (exact true / unscaled)": raster.compareWithNoise(largerNoise, true),
+        "different dimensions comparison": raster.compareWithNoise(largerNoise),
         "empty raster with empty noise": emptyRaster.compareWithNoise(emptyNoise),
       }).toMatchSnapshot();
     });
 
-    it("scales noise coordinates by default (exact = false) and skips scaling when exact = true", () => {
+    it("scales noise coordinates to match raster dimensions", () => {
       const raster4x4 = SVGRaster.fromMiniature("1100\n1100\n0011\n0011");
       const noise2x2 = NoiseRect.fromArray([
         [1.0, 0.0],
@@ -200,11 +199,9 @@ describe("SVGRaster", () => {
       ]);
 
       expect({
-        "4x4 raster vs 2x2 noise (exact: false / scaled)": raster4x4.compareWithNoise(noise2x2, false),
-        "4x4 raster vs 2x2 noise (exact: true / unscaled)": raster4x4.compareWithNoise(noise2x2, true),
+        "4x4 raster vs 2x2 noise (scaled)": raster4x4.compareWithNoise(noise2x2),
       }).toMatchSnapshot();
     });
-
   });
 });
 

@@ -2,37 +2,6 @@ import { Mulberry32 } from "./Mulberry32";
 import { clamp } from "./clamp";
 import { NoiseFunction } from "../drawing/NoiseRect";
 
-function fade(t: number): number {
-  return t * t * t * (t * (t * 6 - 15) + 10);
-}
-
-function lerp(t: number, a: number, b: number): number {
-  return a + t * (b - a);
-}
-
-function grad(hash: number, x: number, y: number): number {
-  switch (hash & 7) {
-    case 0:
-      return x + y;
-    case 1:
-      return -x + y;
-    case 2:
-      return x - y;
-    case 3:
-      return -x - y;
-    case 4:
-      return x;
-    case 5:
-      return -x;
-    case 6:
-      return y;
-    case 7:
-      return -y;
-    default:
-      return 0;
-  }
-}
-
 export function createPerlin2D(scale: number = 0.1, seed: number = 1337): NoiseFunction {
   const rng = new Mulberry32(seed);
   const p = new Uint8Array(256);
@@ -77,4 +46,35 @@ export function createPerlin2D(scale: number = 0.1, seed: number = 1337): NoiseF
 
     return clamp((rawNoise + 1) / 2, 0, 1);
   };
+}
+
+function fade(t: number): number {
+  return t * t * t * (t * (t * 6 - 15) + 10);
+}
+
+function lerp(t: number, a: number, b: number): number {
+  return a + t * (b - a);
+}
+
+function grad(hash: number, x: number, y: number): number {
+  switch (hash & 7) {
+    case 0:
+      return x + y;
+    case 1:
+      return -x + y;
+    case 2:
+      return x - y;
+    case 3:
+      return -x - y;
+    case 4:
+      return x;
+    case 5:
+      return -x;
+    case 6:
+      return y;
+    case 7:
+      return -y;
+    default:
+      return 0;
+  }
 }

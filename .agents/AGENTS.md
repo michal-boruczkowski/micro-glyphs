@@ -33,7 +33,11 @@ src/
 - Always receive props as a single **`props`** parameter typed with the props type, then destructure on **one line** at the top of the function body (e.g. `function Glyph(props: GlyphProps) { const { name, size = 24 } = props; ... }`)
 - Export both the props interface and the component as **named exports** (not `default`)
 - Always use **named imports** from `react` — never access types or hooks via the `React` namespace (e.g. use `FC`, `useState`, `useRef` instead of `React.FC`, `React.useState`, `React.useRef`)
+- Do not use re-exports (e.g. `export * from ...` or `export { X } from ...`); export entities directly from the file where they are defined
 - Always place the primary entity (main component, class, or function) at the top of the file, placing internal helper and utility functions at the bottom
+- Never use string literal union typing (e.g. `"viridis" | "cool" | "warm" | "spectral" | "rainbow"`). Always use `enum`s or `const` objects for fixed sets of options/values
+- Do not bundle React into the package (it is a peer dependency)
+- Do not modify `vite.config.ts` without checking compatibility with `vitest/config`
 
 ## Tests
 
@@ -54,10 +58,3 @@ src/
 
 - `npm run build` – `tsc && vite build`
 - Output: `dist/` (ES module `.js` + UMD `.umd.cjs` + type declarations `.d.ts`)
-
-## What to avoid
-
-- Do not use `export default` for components
-- Do not bundle React into the package (it is a peer dependency)
-- Do not modify `vite.config.ts` without checking compatibility with `vitest/config`
-- Do not use re-exports (e.g. `export * from ...` or `export { X } from ...`); export entities directly from the file where they are defined

@@ -4,7 +4,7 @@ import { NoiseFunction } from "../drawing/NoiseRect";
 
 export type SizeFunction = (noiseValue: number) => number;
 
-export function getPerlinDivision(
+export function getNoiseDivision(
   canvas: Rectangle,
   columns: number,
   rows: number,

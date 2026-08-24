@@ -19,8 +19,8 @@ import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbo
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 import { getGoldenDivision } from "../utils/getGoldenDivision";
 import { DivisionType } from "./divisionType";
-import { getPerlinDivision } from "../utils/getPerlinDivision";
-import { Mulberry32 } from "../utils/Mulberry32";
+import { getNoiseDivision } from "../utils/getNoiseDivision";
+import { createPerlin2D } from "../utils/perlinNoise";
 
 type SVGRasterScenarioProps = CounterStrategyOptions & {
   svgRasters: SVGRaster[];
@@ -82,8 +82,6 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
 
     let grid = [];
 
-    const generator = new Mulberry32(1000);
-
     switch (divisionType) {
       case DivisionType.GRID:
         grid = getGrid(canvas, howManyColumns, howManyRows);
@@ -98,15 +96,15 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
         }));
         break;
       case DivisionType.PERLIN:
-        grid = getPerlinDivision(canvas, howManyColumns, howManyRows, (x, y) =>
-          generator.next(),
-        ).map((rectangle, i) => ({
-          x: rectangle.x,
-          y: rectangle.y,
-          width: rectangle.width,
-          height: rectangle.height,
-          index: i,
-        }));
+        grid = getNoiseDivision(canvas, howManyColumns, howManyRows, createPerlin2D(0.1)).map(
+          (rectangle, i) => ({
+            x: rectangle.x,
+            y: rectangle.y,
+            width: rectangle.width,
+            height: rectangle.height,
+            index: i,
+          }),
+        );
     }
 
     const cells = [];

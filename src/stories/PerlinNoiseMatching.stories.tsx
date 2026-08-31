@@ -1,14 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { PerlinNoiseMatchingGrid } from "../components/PerlinNoiseMatchingGrid";
-import {
-  allCorners,
-  binary9,
-  letters,
-  niceCorners,
-  niceFull,
-  niceHeroes,
-  SVG_RASTERS_CONTROL,
-} from "../drawing/svgRasters";
+import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
 import { TAILWIND_COLORS, TailwindGradients } from "../utils/colors";
 import { COLOR_CONTROL, GRADIENT_CONTROL } from "./colors";
 
@@ -99,57 +91,20 @@ export const Default: Story = {
   },
 };
 
-export const Corners: Story = {
-  args: {
-    pageMul: 6,
-    scale: 0.08,
-    seed: 42,
-    windowSize: 3,
-    svgRasters: allCorners,
-  },
-};
-
-export const NiceFullPattern: Story = {
-  args: {
-    pageMul: 6,
-    scale: 0.06,
-    seed: 999,
-    windowSize: 3,
-    svgRasters: niceFull,
-  },
-};
-
-export const Binary9Pattern: Story = {
-  args: {
-    pageMul: 6,
-    scale: 0.07,
-    seed: 2024,
-    windowSize: 3,
-    svgRasters: binary9,
-  },
-};
-
-export const LettersPattern: Story = {
+export const Gradientmapping: Story = {
   args: {
     pageMul: 5,
-    scale: 0.05,
-    seed: 777,
-    windowSize: 3,
-    svgRasters: letters,
-  },
-};
-
-export const GlowingGradients: Story = {
-  args: {
-    pageMul: 6,
-    scale: 0.06,
-    seed: 31415,
-    windowSize: 3,
-    svgRasters: niceCorners,
+    scale: 0.08,
+    seed: 1337,
+    windowSize: 2,
+    svgRasters: allCorners,
     color: "oklch(96.8% 0.007 247.896)",
-    background: "oklch(20% 0.03 260)",
-    gradientColors: TailwindGradients.SUNSET_VIBES,
+    background: "oklch(21% 0.034 264.665)",
+    duration: 0,
     glowSize: 4,
-    showBox: false,
+    strokeSize: 0,
+    roundingSize: 0,
+    showBox: true,
+    gradientColors: TailwindGradients.CYBERPUNK_NEON,
   },
 };

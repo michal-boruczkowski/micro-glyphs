@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
-import { easeElasticOut, select } from "d3";
+import { easeElasticOut, interpolateGreens, select } from "d3";
 import { defs, group, path, rect } from "../d3wrapper/d3wrapper";
 import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
@@ -129,7 +129,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
         d: svgRaster.toPath(viewBox, rounding),
         rainbowGradient,
         glowFilter,
-        fill: color,
+        fill: interpolateGreens(matchedCell.noiseWindow.get(0, 0)),
         stroke: rainbowGradient ? rainbowGradient.url : stroke,
         strokeWidth: strokeSize < 0 ? niceRounding / PHI : strokeSize,
       });

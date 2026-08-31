@@ -65,6 +65,20 @@ export class NoiseRect {
     return new NoiseRect(this.width, this.height, [...this.data]);
   }
 
+  public getSubRect(x: number, y: number, width: number, height: number): NoiseRect {
+    const w = Math.max(0, Math.floor(width));
+    const h = Math.max(0, Math.floor(height));
+    const data = new Array(w * h);
+
+    for (let dy = 0; dy < h; dy++) {
+      for (let dx = 0; dx < w; dx++) {
+        data[dy * w + dx] = this.get(x + dx, y + dy);
+      }
+    }
+
+    return new NoiseRect(w, h, data);
+  }
+
   public static fromNoiseFunction(
     width: number,
     height: number,

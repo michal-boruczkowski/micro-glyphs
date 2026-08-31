@@ -1,0 +1,140 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`matchNoiseGrid > computes matching grid from NoiseRect directly 1`] = `
+{
+  "2x2 window stride 1": {
+    "columns": 3,
+    "grid": [
+      [
+        "dark",
+        "dark",
+        "light",
+      ],
+      [
+        "dark",
+        "dark",
+        "dark",
+      ],
+      [
+        "light",
+        "dark",
+        "dark",
+      ],
+    ],
+    "rows": 3,
+    "symbols": [
+      "dark",
+      "dark",
+      "light",
+      "dark",
+      "dark",
+      "dark",
+      "light",
+      "dark",
+      "dark",
+    ],
+  },
+  "2x2 window stride 2": {
+    "cellIndices": [
+      {
+        "colIndex": 0,
+        "index": 0,
+        "rowIndex": 0,
+        "symbol": "dark",
+        "windowValues": [
+          [
+            0,
+            0.1,
+          ],
+          [
+            0.1,
+            0,
+          ],
+        ],
+      },
+      {
+        "colIndex": 1,
+        "index": 1,
+        "rowIndex": 0,
+        "symbol": "light",
+        "windowValues": [
+          [
+            0.9,
+            1,
+          ],
+          [
+            1,
+            0.9,
+          ],
+        ],
+      },
+      {
+        "colIndex": 0,
+        "index": 2,
+        "rowIndex": 1,
+        "symbol": "light",
+        "windowValues": [
+          [
+            0.8,
+            0.9,
+          ],
+          [
+            1,
+            0.8,
+          ],
+        ],
+      },
+      {
+        "colIndex": 1,
+        "index": 3,
+        "rowIndex": 1,
+        "symbol": "dark",
+        "windowValues": [
+          [
+            0.1,
+            0,
+          ],
+          [
+            0,
+            0.1,
+          ],
+        ],
+      },
+    ],
+    "columns": 2,
+    "grid": [
+      [
+        "dark",
+        "light",
+      ],
+      [
+        "light",
+        "dark",
+      ],
+    ],
+    "rows": 2,
+    "symbols": [
+      "dark",
+      "light",
+      "light",
+      "dark",
+    ],
+  },
+  "empty dictionary": {
+    "columns": 2,
+    "rows": 2,
+    "symbols": [
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  "noise smaller than window size": {
+    "columns": 0,
+    "grid": [],
+    "rows": 0,
+    "symbols": [],
+  },
+}
+`;

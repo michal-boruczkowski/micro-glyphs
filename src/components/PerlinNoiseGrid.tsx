@@ -4,7 +4,7 @@ import { group, rect } from "../d3wrapper/d3wrapper";
 import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
 import { Rectangle } from "../drawing/Rectangle";
-import { createPerlin2D } from "../utils/perlinNoise";
+import { NoiseRect } from "../drawing/NoiseRect";
 import { TAILWIND_COLORS } from "../utils/colors";
 import {
   getScenarioColumns,
@@ -51,7 +51,7 @@ export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
   useEffect(() => {
     if (!d3Ref.current) return;
 
-    const perlin2D = createPerlin2D(scale, seed);
+    const noiseRect = NoiseRect.fromPerlin(howManyColumns, howManyRows, scale, seed);
 
     const grid = getGrid(canvas, howManyColumns, howManyRows);
 
@@ -59,7 +59,7 @@ export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
 
     for (const cell of grid) {
       const { x, y, width, height, index, colIndex, rowIndex } = cell;
-      const noiseValue = perlin2D(colIndex, rowIndex);
+      const noiseValue = noiseRect.get(colIndex, rowIndex);
 
       cells.push({
         id: `${index}`,

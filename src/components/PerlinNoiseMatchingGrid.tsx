@@ -5,6 +5,7 @@ import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbo
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
+import { NoiseRect } from "../drawing/NoiseRect";
 import { Rectangle } from "../drawing/Rectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
 import { TAILWIND_COLORS } from "../utils/colors";
@@ -16,7 +17,7 @@ import {
   toScenarioPadding,
 } from "./consts";
 import { getGrid } from "../utils/getGrid";
-import { matchPerlinGrid } from "../utils/perlinMatching";
+import { matchNoiseGrid } from "../utils/noiseMatching";
 
 export type PerlinNoiseMatchingGridProps = {
   scale?: number;
@@ -72,22 +73,34 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     return viewBoxRect.getPadded(-px, -py);
   }, [width, viewBoxRect]);
 
+  const actualStrideX = strideX ?? windowSize;
+  const actualStrideY = strideY ?? windowSize;
+
+  const noiseRect = useMemo(() => {
+    const totalNoiseWidth = Math.max(
+      0,
+      howManyColumns * actualStrideX + (windowSize - actualStrideX),
+    );
+    const totalNoiseHeight = Math.max(
+      0,
+      howManyRows * actualStrideY + (windowSize - actualStrideY),
+    );
+    return NoiseRect.fromPerlin(totalNoiseWidth, totalNoiseHeight, scale, seed);
+  }, [howManyColumns, howManyRows, actualStrideX, actualStrideY, windowSize, scale, seed]);
+
   const matched = useMemo(() => {
     if (!svgRasters || svgRasters.length === 0) {
       return null;
     }
 
-    return matchPerlinGrid({
-      columns: howManyColumns,
-      rows: howManyRows,
+    return matchNoiseGrid({
+      noiseRect,
       dictionary: svgRasters,
-      scale,
-      seed,
       windowSize,
       strideX,
       strideY,
     });
-  }, [howManyColumns, howManyRows, svgRasters, scale, seed, windowSize, strideX, strideY]);
+  }, [noiseRect, svgRasters, windowSize, strideX, strideY]);
 
   const d3Ref = useRef<SVGGElement | null>(null);
 
@@ -98,13 +111,13 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     const cells: MatchingCellData[] = [];
 
     for (const cell of grid) {
-      const { x, y, width: cellWidth, height: cellHeight, index } = cell;
+      const { x, y, width, height, index } = cell;
       const matchedCell = matched.cells[index];
       const svgRaster = matchedCell?.symbol;
 
       if (!svgRaster) continue;
 
-      const viewBox = Math.min(cellWidth, cellHeight);
+      const viewBox = Math.min(width, height);
       const niceRounding = Math.sqrt(viewBox) / PHI;
       const rounding = roundingSize < 0 ? niceRounding : roundingSize;
 
@@ -119,13 +132,13 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
         id: `${index}`,
         x,
         y,
-        width: cellWidth,
-        height: cellHeight,
+        width,
+        height,
         duration,
         viewBox,
         showBox,
-        dx: (cellWidth - viewBox) / 2,
-        dy: (cellHeight - viewBox) / 2,
+        dx: (width - viewBox) / 2,
+        dy: (height - viewBox) / 2,
         d: svgRaster.toPath(viewBox, rounding),
         rainbowGradient,
         glowFilter,

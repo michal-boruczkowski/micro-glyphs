@@ -7,7 +7,7 @@ const meta: Meta<typeof GridPadding> = {
   tags: ["autodocs"],
   parameters: {
     controls: {
-      include: ["pageMul", "paddingX", "paddingY", "cellPaddingX", "cellPaddingY"],
+      include: ["pageMul", "pMul", "cMul"],
     },
   },
   argTypes: {
@@ -15,27 +15,18 @@ const meta: Meta<typeof GridPadding> = {
       control: { type: "range", min: 1, max: 10, step: 1 },
     },
 
-    paddingX: {
-      control: { type: "range", min: 1, max: 20, step: 1 },
+    pMul: {
+      control: { type: "range", min: 0.5, max: 10, step: 0.5 },
     },
 
-    paddingY: {
-      control: { type: "range", min: 1, max: 20, step: 1 },
-    },
-
-    cellPaddingX: {
-      control: { type: "range", min: 0, max: 50, step: 1 },
-    },
-
-    cellPaddingY: {
-      control: { type: "range", min: 0, max: 50, step: 1 },
+    cMul: {
+      control: { type: "range", min: 0.5, max: 10, step: 0.5 },
     },
   },
   args: {
     pageMul: 4,
-    paddingX: 6,
-    cellPaddingX: 0,
-    cellPaddingY: 0,
+    pMul: 2,
+    cMul: 2,
   },
 };
 
@@ -45,9 +36,7 @@ type Story = StoryObj<typeof GridPadding>;
 export const Default: Story = {
   args: {
     pageMul: 4,
-    paddingX: 8,
-    paddingY: 10,
-    cellPaddingX: 10,
-    cellPaddingY: 8,
+    pMul: 2,
+    cMul: 2,
   },
 };

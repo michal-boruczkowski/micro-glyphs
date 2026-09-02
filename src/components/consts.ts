@@ -15,13 +15,13 @@ export function toScenarioHeight(width: number) {
   return (width / 4) * 5;
 }
 
-export function getScenarioSetup(width: number) {
+export function getScenarioSetup(width: number, pMul = 2.5, cMul = 1) {
   const viewBoxRect = new Rectangle(0, 0, width, toScenarioHeight(width));
 
-  const paddingX = 8;
-  const paddingY = 10;
-  const cellPaddingX = 10;
-  const cellPaddingY = 8;
+  const paddingX = 4 * pMul;
+  const paddingY = 5 * pMul;
+  const cellPaddingX = 5 * cMul;
+  const cellPaddingY = 4 * cMul;
 
   const px = phiScale(viewBoxRect.width, paddingX);
   const py = phiScale(viewBoxRect.height, paddingY);

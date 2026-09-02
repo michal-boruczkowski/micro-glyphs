@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import { Rectangle } from "../drawing/Rectangle";
-import { getScenarioColumns, getScenarioLimit, phiScale, toScenarioHeight } from "./consts";
+import { getScenarioColumns, getScenarioLimit, getScenarioSetup } from "./consts";
 import { getGrid } from "../utils/getGrid";
 import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
@@ -8,37 +7,21 @@ import { SVGRectangle } from "./SVGRectangle";
 export type GridPaddingProps = {
   pageMul?: number;
   width?: number;
-  paddingX?: number;
-  paddingY?: number;
-  cellPaddingX?: number;
-  cellPaddingY?: number;
+  pMul?: number;
+  cMul?: number;
 };
 
 export function GridPadding(props: GridPaddingProps) {
-  const {
-    pageMul = 4,
-    width = 700,
-    paddingX = 6,
-    paddingY = 6,
-    cellPaddingX = 1,
-    cellPaddingY = 1,
-  } = props;
+  const { pageMul = 4, width = 700, pMul = 6, cMul = 1 } = props;
 
   const howManyElements = getScenarioLimit(pageMul);
   const howManyColumns = getScenarioColumns(howManyElements);
   const howManyRows = Math.ceil(howManyElements / howManyColumns);
 
-  const viewBoxRect = useMemo(() => new Rectangle(0, 0, width, toScenarioHeight(width)), [width]);
-
-  const px = phiScale(viewBoxRect.width, paddingX);
-  const py = phiScale(viewBoxRect.height, paddingY);
-
-  const cpx = px / cellPaddingX;
-  const cpy = py / cellPaddingY;
-
-  const canvas = useMemo(() => {
-    return viewBoxRect.getPadded(-px, -py);
-  }, [px, py, viewBoxRect]);
+  const { viewBoxRect, canvas, cpx, cpy } = useMemo(
+    () => getScenarioSetup(width, pMul, cMul),
+    [width, pMul, cMul],
+  );
 
   const grid = useMemo(() => {
     return getGrid(canvas, howManyColumns, howManyRows, cpx, cpy);

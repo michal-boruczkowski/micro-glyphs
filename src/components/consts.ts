@@ -1,7 +1,9 @@
+import { Rectangle } from "../drawing/Rectangle";
+
 export const PHI = (1 + Math.sqrt(5)) / 2;
 
 export function phiScale(value: number, steps: number = 1) {
-  return value / PHI ** steps;
+  return value / PHI / steps;
 }
 
 export const VIEWBOX_SIZE = 24;
@@ -13,8 +15,28 @@ export function toScenarioHeight(width: number) {
   return (width / 4) * 5;
 }
 
-export function toScenarioPadding(width: number) {
-  return phiScale(width, 6);
+export function getScenarioSetup(width: number) {
+  const viewBoxRect = new Rectangle(0, 0, width, toScenarioHeight(width));
+
+  const paddingX = 8;
+  const paddingY = 10;
+  const cellPaddingX = 10;
+  const cellPaddingY = 8;
+
+  const px = phiScale(viewBoxRect.width, paddingX);
+  const py = phiScale(viewBoxRect.height, paddingY);
+
+  const cpx = px / cellPaddingX;
+  const cpy = py / cellPaddingY;
+
+  const canvas = viewBoxRect.getPadded(-px, -py);
+
+  return {
+    cpx,
+    cpy,
+    canvas,
+    viewBoxRect,
+  };
 }
 
 export function getScenarioLimit(mul = 1) {

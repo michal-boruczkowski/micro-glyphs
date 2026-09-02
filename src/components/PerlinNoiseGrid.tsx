@@ -3,15 +3,9 @@ import { easeElasticOut, interpolateGreys, select } from "d3";
 import { group, rect } from "../d3wrapper/d3wrapper";
 import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
-import { Rectangle } from "../drawing/Rectangle";
 import { NoiseRect } from "../drawing/NoiseRect";
 import { TAILWIND_COLORS } from "../utils/colors";
-import {
-  getScenarioColumns,
-  getScenarioLimit,
-  toScenarioHeight,
-  toScenarioPadding,
-} from "./consts";
+import { getScenarioColumns, getScenarioLimit, getScenarioSetup } from "./consts";
 import { getGrid } from "../utils/getGrid";
 
 export type PerlinNoiseGridProps = {
@@ -37,14 +31,7 @@ export function PerlinNoiseGrid(props: PerlinNoiseGridProps) {
   const howManyColumns = getScenarioColumns(howManyElements);
   const howManyRows = Math.ceil(howManyElements / howManyColumns);
 
-  const viewBoxRect = useMemo(() => new Rectangle(0, 0, width, toScenarioHeight(width)), [width]);
-
-  const canvas = useMemo(() => {
-    const px = toScenarioPadding(width);
-    const py = toScenarioHeight(px);
-
-    return viewBoxRect.getPadded(-px, -py);
-  }, [width, viewBoxRect]);
+  const { viewBoxRect, canvas } = useMemo(() => getScenarioSetup(width), [width]);
 
   const d3Ref = useRef<SVGGElement | null>(null);
 

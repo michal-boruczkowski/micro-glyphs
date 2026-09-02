@@ -6,16 +6,9 @@ import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
 import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
 import { NoiseRect } from "../drawing/NoiseRect";
-import { Rectangle } from "../drawing/Rectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
 import { TAILWIND_COLORS } from "../utils/colors";
-import {
-  getScenarioColumns,
-  getScenarioLimit,
-  PHI,
-  toScenarioHeight,
-  toScenarioPadding,
-} from "./consts";
+import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "./consts";
 import { getGrid } from "../utils/getGrid";
 import { matchNoiseGrid } from "../utils/noiseMatching";
 
@@ -64,14 +57,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
   const howManyColumns = getScenarioColumns(howManyElements);
   const howManyRows = Math.ceil(howManyElements / howManyColumns);
 
-  const viewBoxRect = useMemo(() => new Rectangle(0, 0, width, toScenarioHeight(width)), [width]);
-
-  const canvas = useMemo(() => {
-    const px = toScenarioPadding(width);
-    const py = toScenarioHeight(px);
-
-    return viewBoxRect.getPadded(-px, -py);
-  }, [width, viewBoxRect]);
+  const { viewBoxRect, canvas, cpx, cpy } = useMemo(() => getScenarioSetup(width), [width]);
 
   const actualStrideX = strideX ?? windowSize;
   const actualStrideY = strideY ?? windowSize;
@@ -107,7 +93,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
   useEffect(() => {
     if (!d3Ref.current || !matched) return;
 
-    const grid = getGrid(canvas, howManyColumns, howManyRows);
+    const grid = getGrid(canvas, howManyColumns, howManyRows, 0, 0);
     const cells: MatchingCellData[] = [];
 
     for (const cell of grid) {
@@ -164,6 +150,8 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     gradientColors,
     stroke,
     showBox,
+    cpx,
+    cpy,
   ]);
 
   return (

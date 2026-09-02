@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PerlinNoiseGrid } from "../components/PerlinNoiseGrid";
 
 const meta: Meta<typeof PerlinNoiseGrid> = {
-  title: "PerlinNoise",
+  title: "PerlinNoiseGrid",
   component: PerlinNoiseGrid,
   tags: ["autodocs"],
   parameters: {

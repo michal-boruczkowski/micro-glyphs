@@ -1,0 +1,168 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getGrid > calculates grid with horizontal and vertical cell padding 1`] = `
+{
+  "2x2 with paddingX=10, paddingY=20": [
+    {
+      "colIndex": 0,
+      "height": 90,
+      "index": 0,
+      "rowIndex": 0,
+      "width": 45,
+      "x": 10,
+      "y": 20,
+    },
+    {
+      "colIndex": 1,
+      "height": 90,
+      "index": 1,
+      "rowIndex": 0,
+      "width": 45,
+      "x": 65,
+      "y": 20,
+    },
+    {
+      "colIndex": 0,
+      "height": 90,
+      "index": 2,
+      "rowIndex": 1,
+      "width": 45,
+      "x": 10,
+      "y": 130,
+    },
+    {
+      "colIndex": 1,
+      "height": 90,
+      "index": 3,
+      "rowIndex": 1,
+      "width": 45,
+      "x": 65,
+      "y": 130,
+    },
+  ],
+}
+`;
+
+exports[`getGrid > calculates grid without cell padding (defaults to 0) 1`] = `
+{
+  "2x2 default padding": [
+    {
+      "colIndex": 0,
+      "height": 50,
+      "index": 0,
+      "rowIndex": 0,
+      "width": 50,
+      "x": 0,
+      "y": 0,
+    },
+    {
+      "colIndex": 1,
+      "height": 50,
+      "index": 1,
+      "rowIndex": 0,
+      "width": 50,
+      "x": 50,
+      "y": 0,
+    },
+    {
+      "colIndex": 0,
+      "height": 50,
+      "index": 2,
+      "rowIndex": 1,
+      "width": 50,
+      "x": 0,
+      "y": 50,
+    },
+    {
+      "colIndex": 1,
+      "height": 50,
+      "index": 3,
+      "rowIndex": 1,
+      "width": 50,
+      "x": 50,
+      "y": 50,
+    },
+  ],
+  "2x2 explicit zero padding": [
+    {
+      "colIndex": 0,
+      "height": 50,
+      "index": 0,
+      "rowIndex": 0,
+      "width": 50,
+      "x": 0,
+      "y": 0,
+    },
+    {
+      "colIndex": 1,
+      "height": 50,
+      "index": 1,
+      "rowIndex": 0,
+      "width": 50,
+      "x": 50,
+      "y": 0,
+    },
+    {
+      "colIndex": 0,
+      "height": 50,
+      "index": 2,
+      "rowIndex": 1,
+      "width": 50,
+      "x": 0,
+      "y": 50,
+    },
+    {
+      "colIndex": 1,
+      "height": 50,
+      "index": 3,
+      "rowIndex": 1,
+      "width": 50,
+      "x": 50,
+      "y": 50,
+    },
+  ],
+}
+`;
+
+exports[`getGrid > centers square cells when autoCenter is enabled with padding 1`] = `
+{
+  "2x1 autoCenter with paddingX=10": [
+    {
+      "colIndex": 0,
+      "height": 45,
+      "index": 0,
+      "rowIndex": 0,
+      "width": 45,
+      "x": 0,
+      "y": 27.5,
+    },
+    {
+      "colIndex": 1,
+      "height": 45,
+      "index": 1,
+      "rowIndex": 0,
+      "width": 45,
+      "x": 55,
+      "y": 27.5,
+    },
+  ],
+}
+`;
+
+exports[`getGrid > handles edge cases gracefully 1`] = `
+{
+  "0 columns": [],
+  "0 rows": [],
+  "1x1 with padding": [
+    {
+      "colIndex": 0,
+      "height": 100,
+      "index": 0,
+      "rowIndex": 0,
+      "width": 100,
+      "x": 0,
+      "y": 0,
+    },
+  ],
+}
+`;

@@ -1,12 +1,5 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
-import {
-  getScenarioColumns,
-  getScenarioLimit,
-  PHI,
-  toScenarioHeight,
-  toScenarioPadding,
-} from "../components/consts";
-import { Rectangle } from "../drawing/Rectangle";
+import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "../components/consts";
 import { SVGRoot } from "../components/SVGRoot";
 import { SVGRectangle } from "../components/SVGRectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
@@ -63,14 +56,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
-  const viewBoxRect = useMemo(() => new Rectangle(0, 0, width, toScenarioHeight(width)), [width]);
-
-  const canvas = useMemo(() => {
-    const px = toScenarioPadding(width);
-    const py = toScenarioHeight(px);
-
-    return viewBoxRect.getPadded(-px, -py);
-  }, [width, viewBoxRect]);
+  const { viewBoxRect, canvas } = useMemo(() => getScenarioSetup(width), [width]);
 
   const howManyColumns = getScenarioColumns(data.length);
   const howManyRows = Math.ceil(data.length / howManyColumns);

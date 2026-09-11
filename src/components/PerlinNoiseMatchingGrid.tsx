@@ -1,5 +1,6 @@
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
-import { easeElasticOut, interpolateGreens, select } from "d3";
+import { easeElasticOut, select } from "d3";
+import chroma from "chroma-js";
 import { defs, group, path, rect } from "../d3wrapper/d3wrapper";
 import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
 import { getGlowFilter, glowFilterRenderer } from "../d3wrapper/glowFilter";
@@ -10,6 +11,7 @@ import { SVGRaster } from "../drawing/SVGRaster";
 import { TAILWIND_COLORS } from "../utils/colors";
 import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "./consts";
 import { getGrid } from "../utils/getGrid";
+import { getGridProgress } from "../utils/getGridProgress";
 import { matchNoiseGrid } from "../utils/noiseMatching";
 import { generateThemeForBackground } from "../utils/generateThemeForBackground";
 
@@ -29,6 +31,8 @@ export type PerlinNoiseMatchingGridProps = {
   glowSize?: number;
   strokeSize?: number;
   roundingSize?: number;
+
+  noiseBackground?: boolean;
   showBox?: boolean;
 };
 
@@ -50,6 +54,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strokeSize = -1,
     roundingSize = -1,
     showBox = false,
+    noiseBackground = false,
   } = props;
 
   const howManyElements = getScenarioLimit(pageMul);
@@ -93,16 +98,18 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     if (!d3Ref.current || !matched) return;
 
     const theme = generateThemeForBackground(background);
+    const colorScale = chroma.scale(theme).mode("lch");
 
     const grid = getGrid(canvas, howManyColumns, howManyRows, 0, 0);
     const cells: MatchingCellData[] = [];
 
     for (const cell of grid) {
-      const { x, y, width, height, index } = cell;
+      const { x, y, width, height, index, colIndex, rowIndex } = cell;
       const matchedCell = matched.cells[index];
-      const svgRaster = matchedCell?.symbol;
 
-      if (!svgRaster) continue;
+      if (!matchedCell) continue;
+
+      const { symbol: svgRaster, noiseWindow } = matchedCell;
 
       const viewBox = Math.min(width, height);
       const niceRounding = Math.sqrt(viewBox) / PHI;
@@ -114,6 +121,11 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
           : undefined;
 
       const glowFilter = glowSize > 0 ? getGlowFilter(index, glowSize) : undefined;
+
+      const progress = getGridProgress(colIndex, rowIndex, howManyColumns, howManyRows);
+      const noiseValue = noiseWindow.getAverage();
+
+      const fill = colorScale(noiseBackground ? noiseValue : progress).hex();
 
       cells.push({
         id: `${index}`,
@@ -129,7 +141,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
         d: svgRaster.toPath(viewBox, rounding),
         rainbowGradient,
         glowFilter,
-        fill: interpolateGreens(matchedCell.noiseWindow.get(0, 0)),
+        fill,
         stroke: rainbowGradient ? rainbowGradient.url : stroke,
         strokeWidth: strokeSize < 0 ? niceRounding / PHI : strokeSize,
       });
@@ -150,6 +162,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     gradientColors,
     stroke,
     showBox,
+    noiseBackground,
     cpx,
     cpy,
   ]);
@@ -192,9 +205,9 @@ const glyph = path<MatchingCellData>("glyph-path")
     enter
       .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
-      .attr("stroke", (d) => d.stroke)
-      .attr("stroke-width", (d) => d.strokeWidth)
-      .attr("fill", (d) => d.fill),
+      .attr("stroke", (d) => d.stroke ?? null)
+      .attr("stroke-width", (d) => d.strokeWidth ?? null)
+      .attr("fill", (d) => d.fill ?? null),
   )
   .merged((merged) =>
     merged
@@ -203,9 +216,9 @@ const glyph = path<MatchingCellData>("glyph-path")
       .duration((d) => d.duration)
       .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
-      .attr("fill", (d) => d.fill)
-      .attr("stroke", (d) => d.stroke)
-      .attr("stroke-width", (d) => d.strokeWidth),
+      .attr("fill", (d) => d.fill ?? null)
+      .attr("stroke", (d) => d.stroke ?? null)
+      .attr("stroke-width", (d) => d.strokeWidth ?? null),
   );
 
 const defsContainer = defs<MatchingCellData>().merged((selection) =>
@@ -223,8 +236,8 @@ const glowGlyph = path<MatchingCellData>("glyph-path-filter")
       .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
       .attr("fill", "none")
-      .attr("stroke", (d) => d.stroke)
-      .attr("stroke-width", (d) => d.strokeWidth),
+      .attr("stroke", (d) => d.stroke ?? null)
+      .attr("stroke-width", (d) => d.strokeWidth ?? null),
   )
   .merged((merged) =>
     merged
@@ -234,8 +247,8 @@ const glowGlyph = path<MatchingCellData>("glyph-path-filter")
       .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
       .attr("fill", "none")
-      .attr("stroke", (d) => d.stroke)
-      .attr("stroke-width", (d) => d.strokeWidth),
+      .attr("stroke", (d) => d.stroke ?? null)
+      .attr("stroke-width", (d) => d.strokeWidth ?? null),
   );
 
 const glyphBackground = rect<MatchingCellData>("glyph-background")

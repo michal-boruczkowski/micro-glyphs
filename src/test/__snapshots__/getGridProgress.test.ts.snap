@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getGridProgress > calculates progress for standard and edge case grid dimensions 1`] = `
+{
+  "1x1 grid": {
+    "(0, 0)": 0,
+  },
+  "1x3 grid (single column)": {
+    "(0, 0)": 0,
+    "(0, 1)": 0.5,
+    "(0, 2)": 1,
+  },
+  "3x1 grid (single row)": {
+    "(0, 0)": 0,
+    "(1, 0)": 0.5,
+    "(2, 0)": 1,
+  },
+  "3x3 grid": {
+    "bottom-left (0, 2)": 0.5,
+    "bottom-right (2, 2)": 1,
+    "center (1, 1)": 0.5,
+    "top-left (0, 0)": 0,
+    "top-right (2, 0)": 0.5,
+  },
+}
+`;

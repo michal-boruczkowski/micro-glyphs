@@ -24,6 +24,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
         "strokeSize",
         "roundingSize",
         "showBox",
+        "noiseBackground",
       ],
     },
   },
@@ -56,6 +57,9 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
     roundingSize: {
       control: { type: "range", min: -1, max: 20, step: 0.5 },
     },
+    noiseBackground: {
+      control: "boolean",
+    },
     showBox: {
       control: "boolean",
     },
@@ -72,6 +76,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
     strokeSize: -1,
     roundingSize: -1,
     showBox: false,
+    noiseBackground: false,
   },
 };
 

@@ -1,6 +1,11 @@
 import chroma from "chroma-js";
 
-export function generateThemeForBackground(background: string) {
+export type GenerateThemeOptions = {
+  hueSpread?: number; //0-180
+};
+
+export function generateThemeForBackground(background: string, options?: GenerateThemeOptions) {
+  const { hueSpread = 180 } = options ?? {};
   const bg = chroma(background);
 
   // Extract LCH parameters from background (Lightness, Chroma, Hue)
@@ -14,9 +19,10 @@ export function generateThemeForBackground(background: string) {
   const targetLightness = isDarkBg ? 75 : 25;
   const targetChroma = 65; // High saturation for vividness
 
-  // 3. Generate gradient (hue shift on color wheel by -30 and +45 degrees)
-  const startHue = (baseHue - 30 + 360) % 360;
-  const endHue = (baseHue + 45) % 360;
+  // 3. Generate gradient with high color contrast (complementary / split-complementary hue shift)
+  const halfSpread = hueSpread / 2;
+  const startHue = (baseHue - halfSpread + 360) % 360;
+  const endHue = (baseHue + halfSpread) % 360;
 
   const gradientStart = chroma.lch(targetLightness, targetChroma, startHue).hex();
   const gradientEnd = chroma.lch(targetLightness, targetChroma, endHue).hex();

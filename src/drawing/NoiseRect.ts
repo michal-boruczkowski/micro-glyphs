@@ -65,6 +65,17 @@ export class NoiseRect {
     return new NoiseRect(this.width, this.height, [...this.data]);
   }
 
+  public getAverage(): number {
+    if (this.data.length === 0) {
+      return 0;
+    }
+    let sum = 0;
+    for (let i = 0; i < this.data.length; i++) {
+      sum += this.data[i];
+    }
+    return clamp(sum / this.data.length, 0, 1);
+  }
+
   public getSubRect(x: number, y: number, width: number, height: number): NoiseRect {
     const w = Math.max(0, Math.floor(width));
     const h = Math.max(0, Math.floor(height));

@@ -9,4 +9,12 @@ describe("generateThemeForBackground", () => {
       "neutral gray": generateThemeForBackground("#808080"),
     }).toMatchSnapshot();
   });
+
+  it("supports custom hue spread options", () => {
+    expect({
+      "custom 180 deg": generateThemeForBackground("#0f172a", { hueSpread: 180 }),
+      "custom 90 deg": generateThemeForBackground("#0f172a", { hueSpread: 90 }),
+    }).toMatchSnapshot();
+  });
 });
+

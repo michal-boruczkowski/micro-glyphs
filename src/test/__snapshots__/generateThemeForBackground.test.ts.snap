@@ -2,26 +2,30 @@
 
 exports[`generateThemeForBackground > handles grayscale backgrounds without NaN hues 1`] = `
 {
-  "neutral gray": {
-    "background": "#808080",
-    "gradient": [
-      "#72006e",
-      "#7d0400",
-    ],
-  },
-  "pure black": {
-    "background": "#000000",
-    "gradient": [
-      "#ff90f5",
-      "#ff9366",
-    ],
-  },
-  "pure white": {
-    "background": "#ffffff",
-    "gradient": [
-      "#72006e",
-      "#7d0400",
-    ],
-  },
+  "neutral gray": [
+    "#003a9d",
+    "#602f00",
+  ],
+  "pure black": [
+    "#83b5ff",
+    "#f2ab3f",
+  ],
+  "pure white": [
+    "#003a9d",
+    "#602f00",
+  ],
+}
+`;
+
+exports[`generateThemeForBackground > supports custom hue spread options 1`] = `
+{
+  "custom 180 deg": [
+    "#00d6d2",
+    "#ff83a0",
+  ],
+  "custom 90 deg": [
+    "#00cfff",
+    "#fe91f9",
+  ],
 }
 `;

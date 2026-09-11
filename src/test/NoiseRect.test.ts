@@ -76,4 +76,22 @@ describe("NoiseRect", () => {
       "5x5 Perlin noise grid": perlinRect.values,
     }).toMatchSnapshot();
   });
+
+  it("calculates representative average value in [0, 1] for entire noise rect", () => {
+    const emptyRect = new NoiseRect(0, 0);
+    const uniformRect = new NoiseRect(2, 2, [0.4, 0.4, 0.4, 0.4]);
+    const gradientRect = new NoiseRect(2, 2, [0.0, 0.5, 0.5, 1.0]);
+    const variedRect = NoiseRect.fromArray([
+      [0.2, 0.4],
+      [0.6, 0.8],
+    ]);
+
+    expect({
+      "empty rect average": emptyRect.getAverage(),
+      "uniform rect average": uniformRect.getAverage(),
+      "gradient rect average": gradientRect.getAverage(),
+      "varied rect average": variedRect.getAverage(),
+    }).toMatchSnapshot();
+  });
 });
+

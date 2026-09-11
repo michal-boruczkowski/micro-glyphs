@@ -1,5 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`NoiseRect > calculates representative average value in [0, 1] for entire noise rect 1`] = `
+{
+  "empty rect average": 0,
+  "gradient rect average": 0.5,
+  "uniform rect average": 0.4,
+  "varied rect average": 0.5,
+}
+`;
+
 exports[`NoiseRect > generates Perlin noise grid with all values in [0, 1] 1`] = `
 {
   "5x5 Perlin noise grid": [

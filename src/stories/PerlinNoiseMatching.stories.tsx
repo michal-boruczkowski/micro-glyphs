@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { PerlinNoiseMatchingGrid } from "../components/PerlinNoiseMatchingGrid";
 import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
-import { TAILWIND_COLORS, TailwindGradients } from "../utils/colors";
-import { COLOR_CONTROL, GRADIENT_CONTROL } from "./colors";
+import { NiceGradientCompositions } from "../utils/colors";
+import { GRADIENT_CONTROL } from "./colors";
 
 const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
   title: "PerlinNoiseMatching",
@@ -16,8 +16,6 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
         "seed",
         "windowSize",
         "svgRasters",
-        "background",
-        "stroke",
         "gradientColors",
         "duration",
         "glowSize",
@@ -43,8 +41,6 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
       control: { type: "range", min: 1, max: 9, step: 1 },
     },
     svgRasters: SVG_RASTERS_CONTROL,
-    background: COLOR_CONTROL,
-    stroke: COLOR_CONTROL,
     gradientColors: GRADIENT_CONTROL,
     duration: {
       control: { type: "range", min: 0, max: 2000, step: 50 },
@@ -74,7 +70,6 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
     seed: 1337,
     windowSize: 3,
     svgRasters: niceHeroes,
-    background: TAILWIND_COLORS.gray[900],
     duration: 300,
     glowSize: 0,
     strokeSize: -1,
@@ -105,12 +100,11 @@ export const Gradientmapping: Story = {
     seed: 1337,
     windowSize: 2,
     svgRasters: allCorners,
-    background: "oklch(21% 0.034 264.665)",
     duration: 0,
     glowSize: 4,
     strokeSize: 0,
     roundingSize: 0,
     showBox: true,
-    gradientColors: TailwindGradients.CYBERPUNK_NEON,
+    gradientColors: NiceGradientCompositions.CYBERPUNK_NEON__VOID_BLACK,
   },
 };

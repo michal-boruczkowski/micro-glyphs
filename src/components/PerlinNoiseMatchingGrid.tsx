@@ -8,12 +8,10 @@ import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
 import { NoiseRect } from "../drawing/NoiseRect";
 import { SVGRaster } from "../drawing/SVGRaster";
-import { TAILWIND_COLORS } from "../utils/colors";
 import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "./consts";
 import { getGrid } from "../utils/getGrid";
 import { getGridProgress } from "../utils/getGridProgress";
 import { matchNoiseGrid } from "../utils/noiseMatching";
-import { generateThemeForBackground } from "../utils/generateThemeForBackground";
 
 export type PerlinNoiseMatchingGridProps = {
   scale?: number;
@@ -25,9 +23,9 @@ export type PerlinNoiseMatchingGridProps = {
   strideX?: number;
   strideY?: number;
   duration?: number;
-  background?: CSSProperties["color"];
-  stroke?: CSSProperties["color"];
-  gradientColors?: CSSProperties["color"][];
+
+  gradientColors?: { background: CSSProperties["color"]; gradient: CSSProperties["color"][] };
+
   glowSize?: number;
   strokeSize?: number;
   roundingSize?: number;
@@ -48,8 +46,6 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strideX,
     strideY,
     duration = 300,
-    background = TAILWIND_COLORS.gray[900],
-    stroke,
     gradientColors,
     glowSize = 0,
     strokeSize = -1,
@@ -96,11 +92,15 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
 
   const d3Ref = useRef<SVGGElement | null>(null);
 
+  const { background, gradient } = gradientColors || {
+    background: "#000000",
+    gradient: ["#FFFFFF"],
+  };
+
   useEffect(() => {
     if (!d3Ref.current || !matched) return;
 
-    const theme = generateThemeForBackground(background, { mirror: mirrorBackground });
-    const colorScale = chroma.scale(theme).mode("lch");
+    const colorScale = chroma.scale(gradient).mode("lch");
 
     const grid = getGrid(canvas, howManyColumns, howManyRows, cpx, cpy);
     const cells: MatchingCellData[] = [];
@@ -118,8 +118,8 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
       const rounding = roundingSize < 0 ? niceRounding : roundingSize;
 
       const rainbowGradient =
-        gradientColors && gradientColors.length > 0
-          ? getRainbowGradient(index, gradientColors as string[])
+        gradient && gradient.length > 0
+          ? getRainbowGradient(index, gradient as string[])
           : undefined;
 
       const glowFilter = glowSize > 0 ? getGlowFilter(index, glowSize) : undefined;
@@ -144,7 +144,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
         rainbowGradient,
         glowFilter,
         fill,
-        stroke: rainbowGradient ? rainbowGradient.url : stroke,
+        stroke: rainbowGradient ? rainbowGradient.url : null,
         strokeWidth: strokeSize < 0 ? niceRounding / PHI : strokeSize,
       });
     }
@@ -157,12 +157,10 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strokeSize,
     roundingSize,
     glowSize,
-    background,
     canvas,
     howManyColumns,
     howManyRows,
-    gradientColors,
-    stroke,
+    gradient,
     showBox,
     noiseBackground,
     cpx,

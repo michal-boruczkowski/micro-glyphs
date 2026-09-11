@@ -19,9 +19,8 @@ type SVGRasterScenarioProps = CounterStrategyOptions & {
   svgRasters: SVGRaster[];
 
   color?: CSSProperties["color"];
-  background?: CSSProperties["color"];
-  stroke?: CSSProperties["color"];
-  gradientColors?: CSSProperties["color"][];
+
+  gradientColors?: { background: CSSProperties["color"]; gradient: CSSProperties["color"][] };
 
   width?: number;
 
@@ -36,14 +35,12 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
   const {
     svgRasters,
     color = TAILWIND_COLORS.slate[100],
-    background = TAILWIND_COLORS.gray[800],
     width = 700,
     gradientColors,
     showBox = false,
     glowSize = 4,
     strokeSize,
     roundingSize,
-    stroke,
     divisionType = DivisionType.GRID,
     ...counterOptions
   } = props;
@@ -62,6 +59,11 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
   const howManyRows = Math.ceil(data.length / howManyColumns);
 
   const d3Ref = useRef<SVGGElement | null>(null);
+
+  const { background, gradient } = gradientColors || {
+    background: "#000000",
+    gradient: ["#FFFFFF"],
+  };
 
   useEffect(() => {
     if (!d3Ref.current) return;
@@ -109,7 +111,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
       const rounding = roundingSize < 0 ? niceRounding : roundingSize;
 
       const rainbowGradient =
-        gradientColors?.length > 0 ? getRainbowGradient(index, gradientColors) : undefined;
+        gradient?.length > 0 ? getRainbowGradient(index, gradient) : undefined;
 
       const glowFilter = glowSize > 0 && getGlowFilter(index, glowSize);
 
@@ -128,7 +130,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
         rainbowGradient,
         glowFilter,
         fill: color,
-        stroke: rainbowGradient ? rainbowGradient.url : stroke,
+        stroke: rainbowGradient ? rainbowGradient.url : null,
         strokeWidth: strokeSize < 0 ? niceRounding / PHI : strokeSize,
         animateOpacity,
         onClick: () => {
@@ -155,12 +157,10 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     roundingSize,
     glowSize,
     color,
-    background,
     canvas,
     howManyColumns,
     howManyRows,
-    gradientColors,
-    stroke,
+    gradient,
     divisionType,
     showBox,
   ]);

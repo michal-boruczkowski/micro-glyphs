@@ -1,4 +1,4 @@
-import { TAILWIND_PRESET_COLORS, TailwindGradients } from "../utils/colors";
+import { TAILWIND_PRESET_COLORS, NiceGradientCompositions } from "../utils/colors";
 
 export const COLOR_CONTROL = {
   control: {
@@ -8,8 +8,8 @@ export const COLOR_CONTROL = {
 } as const;
 
 export const GRADIENT_CONTROL = {
-  options: Object.keys(TailwindGradients),
-  mapping: TailwindGradients,
+  options: Object.keys(NiceGradientCompositions),
+  mapping: NiceGradientCompositions,
   control: {
     type: "select",
   },

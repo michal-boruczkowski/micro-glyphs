@@ -5,8 +5,8 @@ import * as monoPatterns_5x5 from "../drawing/svgRasters_5x5";
 import * as monoPatterns_9x9 from "../drawing/svgRasters_9x9";
 
 import { SVGRasterScenario } from "./SVGRasterScenario";
-import { TAILWIND_COLORS, TailwindGradients } from "../utils/colors";
-import { COLOR_CONTROL, GRADIENT_CONTROL } from "./colors";
+import { TAILWIND_COLORS, NiceGradientCompositions } from "../utils/colors";
+import { GRADIENT_CONTROL } from "./colors";
 import { DIVISION_TYPE_CONTROL, DivisionType } from "./divisionType";
 import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
 
@@ -17,8 +17,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
   parameters: {
     controls: {
       include: [
-        "color",
-        "background",
         "duration",
         "glowSize",
         "roundingSize",
@@ -42,7 +40,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     glowSize: 4,
     strokeSize: -1,
     roundingSize: -1,
-    gradientColors: TailwindGradients.SUNSET_VIBES,
+    gradientColors: NiceGradientCompositions.SUNSET_VIBES__WARM_SAND,
     loop: false,
     stop: false,
     showBox: false,
@@ -51,9 +49,6 @@ const meta: Meta<typeof SVGRasterScenario> = {
     pageMul: 2,
   },
   argTypes: {
-    color: COLOR_CONTROL,
-    background: COLOR_CONTROL,
-    stroke: COLOR_CONTROL,
     gradientColors: GRADIENT_CONTROL,
     divisionType: DIVISION_TYPE_CONTROL,
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
@@ -99,13 +94,11 @@ export const _9x9: Story = {
 
 export const GoldHeroes: Story = {
   args: {
-    color: "oklch(96.8% 0.007 247.896)",
-    background: "oklch(27.8% 0.033 256.848)",
     duration: 150,
     glowSize: 4,
     strokeSize: -1,
     roundingSize: -1,
-    gradientColors: TailwindGradients.GOLD,
+    gradientColors: NiceGradientCompositions.GOLD__OBSIDIAN,
     loop: true,
     stop: true,
     showBox: false,
@@ -120,8 +113,6 @@ export const GoldHeroes: Story = {
 
 export const PerlinPattern: Story = {
   args: {
-    color: "oklch(96.8% 0.007 247.896)",
-    background: "oklch(27.8% 0.033 256.848)",
     duration: 0,
     glowSize: 4,
     strokeSize: 0,

@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateThemeForBackground > handles grayscale backgrounds without NaN hues 1`] = `
+{
+  "neutral gray": {
+    "background": "#808080",
+    "gradient": [
+      "#72006e",
+      "#7d0400",
+    ],
+  },
+  "pure black": {
+    "background": "#000000",
+    "gradient": [
+      "#ff90f5",
+      "#ff9366",
+    ],
+  },
+  "pure white": {
+    "background": "#ffffff",
+    "gradient": [
+      "#72006e",
+      "#7d0400",
+    ],
+  },
+}
+`;

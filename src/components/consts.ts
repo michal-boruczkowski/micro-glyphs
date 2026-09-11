@@ -15,7 +15,7 @@ export function toScenarioHeight(width: number) {
   return (width / 4) * 5;
 }
 
-export function getScenarioSetup(width: number, pMul = 2.5, cMul = 1) {
+export function getScenarioSetup(width: number, pMul = 2.5, cMul = 2) {
   const viewBoxRect = new Rectangle(0, 0, width, toScenarioHeight(width));
 
   const paddingX = 4 * pMul;

@@ -33,7 +33,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
       control: { type: "range", min: 1, max: 10, step: 1 },
     },
     scale: {
-      control: { type: "range", min: 0.01, max: 1.0, step: 0.01 },
+      control: { type: "range", min: 0.01, max: 1.0, step: 0.001 },
     },
     seed: {
       control: { type: "range", min: 1, max: 10000, step: 1 },

@@ -100,7 +100,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     const theme = generateThemeForBackground(background);
     const colorScale = chroma.scale(theme).mode("lch");
 
-    const grid = getGrid(canvas, howManyColumns, howManyRows, 0, 0);
+    const grid = getGrid(canvas, howManyColumns, howManyRows, cpx, cpy);
     const cells: MatchingCellData[] = [];
 
     for (const cell of grid) {

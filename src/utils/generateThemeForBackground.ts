@@ -17,7 +17,7 @@ export function generateThemeForBackground(background: string, options?: Generat
   // If background is dark, gradient must be light (and vice versa)
   const isDarkBg = bgLightness < 50;
   const targetLightness = isDarkBg ? 75 : 25;
-  const targetChroma = 65; // High saturation for vividness
+  const targetChroma = 90; // High saturation for vividness 0-180
 
   // 3. Generate gradient with high color contrast (complementary / split-complementary hue shift)
   const halfSpread = hueSpread / 2;

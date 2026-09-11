@@ -16,5 +16,16 @@ describe("generateThemeForBackground", () => {
       "custom 90 deg": generateThemeForBackground("#0f172a", { hueSpread: 90 }),
     }).toMatchSnapshot();
   });
-});
 
+  it("smoothly transitions target lightness based on background lightness", () => {
+    expect({
+      "dark bg (L~20)": generateThemeForBackground("#1e1e1e"),
+      "mid bg (L~50)": generateThemeForBackground("#7f7f7f"),
+      "light bg (L~85)": generateThemeForBackground("#dcdcdc"),
+      "custom lightness bounds [10, 90]": generateThemeForBackground("#7f7f7f", {
+        minLightness: 10,
+        maxLightness: 90,
+      }),
+    }).toMatchSnapshot();
+  });
+});

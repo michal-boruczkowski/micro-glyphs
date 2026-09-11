@@ -25,6 +25,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
         "roundingSize",
         "showBox",
         "noiseBackground",
+        "mirrorBackground",
       ],
     },
   },
@@ -60,6 +61,9 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
     noiseBackground: {
       control: "boolean",
     },
+    mirrorBackground: {
+      control: "boolean",
+    },
     showBox: {
       control: "boolean",
     },
@@ -77,6 +81,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
     roundingSize: -1,
     showBox: false,
     noiseBackground: false,
+    mirrorBackground: true,
   },
 };
 

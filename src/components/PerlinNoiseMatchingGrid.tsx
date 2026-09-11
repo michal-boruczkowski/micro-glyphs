@@ -32,6 +32,7 @@ export type PerlinNoiseMatchingGridProps = {
   strokeSize?: number;
   roundingSize?: number;
 
+  mirrorBackground?: boolean;
   noiseBackground?: boolean;
   showBox?: boolean;
 };
@@ -55,6 +56,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     roundingSize = -1,
     showBox = false,
     noiseBackground = false,
+    mirrorBackground = true,
   } = props;
 
   const howManyElements = getScenarioLimit(pageMul);
@@ -97,7 +99,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
   useEffect(() => {
     if (!d3Ref.current || !matched) return;
 
-    const theme = generateThemeForBackground(background);
+    const theme = generateThemeForBackground(background, { mirror: mirrorBackground });
     const colorScale = chroma.scale(theme).mode("lch");
 
     const grid = getGrid(canvas, howManyColumns, howManyRows, cpx, cpy);
@@ -165,6 +167,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     noiseBackground,
     cpx,
     cpy,
+    mirrorBackground,
   ]);
 
   return (

@@ -1,31 +1,69 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`generateThemeForBackground > generates frosted glass gradient with white highlight for light backgrounds 1`] = `
+{
+  "custom bounds": [
+    "#70b4d0",
+    "#f8fdff",
+  ],
+  "ice blue bg": [
+    "#6eb7d3",
+    "#f8fdff",
+  ],
+  "light gray bg": [
+    "#91afbb",
+    "#f8fdff",
+  ],
+  "pure white bg": [
+    "#9fbec9",
+    "#f8fdff",
+  ],
+}
+`;
+
+exports[`generateThemeForBackground > generates vivid gradient for dark backgrounds 1`] = `
+{
+  "dark bg (L~20)": [
+    "#00dba9",
+    "#00c6ff",
+  ],
+  "slate dark": [
+    "#00d5ff",
+    "#ff7fff",
+  ],
+}
+`;
+
 exports[`generateThemeForBackground > handles grayscale backgrounds without NaN hues 1`] = `
 {
   "neutral gray": [
-    "#003a9d",
-    "#602f00",
+    "#526f79",
+    "#f8fdff",
   ],
   "pure black": [
-    "#83b5ff",
-    "#f2ab3f",
+    "#00dba9",
+    "#00c6ff",
   ],
   "pure white": [
-    "#003a9d",
-    "#602f00",
+    "#9fbec9",
+    "#f8fdff",
   ],
 }
 `;
 
 exports[`generateThemeForBackground > supports custom hue spread options 1`] = `
 {
-  "custom 180 deg": [
-    "#00d6d2",
-    "#ff83a0",
+  "custom 180 deg (dark bg)": [
+    "#00dcda",
+    "#ff6599",
   ],
-  "custom 90 deg": [
-    "#00cfff",
-    "#fe91f9",
+  "custom 60 deg (light bg)": [
+    "#a5bccd",
+    "#f8fdff",
+  ],
+  "custom 90 deg (dark bg)": [
+    "#00d5ff",
+    "#ff7fff",
   ],
 }
 `;

@@ -4,14 +4,14 @@ import { getGrid } from "../utils/getGrid";
 import { SVGRoot } from "./SVGRoot";
 import { SVGRectangle } from "./SVGRectangle";
 
-export type GridPaddingProps = {
+export type PaddingGridProps = {
   pageMul?: number;
   width?: number;
   pMul?: number;
   cMul?: number;
 };
 
-export function GridPadding(props: GridPaddingProps) {
+export function PaddingGrid(props: PaddingGridProps) {
   const { pageMul = 4, width = 700, pMul = 6, cMul = 1 } = props;
 
   const howManyElements = getScenarioLimit(pageMul);

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { GridPadding } from "../components/GridPadding";
+import { PaddingGrid } from "../components/PaddingGrid";
 
-const meta: Meta<typeof GridPadding> = {
-  title: "GridPadding",
-  component: GridPadding,
+const meta: Meta<typeof PaddingGrid> = {
+  title: "Padding",
+  component: PaddingGrid,
   tags: ["autodocs"],
   parameters: {
     controls: {
@@ -31,7 +31,7 @@ const meta: Meta<typeof GridPadding> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof GridPadding>;
+type Story = StoryObj<typeof PaddingGrid>;
 
 export const Default: Story = {
   args: {

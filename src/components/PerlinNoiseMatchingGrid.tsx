@@ -11,6 +11,7 @@ import { TAILWIND_COLORS } from "../utils/colors";
 import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "./consts";
 import { getGrid } from "../utils/getGrid";
 import { matchNoiseGrid } from "../utils/noiseMatching";
+import { generateThemeForBackground } from "../utils/generateThemeForBackground";
 
 export type PerlinNoiseMatchingGridProps = {
   scale?: number;
@@ -22,7 +23,6 @@ export type PerlinNoiseMatchingGridProps = {
   strideX?: number;
   strideY?: number;
   duration?: number;
-  color?: CSSProperties["color"];
   background?: CSSProperties["color"];
   stroke?: CSSProperties["color"];
   gradientColors?: CSSProperties["color"][];
@@ -43,7 +43,6 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strideX,
     strideY,
     duration = 300,
-    color = TAILWIND_COLORS.slate[100],
     background = TAILWIND_COLORS.gray[900],
     stroke,
     gradientColors,
@@ -92,6 +91,8 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
 
   useEffect(() => {
     if (!d3Ref.current || !matched) return;
+
+    const theme = generateThemeForBackground(background);
 
     const grid = getGrid(canvas, howManyColumns, howManyRows, 0, 0);
     const cells: MatchingCellData[] = [];
@@ -142,7 +143,6 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strokeSize,
     roundingSize,
     glowSize,
-    color,
     background,
     canvas,
     howManyColumns,

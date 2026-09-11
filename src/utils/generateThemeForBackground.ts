@@ -1,16 +1,6 @@
 import chroma from "chroma-js";
 
-export type BackgroundDictionaryItem = {
-  name: string;
-  hex: string;
-};
-
-export type ThemeResult = {
-  background: string;
-  gradient: [string, string];
-};
-
-export function generateThemeForBackground(background: string): ThemeResult {
+export function generateThemeForBackground(background: string) {
   const bg = chroma(background);
 
   // Extract LCH parameters from background (Lightness, Chroma, Hue)
@@ -31,8 +21,5 @@ export function generateThemeForBackground(background: string): ThemeResult {
   const gradientStart = chroma.lch(targetLightness, targetChroma, startHue).hex();
   const gradientEnd = chroma.lch(targetLightness, targetChroma, endHue).hex();
 
-  return {
-    background,
-    gradient: [gradientStart, gradientEnd],
-  };
+  return [gradientStart, gradientEnd];
 }

@@ -31,12 +31,17 @@ type SVGRasterScenarioProps = CounterStrategyOptions & {
   divisionType?: DivisionType;
 };
 
+const DEFAULT_GRADIENT = {
+  background: "#000000",
+  gradient: ["#FFFFFF"],
+};
+
 export function SVGRasterScenario(props: SVGRasterScenarioProps) {
   const {
     svgRasters,
     color = TAILWIND_COLORS.slate[100],
     width = 700,
-    gradientColors,
+    gradientColors = DEFAULT_GRADIENT,
     showBox = false,
     glowSize = 4,
     strokeSize,
@@ -60,10 +65,7 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
 
   const d3Ref = useRef<SVGGElement | null>(null);
 
-  const { background, gradient } = gradientColors || {
-    background: "#000000",
-    gradient: ["#FFFFFF"],
-  };
+  const { background, gradient } = gradientColors;
 
   useEffect(() => {
     if (!d3Ref.current) return;

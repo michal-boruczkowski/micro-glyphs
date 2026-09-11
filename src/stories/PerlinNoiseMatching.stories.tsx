@@ -105,6 +105,5 @@ export const Gradientmapping: Story = {
     strokeSize: 0,
     roundingSize: 0,
     showBox: true,
-    gradientColors: NiceGradientCompositions.CYBERPUNK_NEON__VOID_BLACK,
   },
 };

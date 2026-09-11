@@ -35,12 +35,11 @@ const meta: Meta<typeof SVGRasterScenario> = {
   },
   args: {
     color: TAILWIND_COLORS.slate[100],
-    background: TAILWIND_COLORS.gray[800],
     duration: 600,
     glowSize: 4,
     strokeSize: -1,
     roundingSize: -1,
-    gradientColors: NiceGradientCompositions.SUNSET_VIBES__WARM_SAND,
+    gradientColors: NiceGradientCompositions.SUNSET_VIBES__DARK,
     loop: false,
     stop: false,
     showBox: false,
@@ -98,7 +97,7 @@ export const GoldHeroes: Story = {
     glowSize: 4,
     strokeSize: -1,
     roundingSize: -1,
-    gradientColors: NiceGradientCompositions.GOLD__OBSIDIAN,
+    gradientColors: NiceGradientCompositions.GOLD__DARK,
     loop: true,
     stop: true,
     showBox: false,
@@ -117,12 +116,6 @@ export const PerlinPattern: Story = {
     glowSize: 4,
     strokeSize: 0,
     roundingSize: 0,
-
-    gradientColors: [
-      "oklch(64.5% 0.246 16.439)",
-      "oklch(75% 0.183 55.934)",
-      "oklch(90.5% 0.182 98.111)",
-    ],
 
     loop: false,
     stop: true,

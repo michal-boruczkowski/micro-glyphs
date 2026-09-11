@@ -71,131 +71,173 @@ export const NiceGradient = {
 };
 
 export const NiceGradientCompositions = {
-  SUNSET_VIBES__DEEP_PURPLE: {
-    background: "#120526",
+  // ==========================================
+  // 🌙 CIEMNE TŁA (DARK THEMES)
+  // ==========================================
+
+  SUNSET_VIBES__DARK: {
+    background: "#120526", // Głęboki, ciepły fiolet
     gradient: NiceGradient.SUNSET_VIBES,
   },
-  SUNSET_VIBES__WARM_SAND: {
-    background: "#FFF8F0",
-    gradient: NiceGradient.SUNSET_VIBES,
-  },
-
-  OCEAN_BREEZE__DARK_NAVY: {
-    background: "#031726",
+  OCEAN_BREEZE__DARK: {
+    background: "#02111A", // Bardzo ciemny morski granat
     gradient: NiceGradient.OCEAN_BREEZE,
   },
-  OCEAN_BREEZE__ICE_WHITE: {
-    background: "#F2FAFD",
-    gradient: NiceGradient.OCEAN_BREEZE,
-  },
-
-  CYBERPUNK_NEON__VOID_BLACK: {
-    background: "#06010D",
+  CYBERPUNK_NEON__DARK: {
+    background: "#0A0014", // Niemal czarny fiolet (Cyberpunk void)
     gradient: NiceGradient.CYBERPUNK_NEON,
   },
-
-  NORTHERN_LIGHTS__NIGHT_SKY: {
-    background: "#09041A",
+  NORTHERN_LIGHTS__DARK: {
+    background: "#050A0E", // Głębokie nocne niebo z nutą granatu
     gradient: NiceGradient.NORTHERN_LIGHTS,
   },
-
-  DARK_NEBULA__PITCH_BLACK: {
-    background: "#030008",
+  DARK_NEBULA__DARK: {
+    background: "#05000A", // Kosmiczna, smolista czerń
     gradient: NiceGradient.DARK_NEBULA,
   },
-
-  COTTON_CANDY__PURE_WHITE: {
-    background: "#FFFFFF",
+  COTTON_CANDY__DARK: {
+    background: "#1A101C", // Ciemna, zgaszona śliwka
     gradient: NiceGradient.COTTON_CANDY,
   },
-  COTTON_CANDY__MIDNIGHT_BLUE: {
-    background: "#0B1021",
-    gradient: NiceGradient.COTTON_CANDY,
-  },
-
-  MANGO_PAPAYA__DARK_CHARCOAL: {
-    background: "#18181A",
+  MANGO_PAPAYA__DARK: {
+    background: "#1A0800", // Bardzo ciemny, ciepły brąz
     gradient: NiceGradient.MANGO_PAPAYA,
   },
-  MANGO_PAPAYA__IVORY: {
-    background: "#FFFCF5",
-    gradient: NiceGradient.MANGO_PAPAYA,
-  },
-
-  SILVER_CHROME__MATTE_BLACK: {
-    background: "#111213",
+  SILVER_CHROME__DARK: {
+    background: "#0F0F0F", // Neutralna, matowa czerń
     gradient: NiceGradient.SILVER_CHROME,
   },
-
-  GOLD__ROYAL_GREEN: {
-    background: "#0A1F16",
+  GOLD__DARK: {
+    background: "#140E00", // Głęboka czerń z delikatną nutą oliwkowego złota
     gradient: NiceGradient.GOLD,
   },
-  GOLD__OBSIDIAN: {
-    background: "#120D0A",
-    gradient: NiceGradient.GOLD,
-  },
-
-  RGB__TRUE_BLACK: {
-    background: "#000000",
+  RGB__DARK: {
+    background: "#050505", // Klasyczna czerń RGB
     gradient: NiceGradient.RGB,
   },
-
-  SYNTHWAVE_DRIVE__GRID_ABYSS: {
-    background: "#090417",
+  SYNTHWAVE_DRIVE__DARK: {
+    background: "#0B021A", // Bardzo ciemny, nasycony fiolet
     gradient: NiceGradient.SYNTHWAVE_DRIVE,
   },
-
-  VOLCANIC_MAGMA__CHARRED_ROCK: {
-    background: "#170A0A",
+  VOLCANIC_MAGMA__DARK: {
+    background: "#0A0000", // Węglowa czerń z czerwoną poświatą
     gradient: NiceGradient.VOLCANIC_MAGMA,
   },
-
-  TROPICAL_TOUCAN__JUNGLE_SHADE: {
-    background: "#011A16",
+  TROPICAL_TOUCAN__DARK: {
+    background: "#00140D", // Najciemniejsza zieleń dżungli
     gradient: NiceGradient.TROPICAL_TOUCAN,
   },
-
-  SOUR_GUMMY__DARK_GRAPE: {
-    background: "#19081C",
+  SOUR_GUMMY__DARK: {
+    background: "#170A11", // Ciemna wiśnia
     gradient: NiceGradient.SOUR_GUMMY,
   },
-
-  SUPERNOVA_BLAST__DEEP_SPACE: {
-    background: "#090312",
+  SUPERNOVA_BLAST__DARK: {
+    background: "#0D0012", // Przestrzeń kosmiczna przed wybuchem
     gradient: NiceGradient.SUPERNOVA_BLAST,
   },
-
-  MINT_LEMONADE__COOL_WATER: {
-    background: "#E8FAFC",
+  MINT_LEMONADE__DARK: {
+    background: "#001214", // Bardzo ciemny, chłodny świerk
     gradient: NiceGradient.MINT_LEMONADE,
   },
-  MINT_LEMONADE__DARK_FOREST: {
-    background: "#071F11",
-    gradient: NiceGradient.MINT_LEMONADE,
-  },
-
-  PEACOCK_FEATHERS__MIDNIGHT_INDIGO: {
-    background: "#02040D",
+  PEACOCK_FEATHERS__DARK: {
+    background: "#01050A", // Północny, atramentowy granat
     gradient: NiceGradient.PEACOCK_FEATHERS,
   },
-
-  DRAGON_FRUIT__DARK_MAGENTA: {
-    background: "#1A000D",
+  DRAGON_FRUIT__DARK: {
+    background: "#140008", // Czarno-różowa głębia
     gradient: NiceGradient.DRAGON_FRUIT,
   },
-  DRAGON_FRUIT__PALE_PINK: {
-    background: "#FFF0F8",
-    gradient: NiceGradient.DRAGON_FRUIT,
-  },
-
-  VAPORWAVE_DREAM__CRT_SCREEN: {
-    background: "#0E021F",
+  VAPORWAVE_DREAM__DARK: {
+    background: "#090014", // Nostalgiczna cyfrowa czerń
     gradient: NiceGradient.VAPORWAVE_DREAM,
   },
+  DEEP_ABYSS_GLOW__DARK: {
+    background: "#00010A", // Rów Mariański
+    gradient: NiceGradient.DEEP_ABYSS_GLOW,
+  },
 
-  DEEP_ABYSS_GLOW__MARIANA_TRENCH: {
-    background: "#01000A",
+  // ==========================================
+  // ☀️ JASNE TŁA (LIGHT THEMES)
+  // ==========================================
+
+  SUNSET_VIBES__LIGHT: {
+    background: "#FFF5E6", // Ciepła, złamana biel o zachodzie
+    gradient: NiceGradient.SUNSET_VIBES,
+  },
+  OCEAN_BREEZE__LIGHT: {
+    background: "#F0F9FF", // Delikatny błękit lodowy
+    gradient: NiceGradient.OCEAN_BREEZE,
+  },
+  CYBERPUNK_NEON__LIGHT: {
+    background: "#F8F0FA", // Złamana biel z różowym tonem
+    gradient: NiceGradient.CYBERPUNK_NEON,
+  },
+  NORTHERN_LIGHTS__LIGHT: {
+    background: "#F0FFF4", // Miętowa, arktyczna biel
+    gradient: NiceGradient.NORTHERN_LIGHTS,
+  },
+  DARK_NEBULA__LIGHT: {
+    background: "#F6F2FA", // Perłowy lila
+    gradient: NiceGradient.DARK_NEBULA,
+  },
+  COTTON_CANDY__LIGHT: {
+    background: "#FFF0F5", // Czysty odcień Lavender Blush
+    gradient: NiceGradient.COTTON_CANDY,
+  },
+  MANGO_PAPAYA__LIGHT: {
+    background: "#FFFBF0", // Kremowo-waniliowy
+    gradient: NiceGradient.MANGO_PAPAYA,
+  },
+  SILVER_CHROME__LIGHT: {
+    background: "#F8F9FA", // Chłodny, sterylny szaro-biały
+    gradient: NiceGradient.SILVER_CHROME,
+  },
+  GOLD__LIGHT: {
+    background: "#FFFAF0", // Odcień Floral White, kość słoniowa
+    gradient: NiceGradient.GOLD,
+  },
+  RGB__LIGHT: {
+    background: "#FAFAFA", // Neutralna, czysta biel
+    gradient: NiceGradient.RGB,
+  },
+  SYNTHWAVE_DRIVE__LIGHT: {
+    background: "#FCE4EC", // Pastelowy, jasny róż
+    gradient: NiceGradient.SYNTHWAVE_DRIVE,
+  },
+  VOLCANIC_MAGMA__LIGHT: {
+    background: "#FFF0E6", // Bardzo jasna brzoskwinia
+    gradient: NiceGradient.VOLCANIC_MAGMA,
+  },
+  TROPICAL_TOUCAN__LIGHT: {
+    background: "#F1F8F5", // Chłodna, świetlista zieleń
+    gradient: NiceGradient.TROPICAL_TOUCAN,
+  },
+  SOUR_GUMMY__LIGHT: {
+    background: "#FFF0F5", // Odcień słodkiej różowej waty
+    gradient: NiceGradient.SOUR_GUMMY,
+  },
+  SUPERNOVA_BLAST__LIGHT: {
+    background: "#FFF0F0", // Subtelnie ocieplona biel
+    gradient: NiceGradient.SUPERNOVA_BLAST,
+  },
+  MINT_LEMONADE__LIGHT: {
+    background: "#F0FFF0", // Odcień Honeydew (jasny melon)
+    gradient: NiceGradient.MINT_LEMONADE,
+  },
+  PEACOCK_FEATHERS__LIGHT: {
+    background: "#E0F7FA", // Cyanowa biel
+    gradient: NiceGradient.PEACOCK_FEATHERS,
+  },
+  DRAGON_FRUIT__LIGHT: {
+    background: "#FFF0F6", // Jasna, pastelowa magenta
+    gradient: NiceGradient.DRAGON_FRUIT,
+  },
+  VAPORWAVE_DREAM__LIGHT: {
+    background: "#F4F0FF", // Pastelowy, chłodny fiolet bieli
+    gradient: NiceGradient.VAPORWAVE_DREAM,
+  },
+  DEEP_ABYSS_GLOW__LIGHT: {
+    background: "#E6F2FF", // Jasny, wodnisty błękit
     gradient: NiceGradient.DEEP_ABYSS_GLOW,
   },
 };

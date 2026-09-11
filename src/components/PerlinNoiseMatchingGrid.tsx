@@ -35,6 +35,11 @@ export type PerlinNoiseMatchingGridProps = {
   showBox?: boolean;
 };
 
+const DEFAULT_GRADIENT = {
+  background: "#000000",
+  gradient: ["#FFFFFF"],
+};
+
 export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
   const {
     scale = 0.1,
@@ -46,7 +51,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strideX,
     strideY,
     duration = 300,
-    gradientColors,
+    gradientColors = DEFAULT_GRADIENT,
     glowSize = 0,
     strokeSize = -1,
     roundingSize = -1,
@@ -92,10 +97,11 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
 
   const d3Ref = useRef<SVGGElement | null>(null);
 
-  const { background, gradient } = gradientColors || {
-    background: "#000000",
-    gradient: ["#FFFFFF"],
-  };
+  const { background } = gradientColors;
+
+  const gradient = mirrorBackground
+    ? gradientColors.gradient.concat([...gradientColors.gradient].reverse().slice(1))
+    : gradientColors.gradient;
 
   useEffect(() => {
     if (!d3Ref.current || !matched) return;
@@ -165,7 +171,6 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     noiseBackground,
     cpx,
     cpy,
-    mirrorBackground,
   ]);
 
   return (

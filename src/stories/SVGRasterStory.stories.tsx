@@ -6,7 +6,7 @@ import * as monoPatterns_9x9 from "../drawing/svgRasters_9x9";
 
 import { SVGRasterScenario } from "./SVGRasterScenario";
 import { TAILWIND_COLORS, NiceGradientCompositions } from "../utils/colors";
-import { GRADIENT_CONTROL } from "./colors";
+import { GRADIENT_COMPOSITION_CONTROL } from "./controls";
 import { DIVISION_TYPE_CONTROL, DivisionType } from "./divisionType";
 import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
 
@@ -48,7 +48,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     pageMul: 2,
   },
   argTypes: {
-    gradientComposition: GRADIENT_CONTROL,
+    gradientComposition: GRADIENT_COMPOSITION_CONTROL,
     divisionType: DIVISION_TYPE_CONTROL,
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },

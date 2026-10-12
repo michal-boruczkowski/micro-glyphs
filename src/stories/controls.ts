@@ -7,7 +7,7 @@ export const COLOR_CONTROL = {
   },
 } as const;
 
-export const GRADIENT_CONTROL = {
+export const GRADIENT_COMPOSITION_CONTROL = {
   options: Object.keys(NiceGradientCompositions),
   mapping: NiceGradientCompositions,
   control: {

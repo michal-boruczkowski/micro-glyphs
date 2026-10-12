@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { PerlinNoiseMatchingGrid } from "../components/PerlinNoiseMatchingGrid";
 import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
-import { NiceGradientCompositions } from "../utils/colors";
-import { GRADIENT_CONTROL } from "./colors";
+import { GRADIENT_COMPOSITION_CONTROL } from "./controls";
 
 const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
   title: "PerlinNoiseMatching",
@@ -41,7 +40,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
       control: { type: "range", min: 1, max: 9, step: 1 },
     },
     svgRasters: SVG_RASTERS_CONTROL,
-    gradientComposition: GRADIENT_CONTROL,
+    gradientComposition: GRADIENT_COMPOSITION_CONTROL,
     duration: {
       control: { type: "range", min: 0, max: 2000, step: 50 },
     },

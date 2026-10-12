@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import colors from "tailwindcss/colors";
 
 export const TAILWIND_COLORS = colors;
@@ -5,6 +6,11 @@ export const TAILWIND_COLORS = colors;
 export type PresetColor = {
   color: string;
   title: string;
+};
+
+export type GradientComposition = {
+  background: CSSProperties["color"];
+  gradient: CSSProperties["color"][];
 };
 
 export const TAILWIND_PRESET_COLORS: PresetColor[] = [

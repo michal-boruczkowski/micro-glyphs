@@ -12,6 +12,7 @@ import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "./c
 import { getGrid } from "../utils/getGrid";
 import { getGridProgress } from "../utils/getGridProgress";
 import { matchNoiseGrid } from "../utils/noiseMatching";
+import { GradientComposition } from "../utils/colors";
 
 export type PerlinNoiseMatchingGridProps = {
   scale?: number;
@@ -24,7 +25,7 @@ export type PerlinNoiseMatchingGridProps = {
   strideY?: number;
   duration?: number;
 
-  gradientColors?: { background: CSSProperties["color"]; gradient: CSSProperties["color"][] };
+  gradientComposition?: GradientComposition;
 
   glowSize?: number;
   strokeSize?: number;
@@ -35,7 +36,7 @@ export type PerlinNoiseMatchingGridProps = {
   showBox?: boolean;
 };
 
-const DEFAULT_GRADIENT = {
+const DEFAULT_GRADIENT: GradientComposition = {
   background: "#000000",
   gradient: ["#FFFFFF"],
 };
@@ -51,7 +52,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     strideX,
     strideY,
     duration = 300,
-    gradientColors = DEFAULT_GRADIENT,
+    gradientComposition = DEFAULT_GRADIENT,
     glowSize = 0,
     strokeSize = -1,
     roundingSize = -1,
@@ -97,11 +98,11 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
 
   const d3Ref = useRef<SVGGElement | null>(null);
 
-  const { background } = gradientColors;
+  const { background } = gradientComposition;
 
   const gradient = mirrorBackground
-    ? gradientColors.gradient.concat([...gradientColors.gradient].reverse().slice(1))
-    : gradientColors.gradient;
+    ? gradientComposition.gradient.concat([...gradientComposition.gradient].reverse().slice(1))
+    : gradientComposition.gradient;
 
   useEffect(() => {
     if (!d3Ref.current || !matched) return;

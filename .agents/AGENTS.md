@@ -41,6 +41,7 @@ src/
 
 ## Tests
 
+- **Ignore tests for now**: Do not run, write, or update unit tests unless explicitly requested.
 - Use `@testing-library/react` and `@testing-library/jest-dom` for React components
 - Run tests: `npm test` (Vitest, one-shot) or `npm run test:watch`
 - **Snapshot testing conventions**:

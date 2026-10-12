@@ -16,7 +16,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
         "seed",
         "windowSize",
         "svgRasters",
-        "gradientColors",
+        "gradientComposition",
         "duration",
         "glowSize",
         "strokeSize",
@@ -41,7 +41,7 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
       control: { type: "range", min: 1, max: 9, step: 1 },
     },
     svgRasters: SVG_RASTERS_CONTROL,
-    gradientColors: GRADIENT_CONTROL,
+    gradientComposition: GRADIENT_CONTROL,
     duration: {
       control: { type: "range", min: 0, max: 2000, step: 50 },
     },

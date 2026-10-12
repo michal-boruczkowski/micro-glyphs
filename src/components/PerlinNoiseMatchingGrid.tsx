@@ -12,7 +12,7 @@ import { getScenarioColumns, getScenarioLimit, getScenarioSetup, PHI } from "./c
 import { getGrid } from "../utils/getGrid";
 import { getGridProgress } from "../utils/getGridProgress";
 import { matchNoiseGrid } from "../utils/noiseMatching";
-import { GradientComposition } from "../utils/colors";
+import { DEFAULT_GRADIENT, GradientComposition } from "../utils/colors";
 
 export type PerlinNoiseMatchingGridProps = {
   scale?: number;
@@ -34,11 +34,6 @@ export type PerlinNoiseMatchingGridProps = {
   mirrorBackground?: boolean;
   noiseBackground?: boolean;
   showBox?: boolean;
-};
-
-const DEFAULT_GRADIENT: GradientComposition = {
-  background: "#000000",
-  gradient: ["#FFFFFF"],
 };
 
 export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {

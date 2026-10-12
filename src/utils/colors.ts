@@ -13,6 +13,11 @@ export type GradientComposition = {
   gradient: CSSProperties["color"][];
 };
 
+export const DEFAULT_GRADIENT: GradientComposition = {
+  background: "#000000",
+  gradient: ["#FFFFFF"],
+};
+
 export const TAILWIND_PRESET_COLORS: PresetColor[] = [
   {
     color: "transparent",

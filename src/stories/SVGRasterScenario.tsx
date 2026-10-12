@@ -5,7 +5,7 @@ import { SVGRectangle } from "../components/SVGRectangle";
 import { SVGRaster } from "../drawing/SVGRaster";
 import { easeElasticOut, select } from "d3";
 import { path, group, onClick, defs, rect } from "../d3wrapper/d3wrapper";
-import { GradientComposition, TAILWIND_COLORS } from "../utils/colors";
+import { DEFAULT_GRADIENT, GradientComposition, TAILWIND_COLORS } from "../utils/colors";
 import { getGrid } from "../utils/getGrid";
 import { CounterStrategyOptions, useCounterStrategy } from "../utils/useCounterStrategy";
 import { getRainbowGradient, rainbowGradientRenderer } from "../d3wrapper/rainbowGradient";
@@ -29,11 +29,6 @@ type SVGRasterScenarioProps = CounterStrategyOptions & {
   strokeSize?: number;
   roundingSize?: number;
   divisionType?: DivisionType;
-};
-
-const DEFAULT_GRADIENT: GradientComposition = {
-  background: "#000000",
-  gradient: ["#FFFFFF"],
 };
 
 export function SVGRasterScenario(props: SVGRasterScenarioProps) {

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PerlinNoiseMatchingGrid } from "../components/PerlinNoiseMatchingGrid";
 import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
 import { GRADIENT_COMPOSITION_CONTROL } from "./controls";
+import { NiceGradientCompositions } from "../utils/colors";
 
 const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
   title: "PerlinNoiseMatching",
@@ -104,5 +105,6 @@ export const Gradientmapping: Story = {
     strokeSize: 0,
     roundingSize: 0,
     showBox: true,
+    gradientComposition: NiceGradientCompositions.CYBERPUNK_NEON__DARK,
   },
 };

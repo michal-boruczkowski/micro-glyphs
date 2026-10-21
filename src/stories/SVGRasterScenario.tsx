@@ -39,8 +39,8 @@ export function SVGRasterScenario(props: SVGRasterScenarioProps) {
     gradientComposition = DEFAULT_GRADIENT,
     showBox = false,
     glowSize = 4,
-    strokeSize,
-    roundingSize,
+    strokeSize = -1,
+    roundingSize = -1,
     divisionType = DivisionType.GRID,
     ...counterOptions
   } = props;
@@ -188,11 +188,11 @@ const glyph = path("glyph-path")
   )
   .merged((merged) =>
     merged
+      .attr("d", (d) => d.d)
       .on("click", onClick)
       .transition()
       .ease(customEase)
       .duration((d) => d.duration)
-      .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
       .attr("opacity", 1)
       .attr("fill", (d) => d.fill)
@@ -239,10 +239,10 @@ const glowGlyph = path("glyph-path-filter")
   )
   .merged((merged) =>
     merged
+      .attr("d", (d) => d.d)
       .transition()
       .ease(customEase)
       .duration((d) => d.duration)
-      .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
       .attr("opacity", 1)
       .attr("fill", "none")

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { PerlinNoiseMatchingGrid } from "../components/PerlinNoiseMatchingGrid";
-import { allCorners, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
+import { allCorners, letters, niceHeroes, SVG_RASTERS_CONTROL } from "../drawing/svgRasters";
 import { GRADIENT_COMPOSITION_CONTROL } from "./controls";
 import { NiceGradientCompositions } from "../utils/colors";
 
@@ -49,10 +49,10 @@ const meta: Meta<typeof PerlinNoiseMatchingGrid> = {
       control: { type: "range", min: 0, max: 20, step: 1 },
     },
     strokeSize: {
-      control: { type: "range", min: -1, max: 20, step: 0.5 },
+      control: { type: "range", min: -1, max: 100, step: 1 },
     },
     roundingSize: {
-      control: { type: "range", min: -1, max: 20, step: 0.5 },
+      control: { type: "range", min: -1, max: 100, step: 1 },
     },
     noiseBackground: {
       control: "boolean",
@@ -106,5 +106,41 @@ export const Gradientmapping: Story = {
     roundingSize: 0,
     showBox: true,
     gradientComposition: NiceGradientCompositions.CYBERPUNK_NEON__DARK,
+  },
+};
+
+export const RedLetters: Story = {
+  args: {
+    pageMul: 2,
+    scale: 0.206,
+    seed: 1662,
+    windowSize: 1,
+    svgRasters: letters,
+    duration: 300,
+    glowSize: 0,
+    strokeSize: 0,
+    roundingSize: 0,
+    showBox: false,
+    noiseBackground: true,
+    mirrorBackground: false,
+    gradientComposition: NiceGradientCompositions.SUNSET_VIBES__DARK,
+  },
+};
+
+export const SandSymbols: Story = {
+  args: {
+    pageMul: 1,
+    scale: 0.206,
+    seed: 7074,
+    windowSize: 9,
+    svgRasters: niceHeroes,
+    duration: 500,
+    glowSize: 3,
+    strokeSize: 74,
+    roundingSize: 100,
+    showBox: false,
+    noiseBackground: true,
+    mirrorBackground: false,
+    gradientComposition: NiceGradientCompositions.SUNSET_VIBES__LIGHT,
   },
 };

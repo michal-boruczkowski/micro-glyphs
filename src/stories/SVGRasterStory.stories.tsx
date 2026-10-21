@@ -53,7 +53,7 @@ const meta: Meta<typeof SVGRasterScenario> = {
     duration: { control: { type: "range", min: 0, max: 2000, step: 50 } },
     glowSize: { control: { type: "range", min: 0, max: 20, step: 1 } },
     strokeSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
-    roundingSize: { control: { type: "range", min: -1, max: 20, step: 0.5 } },
+    roundingSize: { control: { type: "range", min: -1, max: 100, step: 1 } },
     pageMul: { control: { type: "range", min: 1, max: 10, step: 1 } },
     loop: { control: "boolean" },
     stop: { control: "boolean" },

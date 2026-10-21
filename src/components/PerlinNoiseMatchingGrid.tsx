@@ -117,7 +117,10 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
 
       const viewBox = Math.min(width, height);
       const niceRounding = Math.sqrt(viewBox) / PHI;
-      const rounding = roundingSize < 0 ? niceRounding : roundingSize;
+      const maxRounding = viewBox / 2;
+      const rounding = roundingSize < 0 ? niceRounding : (roundingSize / 100) * maxRounding;
+      const niceStrokeWidth = niceRounding / PHI;
+      const strokeWidth = strokeSize < 0 ? niceStrokeWidth : (strokeSize / 100) * (maxRounding / 4);
 
       const rainbowGradient =
         gradient && gradient.length > 0
@@ -147,7 +150,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
         glowFilter,
         fill,
         stroke: rainbowGradient ? rainbowGradient.url : null,
-        strokeWidth: strokeSize < 0 ? niceRounding / PHI : strokeSize,
+        strokeWidth,
       });
     }
 
@@ -156,7 +159,6 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
   }, [
     matched,
     duration,
-    strokeSize,
     roundingSize,
     glowSize,
     canvas,
@@ -165,6 +167,7 @@ export function PerlinNoiseMatchingGrid(props: PerlinNoiseMatchingGridProps) {
     gradient,
     showBox,
     noiseBackground,
+    strokeSize,
     cpx,
     cpy,
   ]);
@@ -213,10 +216,10 @@ const glyph = path<MatchingCellData>("glyph-path")
   )
   .merged((merged) =>
     merged
+      .attr("d", (d) => d.d)
       .transition()
       .ease(customEase)
       .duration((d) => d.duration)
-      .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
       .attr("fill", (d) => d.fill ?? null)
       .attr("stroke", (d) => d.stroke ?? null)
@@ -243,10 +246,10 @@ const glowGlyph = path<MatchingCellData>("glyph-path-filter")
   )
   .merged((merged) =>
     merged
+      .attr("d", (d) => d.d)
       .transition()
       .ease(customEase)
       .duration((d) => d.duration)
-      .attr("d", (d) => d.d)
       .attr("transform", (d) => `translate(${d.dx},${d.dy})`)
       .attr("fill", "none")
       .attr("stroke", (d) => d.stroke ?? null)

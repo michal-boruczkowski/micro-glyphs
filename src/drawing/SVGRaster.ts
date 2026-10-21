@@ -301,9 +301,10 @@ export class SVGRaster {
       if (rounding === 0) {
         path.addPath(poly.map((p) => new Point(p.x * pixelSize, p.y * pixelSize)));
       } else {
-        path.addRoundedPath(
+        path.addRoundedPathArc(
           poly.map((p) => new Point(p.x * pixelSize, p.y * pixelSize)),
           rounding,
+          true,
         );
       }
     }

@@ -50,13 +50,25 @@ export class PathBuilder {
     return this;
   }
 
-  addRoundedPath(points: Point[], radius: number, isClosed: boolean = true) {
+  addRoundedPathQuadratic(points: Point[], radius: number, isClosed: boolean = true) {
+    return this.addRoundedPath(points, radius, PathRoundingMethod.QUADRATIC, isClosed);
+  }
+
+  addRoundedPathArc(points: Point[], radius: number, isClosed: boolean = true) {
+    return this.addRoundedPath(points, radius, PathRoundingMethod.ARC, isClosed);
+  }
+
+  addRoundedPath(
+    points: Point[],
+    radius: number,
+    method: PathRoundingMethod = PathRoundingMethod.ARC,
+    isClosed: boolean = true,
+  ) {
     if (points.length === 0) return this;
 
     if (points.length === 1) {
       this.moveTo(points[0].x, points[0].y);
       return this;
-      ``;
     }
 
     if (points.length === 2) {
@@ -66,22 +78,22 @@ export class PathBuilder {
     }
 
     const getPoint = (i: number) => {
-      // Bezpieczne zapętlanie indeksu dla ścieżek zamkniętych
+      // Safe index wrapping for closed paths
       return points[(i + points.length) % points.length];
     };
 
     if (!isClosed) {
-      // Ścieżka otwarta zaczyna się w pierwszym punkcie
+      // Open path starts at the first point
       this.moveTo(points[0].x, points[0].y);
     } else {
-      // Ścieżka zamknięta zaczyna się w połowie pierwszego odcinka,
-      // aby pętla mogła gładko zaokrąglić również pierwszy/ostatni róg
+      // Closed path starts at the midpoint of the first segment,
+      // so the loop can smoothly round the first/last corner as well
       const p0 = points[0];
       const p1 = points[1];
       this.moveTo((p0.x + p1.x) / 2, (p0.y + p1.y) / 2);
     }
 
-    // Ile rogów musimy sprawdzić? Dla otwartej omija pierwszy i ostatni punkt.
+    // How many corners do we need to process? For open paths, skip the first and last point.
     const loopStart = 1;
     const loopEnd = isClosed ? points.length : points.length - 1;
 
@@ -90,33 +102,53 @@ export class PathBuilder {
       const pCurr = getPoint(i);
       const pNext = getPoint(i + 1);
 
-      // 1. Obliczanie długości ramion
+      // 1. Calculate arm lengths
       const len1 = pCurr.distance(pPrev);
       const len2 = pCurr.distance(pNext);
 
-      // Zabezpieczenie przed za dużym promieniem
+      // Clamp radius to avoid exceeding arm lengths
       const r = Math.min(radius, len1 / 2, len2 / 2);
 
-      // 2. Pobieranie kątów
+      if (r <= 0) {
+        this.lineTo(pCurr.x, pCurr.y);
+        continue;
+      }
+
+      // 2. Get angles
       const anglePrev = pCurr.angleTo(pPrev);
       const angleNext = pCurr.angleTo(pNext);
 
-      // 3. Użycie Twojej funkcji do wyznaczenia punktów startu i końca zaokrąglenia!
+      // 3. Compute arc start and end points for the rounding
       const arcStart = pCurr.getPointOnCircle(r, anglePrev);
       const arcEnd = pCurr.getPointOnCircle(r, angleNext);
 
-      // Rysowanie do początku zaokrąglenia
+      // Draw line to the arc start
       this.lineTo(arcStart.x, arcStart.y);
 
-      // Krzywa Beziera zaokrąglająca róg
-      this.quadraticCurveTo(pCurr.x, pCurr.y, arcEnd.x, arcEnd.y);
+      if (method === PathRoundingMethod.ARC) {
+        const dx1 = pCurr.x - pPrev.x;
+        const dy1 = pCurr.y - pPrev.y;
+        const dx2 = pNext.x - pCurr.x;
+        const dy2 = pNext.y - pCurr.y;
+        const cross = dx1 * dy2 - dy1 * dx2;
+
+        if (cross === 0) {
+          this.lineTo(arcEnd.x, arcEnd.y);
+        } else {
+          const sweepFlag = cross > 0 ? 1 : 0;
+          this.arcTo(r, r, 0, 0, sweepFlag, arcEnd.x, arcEnd.y);
+        }
+      } else {
+        // Quadratic Bézier curve rounding the corner
+        this.quadraticCurveTo(pCurr.x, pCurr.y, arcEnd.x, arcEnd.y);
+      }
     }
     if (!isClosed) {
-      // Kończymy linią prosto do ostatniego punktu
+      // Finish with a straight line to the last point
       const lastPoint = points[points.length - 1];
       this.lineTo(lastPoint.x, lastPoint.y);
     } else {
-      // Zamykamy kształt z powrotem do punktu startowego (w połowie pierwszego odcinka)
+      // Close the shape back to the start point (midpoint of the first segment)
       this.close();
     }
 
@@ -141,4 +173,9 @@ export class PathBuilder {
   get d() {
     return this.commands.join(" ");
   }
+}
+
+export enum PathRoundingMethod {
+  ARC = "ARC",
+  QUADRATIC = "QUADRATIC",
 }
